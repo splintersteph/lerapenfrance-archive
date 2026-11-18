@@ -155,6 +155,7 @@ def page(title, body, depth=0, desc="", active=""):
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <link rel="stylesheet" href="{pre}style.css">
+<script>document.addEventListener("error",e=>{{const t=e.target;if(t.tagName==="IMG"){{if(t.classList.contains("cover")||t.closest(".card"))t.replaceWith(Object.assign(document.createElement("div"),{{className:"ph",textContent:"LREF"}}));else t.remove();}}}},true);</script>
 </head><body>
 <header class="top"><div class="wrap">
 <a class="logo" href="{pre}index.html"><span>LREF</span> Le Rap en France <em>· archives</em></a>
@@ -311,18 +312,18 @@ def card(a):
 rubl = "".join(f'<a href="articles.html?r={esc(k)}">{esc(k)} <b>{n}</b></a>' for k, n in rubs.most_common(14))
 yl = "".join(f'<a href="articles.html?y={y}">{y} <b>{n}</b></a>' for y, n in sorted(years.items()))
 body = f"""<section class="hero"><h1>Le Rap en France</h1>
-<p>{len(arts)} articles sauvés du site LREF : chroniques, interviews, focus, dossiers, classements. Fondé en 2011, le site a disparu après un piratage ; tout ce qui suit a été reconstitué à partir des copies de la Wayback Machine.</p>
+<p>{f"{len(arts):,}".replace(",", " ")} articles sauvés du site LREF : chroniques, interviews, focus, dossiers, classements. Fondé en 2011, le site a disparu après un piratage ; tout ce qui suit a été reconstitué à partir des copies de la Wayback Machine.</p>
 <form action="articles.html"><input name="q" type="search" placeholder="Chercher un artiste, un album…"><button>Rechercher</button></form></section>
 <section class="tops"><a href="top-100-annees-90.html"><span>Classement</span>Top 100<br>années 90</a><a href="top-100-annees-2000.html"><span>Classement</span>Top 100<br>années 2000</a></section>
 <h2 class="sec">Rubriques</h2><div class="chips">{rubl}</div>
 <h2 class="sec">Par année</h2><div class="chips">{yl}</div>
 <h2 class="sec">Derniers articles publiés</h2><div class="grid">{"".join(card(a) for a in arts[:12])}</div>
-<p class="all"><a href="articles.html">Voir les {len(arts)} articles →</a></p>"""
+<p class="all"><a href="articles.html">Voir les {f"{len(arts):,}".replace(",", " ")} articles →</a></p>"""
 write("index.html", page("Le Rap en France – archives", body, 0, "Archive du site Le Rap en France (LREF)", "home"))
 
 body = f"""<h1>À propos</h1><div class="content">
 <p>Le Rap en France (LREF) était un média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a réuni jusqu'à une trentaine de contributeurs bénévoles, publié un magazine papier bimestriel et atteint environ 1,5 million de pages vues.</p>
-<p>Le site a été perdu à la suite d'un piratage et son nom de domaine a depuis changé de mains. Cette archive rassemble les {len(arts)} articles dont une copie a été conservée par la <a href="https://web.archive.org/">Wayback Machine</a> d'Internet Archive. Les images sont chargées depuis ces copies d'archive, certaines peuvent donc manquer. Les années 2011 à 2015 sont moins bien couvertes, car l'archive a peu indexé le site à cette période.</p>
+<p>Le site a été perdu à la suite d'un piratage et son nom de domaine a depuis changé de mains. Cette archive rassemble les {f"{len(arts):,}".replace(",", " ")} articles dont une copie a été conservée par la <a href="https://web.archive.org/">Wayback Machine</a> d'Internet Archive. Les images sont chargées depuis ces copies d'archive, certaines peuvent donc manquer. Les années 2011 à 2015 sont moins bien couvertes, car l'archive a peu indexé le site à cette période.</p>
 <p>Chaque article renvoie vers sa copie d'origine sur la Wayback Machine.</p></div>"""
 write("a-propos.html", page("À propos – LREF archives", body, 0, "", "about"))
 write("404.html", page("Page introuvable – LREF archives", '<h1>Page introuvable</h1><p><a href="/lerapenfrance-archive/">Retour à l’accueil</a></p>'))
