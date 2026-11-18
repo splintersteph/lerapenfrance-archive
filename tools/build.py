@@ -36,7 +36,7 @@ SECTIONS = [
                                   "Bienvenueaustud"],
      "Découvertes, playlists et les « Mes 5 » des artistes."),
     ("actus", "Actus", ["Actus", "En Bref", "Une semaine de rap français", "Evénements", "Vidéos", "Magazine"],
-     "L'actualité du rap français semaine après semaine, de 2012 à 2023."),
+     "Les revues de la semaine et les agendas de concerts : le rap français raconté au fil de l'eau."),
 ]
 SEC = {s[0]: s for s in SECTIONS}
 SEC_LABEL = {s[0]: s[1] for s in SECTIONS}
@@ -157,6 +157,18 @@ for a in sorted(uniq.values(), key=lambda a: (a["slug"].startswith("p-"), len(a[
     else:
         seen[k] = seen[k2] = 1
 arts = sorted(uniq.values(), key=lambda a: a["date"], reverse=True)
+# brèves retirées : « En Bref » de moins de 500 mots, concours et annonces promotionnelles
+BREVES = []
+_keep = []
+for a in arts:
+    _w = len(BeautifulSoup(a["html"], "html.parser").get_text(" ").split())
+    if ("En Bref" in a.get("cats", []) and _w < 500) \
+            or re.match(r"\s*\[?(concours|chineurs du mois)", a["title"], re.I) \
+            or ("Vidéos" in a.get("cats", []) and _w < 50):
+        BREVES.append(a["slug"])
+    else:
+        _keep.append(a)
+arts = _keep
 by_slug = {a["slug"]: a for a in arts}
 for a in arts:
     a["text"] = plain(a["html"])
@@ -562,10 +574,11 @@ body = f"""<article class="story"><header class="story-head"><h1>À propos de ce
 <p>Le Rap en France (LREF) était un média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a réuni jusqu'à une trentaine de contributeurs bénévoles, publié un magazine papier bimestriel et atteint environ 1,5 million de pages vues.</p>
 <p>Le site a été perdu à la suite d'un piratage et son nom de domaine a changé de mains. Cette archive rassemble les {num(len(arts))} articles dont la <a href="https://web.archive.org/">Wayback Machine</a> d'Internet Archive a conservé une copie, écrits par {len(authors)} auteurs.</p>
 <p>Lors du piratage, une vingtaine d'articles avaient été remplacés par des publicités en anglais : la plupart ont été retrouvés dans des copies antérieures et réintégrés, les autres sont perdus. Les textes ont été relus automatiquement : typographie française, fautes d'orthographe et d'accord évidentes. Le style des auteurs, l'argot et les citations de paroles n'ont pas été modifiés.</p>
+<p>Les brèves d'actualité (annonces de clips et de sorties, concours) n'ont pas été reprises : seuls les articles de fond, les revues hebdomadaires et les agendas sont conservés.</p>
 <p>Les images sont chargées depuis ces copies d'archive : celles qui n'ont jamais été archivées sont remplacées par un aplat de couleur. Chaque article renvoie vers sa copie d'origine.</p></div></article>"""
 write("a-propos.html", page("À propos – Le Rap en France", body, 0))
 write("404.html", page("Page introuvable – Le Rap en France",
       f'<article class="story"><header class="story-head"><h1>Cette page n\'existe pas dans l\'archive</h1><p class="standfirst">Elle n\'a peut-être jamais été conservée. <a href="{BASE}articles.html">Cherchez dans les {num(len(arts))} articles</a> ou revenez à <a href="{BASE}index.html">la une</a>.</p></header></article>'))
 
-print("corrections :", dict(STATS), "· pages de spam écartées :", len(SPAM_RETIRES))
+print("corrections :", dict(STATS), "· pages de spam écartées :", len(SPAM_RETIRES), "· brèves retirées :", len(BREVES))
 print(f"{len(arts)} articles · rubriques {dict((k, len(v)) for k, v in by_sec.items())} · top90 {len(entries)} · top00 {len(rank00)}")
