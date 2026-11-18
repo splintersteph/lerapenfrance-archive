@@ -14,6 +14,19 @@ WB = "https://web.archive.org/web/2020im_/"
 
 data = json.load(open(SRC, encoding="utf-8"))
 items = data["items"]
+# corrige les adresses redirigees : le chemin reel est celui de la copie d'archive
+for _i in items:
+    _m = re.search(r"/web/\d+/https?://(?:www\.)?lerapenfrance\.fr(?::80)?(/[^?#]*)", _i.get("archive") or "")
+    if _m and _m.group(1).strip("/") and _m.group(1).strip("/").split("/")[0].lower() != (_i.get("path") or "").strip("/").lower():
+        _i["path"] = "/" + _m.group(1).strip("/").split("/")[0]
+# correctifs manuels (pages mal redirigees dans l'archive)
+_pf = os.path.join(os.path.dirname(os.path.abspath(SRC)), "patch-80-71.html")
+if os.path.exists(_pf):
+    items.append({"path": "/100-meilleurs-albums-annees-2000-de-80-a-71", "title": "Les 100 meilleurs albums des années 2000 : de 80 à 71",
+                  "date": "2019-07-29T15:51:27+00:00", "author": "", "cats": ["Sélections", "Tops"], "tags": [],
+                  "image": "http://lerapenfrance.fr/wp-content/uploads/2019/06/80-71.jpg", "desc": "Les années 2000 sont un paradoxe étrange dans le rap français.",
+                  "archive": "https://web.archive.org/web/20210116023114/http://lerapenfrance.fr/100-meilleurs-albums-annees-2000-de-80-a-71/",
+                  "html": open(_pf, encoding="utf-8").read()})
 
 
 def slugify(s):
@@ -40,8 +53,9 @@ def clean_title(t):
 
 
 # --- articles -------------------------------------------------------------
-arts = [i for i in items if not i.get("special") and i.get("html") and i.get("cats")
-        and re.match(r"\d{4}-\d{2}-\d{2}", i.get("date") or "")]
+arts = [i for i in items if not i.get("special") and i.get("html")
+        and re.match(r"\d{4}-\d{2}-\d{2}", i.get("date") or "")
+        and not re.fullmatch(r"\d+|Mise en page \d+|Politique vie priv.*|Contact\.?", (i.get("title") or "").strip())]
 seen = {}
 for a in arts:
     a["title"] = clean_title(a["title"])
@@ -54,6 +68,13 @@ for a in arts:
     k = a["slug"]
     if k not in uniq or len(a["html"]) > len(uniq[k]["html"]):
         uniq[k] = a
+_h = {}
+for a in list(uniq.values()):
+    k = hash(a["html"])
+    if k in _h:
+        uniq.pop(a["slug"] if len(a["slug"]) > len(_h[k]["slug"]) else _h[k]["slug"], None)
+    else:
+        _h[k] = a
 arts = sorted(uniq.values(), key=lambda a: a.get("date") or "", reverse=True)
 by_path = {slugify(a["path"]): a for a in arts}
 
@@ -151,12 +172,12 @@ def write(rel, content):
 
 if os.path.isdir(OUT):
     for f in os.listdir(OUT):
-        if f in (".git", "CNAME"):
+        if f in (".git", "CNAME", "tools", "data", "README.md", ".nojekyll"):
             continue
         fp = os.path.join(OUT, f)
         shutil.rmtree(fp) if os.path.isdir(fp) else os.remove(fp)
 os.makedirs(OUT, exist_ok=True)
-shutil.copy(os.path.join(HERE, "style.css"), os.path.join(OUT, "style.css"))
+shutil.copy(os.path.join(HERE, "style.css"), os.path.join(OUT, "style.css")) if os.path.abspath(HERE) != os.path.abspath(OUT) else None
 open(os.path.join(OUT, ".nojekyll"), "w").close()
 
 # --- pages articles -------------------------------------------------------
@@ -259,7 +280,7 @@ def para(l):
 
 rows = "".join(f'<li><a href="#n{n}"><b>{n}</b> {esc(ar)} – <i>{esc(al)}</i></a></li>' for n, ar, al, y, d in entries)
 cards = "".join(f'<section class="album" id="n{n}"><div class="num">{n}</div><div><h2>{esc(ar)} <span>– {esc(al)}</span></h2>'
-                f'{f"<p class=meta>{y}</p>" if y else ""}{"".join(para(l) for l in d)}</div></section>' for n, ar, al, y, d in reversed(entries))
+                f'{"".join(para(l) for l in d)}</div></section>' for n, ar, al, y, d in reversed(entries))
 body = f"""<h1>Top 100 – Années 90</h1><p class="lead">{esc(intro)}</p>
 <details class="toc" open><summary>Le classement</summary><ol class="rank" reversed>{rows}</ol></details>{cards}"""
 write("top-100-annees-90.html", page("Top 100 des années 90 – LREF archives", body, 0, intro[:150], "t90"))
@@ -270,8 +291,10 @@ order = lambda a: -int((re.search(r"de-(\d+)-a", a["slug"]) or re.search(r"(10)$
 tranches.sort(key=order)
 rank00 = []
 for a in tranches:
-    for m in re.finditer(r"<(?:h\d|strong|b)[^>]*>\s*#?(\d{1,3})\s*[–-]\s*(.+?)\s*\((\d{4})\)\s*</", a["html"]):
-        rank00.append((int(m.group(1)), html.unescape(re.sub("<[^>]+>", "", m.group(2))), m.group(3), a["slug"]))
+    for el in BeautifulSoup(a["html"], "html.parser").find_all(["h1", "h2", "h3", "h4", "strong", "b"]):
+        m = re.match(r"\s*#?(\d{1,3})\s*[–-]\s*(.+?)\s*\((\d{4})\)\s*$", el.get_text(" ").replace("\xa0", " "))
+        if m:
+            rank00.append((int(m.group(1)), re.sub(r"\s+", " ", m.group(2)).replace(" ’", "’"), m.group(3), a["slug"]))
 rank00 = sorted({r[0]: r for r in rank00}.values())
 lst = "".join(f'<li><a href="a/{s}/"><b>{n}</b> {esc(t)} <span class="y">({y})</span></a></li>' for n, t, y, s in rank00)
 trs = "".join(f'<li><a href="a/{a["slug"]}/">{esc(a["title"])}</a></li>' for a in sorted(tranches, key=order, reverse=False))
