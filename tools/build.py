@@ -353,7 +353,7 @@ if os.path.exists(_jf):
 <script>
 fetch("jul-marseille.json").then(r=>r.json()).then(P=>{{
  const map=L.map("map",{{scrollWheelZoom:false}}).setView([43.30,5.40],12);
- L.tileLayer("https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png",{{maxZoom:18,attribution:"© OpenStreetMap"}}).addTo(map);
+ L.tileLayer("https://{{s}}.basemaps.cartocdn.com/rastertiles/voyager/{{z}}/{{x}}/{{y}}{{r}}.png",{{maxZoom:19,subdomains:"abcd",attribution:"© OpenStreetMap, © CARTO"}}).addTo(map);
  const e=s=>s.replace(/[&<>"]/g,c=>({{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}}[c]));
  const mk=P.map(([n,la,lo,d])=>L.circleMarker([la,lo],{{radius:7,color:"#141414",weight:2,fillColor:"#d4231c",fillOpacity:.9}}).addTo(map).bindPopup("<b>"+e(n)+"</b><br>"+e(d)));
  map.fitBounds(L.featureGroup(mk).getBounds(),{{padding:[20,20]}});
