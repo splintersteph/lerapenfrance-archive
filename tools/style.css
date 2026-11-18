@@ -93,3 +93,12 @@ hr.page{border:0;border-top:1px dashed var(--line);margin:30px 0}
  .album{grid-template-columns:1fr;gap:4px}.album .num{font-size:40px}
  nav{gap:4px 14px;font-size:13px}
 }
+.flourish{margin:22px 0}
+.flourish iframe{width:100%;height:620px;border:0;background:#f4f1ea}
+.flourish .backup{font:600 14px system-ui,sans-serif;margin-top:8px}
+.bigmap{height:70vh;min-height:420px;border:1px solid var(--line);margin:18px 0}
+.places{list-style:none;padding:0;columns:2;column-gap:28px;font-size:15px}
+.places li{break-inside:avoid;padding:8px 0;border-bottom:1px solid var(--line)}
+.places a{text-decoration:none;color:var(--red)}
+.places span{display:block;color:#444;font-size:14px}
+@media (max-width:760px){.places{columns:1}.flourish iframe{height:480px}}

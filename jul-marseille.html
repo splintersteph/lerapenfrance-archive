@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jul &amp; Marseille – la carte – LREF archives</title>
+<meta name="description" content="Les lieux de Marseille cités par Jul">
+<link rel="stylesheet" href="style.css">
+<script>document.addEventListener("error",e=>{const t=e.target;if(t.tagName==="IMG"){if(t.classList.contains("cover")||t.closest(".card"))t.replaceWith(Object.assign(document.createElement("div"),{className:"ph",textContent:"LREF"}));else t.remove();}},true);</script>
+</head><body>
+<header class="top"><div class="wrap">
+<a class="logo" href="index.html"><span>LREF</span> Le Rap en France <em>· archives</em></a>
+<nav><a href="index.html">Accueil</a><a href="articles.html">Tous les articles</a><a href="top-100-annees-90.html">Top 100 années 90</a><a href="top-100-annees-2000.html">Top 100 années 2000</a><a href="a-propos.html">À propos</a></nav></div></header>
+<main class="wrap"><h1>Jul &amp; Marseille</h1>
+<p class="lead">Les lieux de Marseille cités par Jul dans ses morceaux, de 2012 à 2022. Cliquez sur un point pour lire l’extrait. <a href="a/lref-carte-de-marseille-par-jul/">Lire l’article d’origine</a> · <a href="https://flo.uri.sh/visualisation/10439095/embed">Carte Flourish d’origine</a></p>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<div id="map" class="bigmap"></div>
+<h2 class="sec">Tous les lieux</h2><div class="filters"><input id="q" type="search" placeholder="Filtrer : un lieu, un titre, un album…"></div><ol id="places" class="places"></ol>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+fetch("jul-marseille.json").then(r=>r.json()).then(P=>{
+ const map=L.map("map",{scrollWheelZoom:false}).setView([43.30,5.40],12);
+ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,attribution:"© OpenStreetMap"}).addTo(map);
+ const e=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+ const mk=P.map(([n,la,lo,d])=>L.circleMarker([la,lo],{radius:7,color:"#141414",weight:2,fillColor:"#d4231c",fillOpacity:.9}).addTo(map).bindPopup("<b>"+e(n)+"</b><br>"+e(d)));
+ map.fitBounds(L.featureGroup(mk).getBounds(),{padding:[20,20]});
+ const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+ const draw=()=>{const q=norm(document.getElementById("q").value);document.getElementById("places").innerHTML=P.map((p,i)=>[p,i]).filter(([p])=>!q||norm(p[0]+" "+p[3]).includes(q)).sort((a,b)=>a[0][3].localeCompare(b[0][3])).map(([p,i])=>`<li><a href="#map" data-i="${i}"><b>${e(p[0])}</b></a><span>${e(p[3])}</span></li>`).join("");};
+ document.getElementById("q").addEventListener("input",draw);draw();
+ document.getElementById("places").addEventListener("click",ev=>{const a=ev.target.closest("a[data-i]");if(!a)return;const m=mk[+a.dataset.i];map.setView(m.getLatLng(),15);m.openPopup();});
+});
+</script></main>
+<footer><div class="wrap">Le Rap en France (2011-2023) · Archive reconstituée à partir de la <a href="https://web.archive.org/">Wayback Machine</a>. Les textes appartiennent à leurs auteurs.</div></footer>
+</body></html>

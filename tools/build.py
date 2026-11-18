@@ -109,6 +109,18 @@ def rewrite(h, depth):
             box.replace_with(yt_block(soup, mm.group(1), box.get("title", "")))
     for p in soup.select("p[data-yt]"):
         p.replace_with(yt_block(soup, p["data-yt"]))
+    for a in soup.find_all("a", href=re.compile(r"flo\.uri\.sh/visualisation/\d+")):
+        vid = re.search(r"visualisation/(\d+)", a["href"]).group(1)
+        box = soup.new_tag("div", attrs={"class": "flourish"})
+        box.append(soup.new_tag("iframe", attrs={"src": f"https://flo.uri.sh/visualisation/{vid}/embed", "loading": "lazy",
+                                                  "title": "Visualisation Flourish", "allowfullscreen": ""}))
+        if vid == "10439095":
+            p = soup.new_tag("p", attrs={"class": "backup"})
+            l = soup.new_tag("a", href=pre + "jul-marseille.html")
+            l.string = "Ouvrir la copie de sauvegarde de la carte (87 lieux, avec les extraits) →"
+            p.append(l)
+            box.append(p)
+        (a.find_parent("p") or a).replace_with(box)
     for m in soup.find_all("meta"):
         m.decompose()
     for hr in soup.select("hr[data-page]"):
@@ -326,6 +338,33 @@ body = f"""<h1>À propos</h1><div class="content">
 <p>Le site a été perdu à la suite d'un piratage et son nom de domaine a depuis changé de mains. Cette archive rassemble les {f"{len(arts):,}".replace(",", " ")} articles dont une copie a été conservée par la <a href="https://web.archive.org/">Wayback Machine</a> d'Internet Archive. Les images sont chargées depuis ces copies d'archive, certaines peuvent donc manquer. Les années 2011 à 2015 sont moins bien couvertes, car l'archive a peu indexé le site à cette période.</p>
 <p>Chaque article renvoie vers sa copie d'origine sur la Wayback Machine.</p></div>"""
 write("a-propos.html", page("À propos – LREF archives", body, 0, "", "about"))
+# --- carte Jul & Marseille (sauvegarde de la visualisation Flourish) --------
+_jf = os.path.join(os.path.dirname(os.path.abspath(SRC)), "jul-marseille.json")
+if os.path.exists(_jf):
+    write("jul-marseille.json", open(_jf, encoding="utf-8").read())
+    _art = next((a for a in arts if a["slug"] == "lref-carte-de-marseille-par-jul"), None)
+    _back = f'<a href="a/{_art["slug"]}/">Lire l’article d’origine</a> · ' if _art else ""
+    body = f"""<h1>Jul &amp; Marseille</h1>
+<p class="lead">Les lieux de Marseille cités par Jul dans ses morceaux, de 2012 à 2022. Cliquez sur un point pour lire l’extrait. {_back}<a href="https://flo.uri.sh/visualisation/10439095/embed">Carte Flourish d’origine</a></p>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<div id="map" class="bigmap"></div>
+<h2 class="sec">Tous les lieux</h2><div class="filters"><input id="q" type="search" placeholder="Filtrer : un lieu, un titre, un album…"></div><ol id="places" class="places"></ol>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+fetch("jul-marseille.json").then(r=>r.json()).then(P=>{{
+ const map=L.map("map",{{scrollWheelZoom:false}}).setView([43.30,5.40],12);
+ L.tileLayer("https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png",{{maxZoom:18,attribution:"© OpenStreetMap"}}).addTo(map);
+ const e=s=>s.replace(/[&<>"]/g,c=>({{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}}[c]));
+ const mk=P.map(([n,la,lo,d])=>L.circleMarker([la,lo],{{radius:7,color:"#141414",weight:2,fillColor:"#d4231c",fillOpacity:.9}}).addTo(map).bindPopup("<b>"+e(n)+"</b><br>"+e(d)));
+ map.fitBounds(L.featureGroup(mk).getBounds(),{{padding:[20,20]}});
+ const norm=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+ const draw=()=>{{const q=norm(document.getElementById("q").value);document.getElementById("places").innerHTML=P.map((p,i)=>[p,i]).filter(([p])=>!q||norm(p[0]+" "+p[3]).includes(q)).sort((a,b)=>a[0][3].localeCompare(b[0][3])).map(([p,i])=>`<li><a href="#map" data-i="${{i}}"><b>${{e(p[0])}}</b></a><span>${{e(p[3])}}</span></li>`).join("");}};
+ document.getElementById("q").addEventListener("input",draw);draw();
+ document.getElementById("places").addEventListener("click",ev=>{{const a=ev.target.closest("a[data-i]");if(!a)return;const m=mk[+a.dataset.i];map.setView(m.getLatLng(),15);m.openPopup();}});
+}});
+</script>"""
+    write("jul-marseille.html", page("Jul & Marseille – la carte – LREF archives", body, 0, "Les lieux de Marseille cités par Jul"))
+
 write("404.html", page("Page introuvable – LREF archives", '<h1>Page introuvable</h1><p><a href="/lerapenfrance-archive/">Retour à l’accueil</a></p>'))
 
 print(f"{len(arts)} articles · rubriques {len(rubs)} · top90 {len(entries)} · top00 {len(rank00)} · années {dict(sorted(years.items()))}")
