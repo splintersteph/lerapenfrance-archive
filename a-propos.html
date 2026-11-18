@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>À propos – LREF archives</title>
+<title>À propos – Le Rap en France</title>
 <meta name="description" content="">
+<meta property="og:title" content="À propos – Le Rap en France">
+<meta property="og:description" content="">
+
+<link rel="preload" href="fonts/BigShouldersDisplay.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
-<script>document.addEventListener("error",e=>{const t=e.target;if(t.tagName==="IMG"){if(t.classList.contains("cover")||t.closest(".card"))t.replaceWith(Object.assign(document.createElement("div"),{className:"ph",textContent:"LREF"}));else t.remove();}},true);</script>
+<script>document.addEventListener("error",e=>{const t=e.target;if(t.tagName!=="IMG")return;const f=t.closest(".ph-host");if(f){f.classList.add("noimg");t.remove()}else t.remove()},true);</script>
 </head><body>
-<header class="top"><div class="wrap">
-<a class="logo" href="index.html"><span>LREF</span> Le Rap en France <em>· archives</em></a>
-<nav><a href="index.html">Accueil</a><a href="articles.html">Tous les articles</a><a href="top-100-annees-90.html">Top 100 années 90</a><a href="top-100-annees-2000.html">Top 100 années 2000</a><a href="a-propos.html" class=on>À propos</a></nav></div></header>
-<main class="wrap"><h1>À propos</h1><div class="content">
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="mast">
+ <div class="mast-in">
+  <a class="brand" href="index.html"><span class="brand-name">Le Rap en France</span><span class="brand-sub">Archives 2011–2023</span></a>
+  <form class="msearch" action="articles.html" role="search"><label class="sr" for="mq">Rechercher</label><input id="mq" name="q" type="search" placeholder="Un artiste, un album…"></form>
+ </div>
+ <nav class="sections" aria-label="Rubriques"><div class="nav-in"><a href="rubrique/classements.html">Classements</a><a href="rubrique/dossiers.html">Dossiers</a><a href="rubrique/interviews.html">Interviews</a><a href="rubrique/chroniques.html">Chroniques</a><a href="rubrique/billets.html">Billets d&#x27;humeur</a><a href="rubrique/selections.html">Sélections</a><a href="rubrique/actus.html">Actus</a><a href="articles.html">Tout</a></div></nav>
+</header>
+<main id="contenu"><article class="story"><header class="story-head"><h1>À propos de cette archive</h1></header><div class="prose">
 <p>Le Rap en France (LREF) était un média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a réuni jusqu'à une trentaine de contributeurs bénévoles, publié un magazine papier bimestriel et atteint environ 1,5 million de pages vues.</p>
-<p>Le site a été perdu à la suite d'un piratage et son nom de domaine a depuis changé de mains. Cette archive rassemble les 1 655 articles dont une copie a été conservée par la <a href="https://web.archive.org/">Wayback Machine</a> d'Internet Archive. Les images sont chargées depuis ces copies d'archive, certaines peuvent donc manquer. Les années 2011 à 2015 sont moins bien couvertes, car l'archive a peu indexé le site à cette période.</p>
-<p>Chaque article renvoie vers sa copie d'origine sur la Wayback Machine.</p></div></main>
-<footer><div class="wrap">Le Rap en France (2011-2023) · Archive reconstituée à partir de la <a href="https://web.archive.org/">Wayback Machine</a>. Les textes appartiennent à leurs auteurs.</div></footer>
+<p>Le site a été perdu à la suite d'un piratage et son nom de domaine a changé de mains. Cette archive rassemble les 1 485 articles dont la <a href="https://web.archive.org/">Wayback Machine</a> d'Internet Archive a conservé une copie, écrits par 80 auteurs.</p>
+<p>Les images sont chargées depuis ces copies d'archive : celles qui n'ont jamais été archivées sont remplacées par un aplat de couleur. Chaque article renvoie vers sa copie d'origine.</p></div></article></main>
+<footer class="foot"><div class="foot-in">
+ <p class="foot-brand">Le Rap en France</p>
+ <p>Média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a disparu après un piratage ; ses articles ont été reconstitués à partir des copies de la <a href="https://web.archive.org/">Wayback Machine</a>. Les textes appartiennent à leurs auteurs.</p>
+ <p><a href="a-propos.html">À propos de l'archive</a> · <a href="top-100-annees-90.html">Top 100 années 90</a> · <a href="top-100-annees-2000.html">Top 100 années 2000</a> · <a href="jul-marseille.html">Jul &amp; Marseille</a></p>
+</div></footer>
 </body></html>
