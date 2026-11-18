@@ -6,6 +6,8 @@ import json, re, sys, os, html, unicodedata, shutil
 from urllib.parse import unquote, quote
 from collections import Counter, defaultdict
 from bs4 import BeautifulSoup
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from corrections import corrige_html, corrige_texte, est_spam, retire_paragraphes_spam
 
 SRC, OUT = sys.argv[1], sys.argv[2]
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -58,6 +60,21 @@ if os.path.exists(_pf):
                   "html": open(_pf, encoding="utf-8").read()})
 
 
+# articles recuperes depuis des copies anterieures au piratage
+_rf = os.path.join(DATA, "recovered.json")
+RECOVERED = json.load(open(_rf, encoding="utf-8")) if os.path.exists(_rf) else []
+_rec_paths = {r["path"] for r in RECOVERED}
+_old = {i.get("path"): i for i in items}
+for r in RECOVERED:
+    o = _old.get(r["path"], {})
+    if not r.get("date"):
+        r["date"] = o.get("date", "")
+    if not r.get("cats"):
+        r["cats"] = o.get("cats", [])
+items = [i for i in items if i.get("path") not in _rec_paths] + RECOVERED
+SPAM_RETIRES = []
+
+
 def slugify(s):
     s = unquote(s).strip("/")
     s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
@@ -107,8 +124,23 @@ def plain(h, n=None):
 arts = [i for i in items if not i.get("special") and i.get("html")
         and re.match(r"\d{4}-\d{2}-\d{2}", i.get("date") or "")
         and not re.fullmatch(r"\d+|Mise en page \d+|Politique vie priv.*|Contact\.?", (i.get("title") or "").strip())]
+_clean = []
+STATS = Counter()
 for a in arts:
-    a["title"] = clean_title(a["title"])
+    _s = BeautifulSoup(a["html"], "html.parser")
+    if est_spam(_s.get_text(" ")):
+        _n = retire_paragraphes_spam(_s)
+        if est_spam(_s.get_text(" ")) or len(_s.get_text(" ").split()) < 40:
+            SPAM_RETIRES.append(a["path"])
+            continue
+        STATS["paragraphes de spam"] += _n
+    else:
+        STATS["paragraphes de spam"] += retire_paragraphes_spam(_s)
+    a["html"] = str(corrige_html(_s, STATS))
+    _clean.append(a)
+arts = _clean
+for a in arts:
+    a["title"] = clean_title(corrige_texte(a["title"], Counter()))
     a["slug"] = slugify(a["path"])
     a["fdate"], a["year"] = fdate(a["date"])
     a["sec"] = section_of(a.get("cats"))
@@ -529,9 +561,11 @@ write("index.html", page("Le Rap en France – archives 2011–2023", body, 0,
 body = f"""<article class="story"><header class="story-head"><h1>À propos de cette archive</h1></header><div class="prose">
 <p>Le Rap en France (LREF) était un média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a réuni jusqu'à une trentaine de contributeurs bénévoles, publié un magazine papier bimestriel et atteint environ 1,5 million de pages vues.</p>
 <p>Le site a été perdu à la suite d'un piratage et son nom de domaine a changé de mains. Cette archive rassemble les {num(len(arts))} articles dont la <a href="https://web.archive.org/">Wayback Machine</a> d'Internet Archive a conservé une copie, écrits par {len(authors)} auteurs.</p>
+<p>Lors du piratage, une vingtaine d'articles avaient été remplacés par des publicités en anglais : la plupart ont été retrouvés dans des copies antérieures et réintégrés, les autres sont perdus. Les textes ont été relus automatiquement : typographie française, fautes d'orthographe et d'accord évidentes. Le style des auteurs, l'argot et les citations de paroles n'ont pas été modifiés.</p>
 <p>Les images sont chargées depuis ces copies d'archive : celles qui n'ont jamais été archivées sont remplacées par un aplat de couleur. Chaque article renvoie vers sa copie d'origine.</p></div></article>"""
 write("a-propos.html", page("À propos – Le Rap en France", body, 0))
 write("404.html", page("Page introuvable – Le Rap en France",
       f'<article class="story"><header class="story-head"><h1>Cette page n\'existe pas dans l\'archive</h1><p class="standfirst">Elle n\'a peut-être jamais été conservée. <a href="{BASE}articles.html">Cherchez dans les {num(len(arts))} articles</a> ou revenez à <a href="{BASE}index.html">la une</a>.</p></header></article>'))
 
+print("corrections :", dict(STATS), "· pages de spam écartées :", len(SPAM_RETIRES))
 print(f"{len(arts)} articles · rubriques {dict((k, len(v)) for k, v in by_sec.items())} · top90 {len(entries)} · top00 {len(rank00)}")
