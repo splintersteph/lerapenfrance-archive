@@ -168,7 +168,9 @@ PROMO = {"mama-festival-2021-une-programmation-rap", "evenement-mama-festival-pr
          "hip-hop-is-red-festival-gratuit-fin-janvier", "evenement-decouvrez-laffiche-de-finale-buzz-booster-idf",
          "jeu-concours-hornet-frappe-a-cigale-7-decembre-2018", "evenement-ne-manquez-demi-finale-de-buzz-booster-idf",
          "alaclair-ensemble-a-conquete-de-paris", "mama-festival-artistes-hip-hop-de-9e-edition",
-         "marsatac-15-16-17-juin-2018-20-ans", "breve-paris-hip-hop-festival-premiers-noms", "ne-loupez-release-party-colere-calme"}
+         "marsatac-15-16-17-juin-2018-20-ans", "breve-paris-hip-hop-festival-premiers-noms", "ne-loupez-release-party-colere-calme",
+         "annonce-rap-france-recrute-2", "swift-guad-nouvel-album-pour-la-rentree", "clip-lma-seme-sa-premiere-graine",
+         "clip-s-i-n-i-k-contradictions"}
 BREVES = []
 _keep = []
 for a in arts:
