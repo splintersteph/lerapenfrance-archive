@@ -24,7 +24,7 @@ SITES = {
         "decade": "1990–1999",
         "theme": "k7",
         "faces": ("Face A", "Face B"),
-        "other": ("2000", "Les années 2000", "https://splintersteph.github.io/top100-annees-2000/"),
+        "other": ("2000", "Les années 2000", "https://2000.lref.fr/"),
         "intro": "Cent albums, de Dee Nasty à IAM, choisis par la rédaction du Rap en France et publiés en 2016. "
                  "Une décennie de cassettes copiées, de compilations, de maxis et de premiers albums qui ont fondé le rap français.",
         "method": [
@@ -47,7 +47,7 @@ SITES = {
         "decade": "2000–2009",
         "theme": "cd",
         "faces": ("Disque 1", "Disque 2"),
-        "other": ("90", "Les années 90", "https://splintersteph.github.io/top100-annees-90/"),
+        "other": ("90", "Les années 90", "https://90.lref.fr/"),
         "intro": "Cent albums de Mauvais Œil à Secrets de l'oubli, élus par 43 critiques. "
                  "La décennie qu'on a trop vite enterrée : street CD, indépendance, Skyrock et 45 Scientific.",
         "method": [
@@ -67,7 +67,7 @@ SITES = {
     },
 }
 
-ARCHIVE = "https://splintersteph.github.io/lerapenfrance-archive/"
+ARCHIVE = "https://lref.fr/"
 
 
 def slug(s):

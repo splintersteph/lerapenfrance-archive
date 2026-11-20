@@ -15,7 +15,7 @@ DATA = os.path.dirname(os.path.abspath(SRC))
 MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
         "septembre", "octobre", "novembre", "décembre"]
 WB = "https://web.archive.org/web/2020im_/"
-BASE = "/lerapenfrance-archive/"
+BASE = "/"
 
 SECTIONS = [
     ("classements", "Classements", ["Tops", "Top 100 années 2000", "Top années 90"],

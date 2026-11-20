@@ -8,7 +8,7 @@ ROOT = Path(__file__).parent
 ARCH_REPO = Path("/home/claude/lerapenfrance-archive")
 DATA = json.load(open(ARCH_REPO / "data" / "top-morceaux-2016.json"))
 OUT = ROOT / "out" / "top-morceaux-2016"
-ARCHIVE = "https://splintersteph.github.io/lerapenfrance-archive/"
+ARCHIVE = "https://lref.fr/"
 ARCH_SLUGS = set(os.listdir(ARCH_REPO / "a")) if (ARCH_REPO / "a").exists() else set()
 FONTS = ROOT / "fonts"
 FONT_FILES = [("Syne", "fontsource-syne-5.3.0", "syne-latin-800-normal.woff2", 800, "normal"),
@@ -147,7 +147,7 @@ def build():
   quand ils manquent, la vignette YouTube prend le relais. Pour le top 10, les vidéos n'ont pas été archivées : les boutons lancent une recherche YouTube.</p>
 </section>
 </main>
-<footer class="foot"><p>Un classement de <a href="{ARCHIVE}">Le Rap en France</a> · Voir aussi les tops albums des <a href="https://splintersteph.github.io/top100-annees-90/">années 90</a> et des <a href="https://splintersteph.github.io/top100-annees-2000/">années 2000</a>.</p></footer>
+<footer class="foot"><p>Un classement de <a href="{ARCHIVE}">Le Rap en France</a> · Voir aussi les tops albums des <a href="https://90.lref.fr/">années 90</a> et des <a href="https://2000.lref.fr/">années 2000</a>.</p></footer>
 <script>
 (function(){{var q=document.getElementById('q'),rows=[].slice.call(document.querySelectorAll('#liste .trk')),secs=[].slice.call(document.querySelectorAll('.tens')),nr=document.getElementById('nores');
 function n(s){{return s.normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase();}}
