@@ -22,7 +22,7 @@ YEARS = {
     "2022":    dict(label="2022", color="#FFA024", kind="projets", short="2022"),
 }
 NOTES = {
-    "2012": "Classement reconstitué en novembre 2026 : aucun bilan 2012 n'a été publié à l'époque. Le choix et l'ordre s'appuient sur les chroniques parues sur le site en 2012, et les textes ont été écrits à la manière des bilans de la rédaction.",
+    "2012": "Classement reconstitué en novembre 2026 : aucun bilan 2012 n'a été publié à l'époque. Le choix et l’ordre s’appuient sur les chroniques parues sur le site en 2012 (et début 2013 pour Booba), et les textes ont été écrits à la manière des bilans de la rédaction.",
     "2013": "Le bilan 2013 n'était pas classé : dix albums, présentés dans l'ordre de l'article d'origine.",
     "2015": "En 2015, la rédaction avait décidé de ne plus classer de 1 à 10 : dix projets, présentés dans l'ordre de l'article d'origine.",
     "2022": "L'article d'origine annonçait 15 projets mais passe directement du n° 15 au n° 13 : il n'y a jamais eu de n° 14.",
