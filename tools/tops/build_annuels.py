@@ -44,7 +44,9 @@ def slug(s):
 
 def keep(p):
     t = plain(p).strip()
-    return t and t not in ("(ICI)", "ICI") and not t.startswith("Sujets")
+    if not t or t in ("(ICI)", "ICI") or t.startswith("Sujets"):
+        return False
+    return not re.match(r"(Retrouvez|Chronique |Pour lire|A lire aussi|À lire aussi|Inutile d’en rajouter|Notre (focus|chronique|dossier)|Roulement de tambour|Place maintenant au top 3)", t)
 
 
 def para(p):
