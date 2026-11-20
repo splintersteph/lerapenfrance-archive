@@ -36,7 +36,7 @@ SECTIONS = [
                                   "Bienvenueaustud"],
      "Découvertes, playlists et les « Mes 5 » des artistes."),
     ("actus", "Actus", ["Actus", "En Bref", "Une semaine de rap français", "Evénements", "Vidéos", "Magazine"],
-     "Les revues de la semaine et les agendas de concerts : le rap français raconté au fil de l'eau."),
+     "Les revues de la semaine, les festivals et l'actualité : le rap français raconté au fil de l'eau."),
 ]
 SEC = {s[0]: s for s in SECTIONS}
 SEC_LABEL = {s[0]: s[1] for s in SECTIONS}
@@ -164,7 +164,8 @@ for a in arts:
     _w = len(BeautifulSoup(a["html"], "html.parser").get_text(" ").split())
     if ("En Bref" in a.get("cats", []) and _w < 500) \
             or re.match(r"\s*\[?(concours|chineurs du mois)", a["title"], re.I) \
-            or ("Vidéos" in a.get("cats", []) and _w < 50):
+            or ("Vidéos" in a.get("cats", []) and _w < 50) \
+            or re.search(r"agenda des concerts|vade-mecum", a["title"], re.I) or a["slug"] == "summertime":
         BREVES.append(a["slug"])
     else:
         _keep.append(a)
@@ -577,7 +578,7 @@ body = f"""<article class="story"><header class="story-head"><h1>À propos de ce
 <p>Le Rap en France (LREF) était un média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a réuni jusqu'à une trentaine de contributeurs bénévoles, publié un magazine papier bimestriel et atteint environ 1,5 million de pages vues.</p>
 <p>Le site a été perdu à la suite d'un piratage et son nom de domaine a changé de mains. Cette archive rassemble les {num(len(arts))} articles dont la <a href="https://web.archive.org/">Wayback Machine</a> d'Internet Archive a conservé une copie, écrits par {len(authors)} auteurs.</p>
 <p>Lors du piratage, une vingtaine d'articles avaient été remplacés par des publicités en anglais : la plupart ont été retrouvés dans des copies antérieures et réintégrés, les autres sont perdus. Les textes ont été relus automatiquement : typographie française, fautes d'orthographe et d'accord évidentes. Le style des auteurs, l'argot et les citations de paroles n'ont pas été modifiés.</p>
-<p>Les brèves d'actualité (annonces de clips et de sorties, concours) n'ont pas été reprises : seuls les articles de fond, les revues hebdomadaires et les agendas sont conservés.</p>
+<p>Les brèves d'actualité (annonces de clips et de sorties, concours) n'ont pas été reprises, pas plus que les agendas de concerts. Seuls les articles de fond et les revues hebdomadaires sont conservés.</p>
 <p>Les images sont chargées depuis ces copies d'archive : celles qui n'ont jamais été archivées sont remplacées par un aplat de couleur. Chaque article renvoie vers sa copie d'origine.</p></div></article>"""
 write("a-propos.html", page("À propos – Le Rap en France", body, 0))
 write("404.html", page("Page introuvable – Le Rap en France",
