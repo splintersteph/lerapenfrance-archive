@@ -1,5 +1,5 @@
 import re,html,glob,json,sys
-SRC={2013:'bilan-notre-top-album',2014:'top-10-2014','2014-ep':'top-10-epsmixtapes-redaction',2017:'top-projets-2017',2018:'top-projets-2018',2020:'rap-francais-top-2020-lref',2021:'top-projets-rap-francais-2021',2022:'top-projets-2022-le-meilleur-du-rap-francais'}
+SRC={2013:'bilan-notre-top-album',2014:'top-10-2014','2014-ep':'top-10-epsmixtapes-redaction',2015:'les-albums-qui-nous-ont-marques-en-2015',2016:'nos-projets-preferes-2016',2017:'top-projets-2017',2018:'top-projets-2018',2020:'rap-francais-top-2020-lref',2021:'top-projets-rap-francais-2021',2022:'top-projets-2022-le-meilleur-du-rap-francais'}
 def clean(s):
     s=re.sub(r'<(?!/?(em|strong|i|b)\b)[^>]+>','',s)
     s=re.sub(r'<(/?)(i)>',r'<\1em>',s); s=re.sub(r'<(/?)b>',r'<\1strong>',s)

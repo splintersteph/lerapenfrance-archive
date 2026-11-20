@@ -12,7 +12,9 @@ YEARS = {
     "2013":    dict(label="2013", color="#FF5A36", kind="albums", short="2013"),
     "2014":    dict(label="2014", color="#FFD23F", kind="albums", short="2014"),
     "2014-ep": dict(label="2014", color="#9BE564", kind="EPs & mixtapes", short="EPs 2014"),
-    "2017":    dict(label="2017", color="#4FA8FF", kind="projets", short="2017"),
+    "2015":    dict(label="2015", color="#FF8FB1", kind="projets", short="2015"),
+    "2016":    dict(label="2016", color="#7CE0FF", kind="projets", short="2016"),
+    "2017":    dict(label="2017", color="#5577FF", kind="projets", short="2017"),
     "2018":    dict(label="2018", color="#FF7AC6", kind="projets", short="2018"),
     "2020":    dict(label="2020", color="#B9A2FF", kind="projets", short="2020"),
     "2021":    dict(label="2021", color="#2FD1BF", kind="projets", short="2021"),
@@ -20,6 +22,7 @@ YEARS = {
 }
 NOTES = {
     "2013": "Le bilan 2013 n'était pas classé : dix albums, présentés dans l'ordre de l'article d'origine.",
+    "2015": "En 2015, la rédaction avait décidé de ne plus classer de 1 à 10 : dix projets, présentés dans l'ordre de l'article d'origine.",
     "2022": "L'article d'origine annonçait 15 projets mais passe directement du n° 15 au n° 13 : il n'y a jamais eu de n° 14.",
 }
 ORDER = list(YEARS)
@@ -65,7 +68,7 @@ def page(title, desc, body, color, cls=""):
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <meta name="theme-color" content="{color}">
-<link rel="stylesheet" href="/style.css?v=3">
+<link rel="stylesheet" href="/style.css?v=4">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23141414'/%3E%3Ccircle cx='32' cy='32' r='9' fill='{urllib.parse.quote(color)}'/%3E%3C/svg%3E">
 </head><body class="{cls}" style="--c:{color}">
 {body}
@@ -89,7 +92,7 @@ def footer():
 
 def winner(m):
     its = m["items"]
-    if m["key"] == "2013":
+    if its[0]["rank"] is None:
         return its[0]
     return min(its, key=lambda x: x["rank"])
 
@@ -132,14 +135,14 @@ def year_page(m):
             return "<span></span>"
         oy = YEARS[o["key"]]
         ow = winner(o)
-        lead = "N° 1" if o["key"] != "2013" else "En tête"
+        lead = "N° 1" if o["items"][0]["rank"] is not None else "En tête"
         return (f'<a class="{cls}" href="/{o["key"]}/" style="--c:{oy["color"]}"><small>{esc(oy["short"])} · {oy["kind"]}</small>'
                 f'<b>{esc(ow["artist"])}</b><em>{lead} : {esc(ow["album"])} · {oy["label"]}</em></a>')
 
     intro = "".join(para(p) for p in m["intro"])
     note = f'<p class="note">{esc(NOTES[k])}</p>' if k in NOTES else ""
     covers = "".join(f'<img src="{esc(x["img"])}" alt="" loading="lazy" onerror="this.remove()">' for x in items)
-    head = "La sélection" if k == "2013" else f"Le top {len(items) + (1 if k == '2022' else 0)}"
+    head = "La sélection" if items[0]["rank"] is None else f"Le top {len(items) + (1 if k == '2022' else 0)}"
     body = f"""{top_bar()}
 <main>
 <section class="yhero">
@@ -172,7 +175,7 @@ def index_page():
         k = m["key"]
         y = YEARS[k]
         w = winner(m)
-        lead = "N° 1" if k != "2013" else "En tête"
+        lead = "N° 1" if m["items"][0]["rank"] is not None else "En tête"
         spines.append(f"""<li style="--c:{y['color']}"><a href="/{k}/">
   <span class="yr">{"EPs 14" if k=="2014-ep" else y['label']}</span>
   <span class="cv"><span class="ph">{esc(w['album'])}</span><img src="{esc(w['img'])}" alt="" loading="lazy" onerror="this.remove()"></span>
@@ -187,7 +190,7 @@ def index_page():
 <ol class="spines">
 {''.join(spines)}
 </ol>
-<p class="gap">Les bilans 2015, 2016 et 2019 n'ont pas été retrouvés dans les archives.</p>
+<p class="gap">Le bilan 2019 n'a pas été retrouvé dans les archives.</p>
 </main>
 {footer()}"""
     return page("Les albums de l'année · Le Rap en France 2013–2022",

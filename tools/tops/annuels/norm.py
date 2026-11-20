@@ -15,6 +15,8 @@ for y,m in d.items():
         h=x['head'].replace(' (ICI)','')
         if y=='2013':
             a,al=Y2013[i]; r=None; tag=x['head']
+        elif y=='2015':
+            a,al=[z.strip() for z in h.split(' – ',1)]; r=None; tag=''
         else:
             mm=re.match(r'(\d+)\s*[–.\-)]\s*(.+?)\s+–\s+(.+)$',h)
             r=int(mm.group(1)); a,al=mm.group(2).strip(),mm.group(3).strip(); tag=''
