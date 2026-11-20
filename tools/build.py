@@ -158,6 +158,17 @@ for a in sorted(uniq.values(), key=lambda a: (a["slug"].startswith("p-"), len(a[
         seen[k] = seen[k2] = 1
 arts = sorted(uniq.values(), key=lambda a: a["date"], reverse=True)
 # brèves retirées : « En Bref » de moins de 500 mots, concours et annonces promotionnelles
+# annonces promotionnelles d'événements (festivals, soirées, line-ups), retirées à la demande de Stéphane
+PROMO = {"mama-festival-2021-une-programmation-rap", "evenement-mama-festival-premier-apercu-programmation-2020",
+         "mama-festival-defricheur-de-nouveaux-talent", "evenement-rock-seine-2019-toujours-plus-de-rap-francais",
+         "evenement-nuits-secretes-fetent-leurs-18-ans", "evenement-lollapalooza-ledition-2019-signe-de-gastronomie-francaise",
+         "marsatac-nouvelle-edition-sannonce-bouillante", "evenement-contre-culture-soiree-secoue-scene-underground",
+         "breve-dour-vend-reve-ledition-2019", "evenements-magnifique-society-festival-porte-bien-nom",
+         "evenements-n-m-novator-rap-rentre-t-grande-chanson-francaise", "decouvrez-futur-soirees-hip-hop-a-paris-cuniculaire",
+         "hip-hop-is-red-festival-gratuit-fin-janvier", "evenement-decouvrez-laffiche-de-finale-buzz-booster-idf",
+         "jeu-concours-hornet-frappe-a-cigale-7-decembre-2018", "evenement-ne-manquez-demi-finale-de-buzz-booster-idf",
+         "alaclair-ensemble-a-conquete-de-paris", "mama-festival-artistes-hip-hop-de-9e-edition",
+         "marsatac-15-16-17-juin-2018-20-ans", "breve-paris-hip-hop-festival-premiers-noms", "ne-loupez-release-party-colere-calme"}
 BREVES = []
 _keep = []
 for a in arts:
@@ -165,7 +176,7 @@ for a in arts:
     if ("En Bref" in a.get("cats", []) and _w < 500) \
             or re.match(r"\s*\[?(concours|chineurs du mois)", a["title"], re.I) \
             or ("Vidéos" in a.get("cats", []) and _w < 50) \
-            or re.search(r"agenda des concerts|vade-mecum", a["title"], re.I) or a["slug"] == "summertime":
+            or re.search(r"agenda des concerts|vade-mecum", a["title"], re.I) or a["slug"] == "summertime" or a["slug"] in PROMO:
         BREVES.append(a["slug"])
     else:
         _keep.append(a)
@@ -578,7 +589,7 @@ body = f"""<article class="story"><header class="story-head"><h1>À propos de ce
 <p>Le Rap en France (LREF) était un média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a réuni jusqu'à une trentaine de contributeurs bénévoles, publié un magazine papier bimestriel et atteint environ 1,5 million de pages vues.</p>
 <p>Le site a été perdu à la suite d'un piratage et son nom de domaine a changé de mains. Cette archive rassemble les {num(len(arts))} articles dont la <a href="https://web.archive.org/">Wayback Machine</a> d'Internet Archive a conservé une copie, écrits par {len(authors)} auteurs.</p>
 <p>Lors du piratage, une vingtaine d'articles avaient été remplacés par des publicités en anglais : la plupart ont été retrouvés dans des copies antérieures et réintégrés, les autres sont perdus. Les textes ont été relus automatiquement : typographie française, fautes d'orthographe et d'accord évidentes. Le style des auteurs, l'argot et les citations de paroles n'ont pas été modifiés.</p>
-<p>Les brèves d'actualité (annonces de clips et de sorties, concours) n'ont pas été reprises, pas plus que les agendas de concerts. Seuls les articles de fond et les revues hebdomadaires sont conservés.</p>
+<p>Les brèves d'actualité (annonces de clips et de sorties, concours) n'ont pas été reprises, pas plus que les agendas de concerts et les annonces de festivals ou de soirées. Seuls les articles de fond et les revues hebdomadaires sont conservés.</p>
 <p>Les images sont chargées depuis ces copies d'archive : celles qui n'ont jamais été archivées sont remplacées par un aplat de couleur. Chaque article renvoie vers sa copie d'origine.</p></div></article>"""
 write("a-propos.html", page("À propos – Le Rap en France", body, 0))
 write("404.html", page("Page introuvable – Le Rap en France",
