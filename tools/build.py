@@ -275,7 +275,7 @@ def page(title, body, depth=0, desc="", active="", og_image=""):
 {f'<meta property="og:image" content="{esc(og_image)}">' if og_image else ''}
 <link rel="preload" href="{pre}fonts/Schibsted.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="theme-color" content="#050505">
-<link rel="stylesheet" href="{pre}style.css">
+<link rel="stylesheet" href="{pre}style.css?v=3">
 <script>document.addEventListener("error",e=>{{const t=e.target;if(t.tagName!=="IMG")return;const f=t.closest(".ph-host");if(f){{f.classList.add("noimg");t.remove()}}else t.remove()}},true);</script>
 </head><body>
 <a class="skip" href="#contenu">Aller au contenu</a>
