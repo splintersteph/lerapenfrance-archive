@@ -6,6 +6,14 @@ from urllib.parse import quote_plus
 
 ROOT = Path(__file__).parent
 DATA = json.load(open(ROOT / "src" / "data.json"))
+COVERS = json.load(open(ROOT / "src" / "covers.json")) if (ROOT / "src" / "covers.json").exists() else {}
+
+
+def cover(site, e):
+    return COVERS.get(("90" if site["theme"] == "k7" else "2000") + "-" + str(e["rank"]))
+
+
+ONERR = "this.closest('figure').classList.add('nocover');this.remove()"
 FONTS = ROOT / "fonts"
 
 SITES = {
@@ -126,10 +134,12 @@ def page(site, title, body, desc, depth=0, cls=""):
 def sleeve(site, e):
     a, al, r = html.escape(e["artist"]), inline(e["album"]), e["rank"]
     yr = e.get("year") or ""
+    cv = cover(site, e)
     if site["theme"] == "k7":
-        return f"""<figure class="jcard" aria-hidden="true">
+        img = (f'<img class="jcard-img" src="{cv}" alt="" loading="eager" referrerpolicy="no-referrer" onerror="{ONERR}"><span class="jcard-sticker">{r}</span>' if cv else "")
+        return f"""<figure class="jcard{' has-cover' if cv else ''}" aria-hidden="true">
   <div class="jcard-spine"><span>{a} — {al}</span></div>
-  <div class="jcard-front">
+  <div class="jcard-front">{img}
     <span class="jcard-n">{r}</span>
     <span class="jcard-a">{a}</span>
     <span class="jcard-t">{al}</span>
@@ -137,7 +147,8 @@ def sleeve(site, e):
     <span class="jcard-tape"></span>
   </div>
 </figure>"""
-    return f"""<figure class="disc-wrap" aria-hidden="true">
+    img = f'<img class="cd-cover" src="{cv}" alt="" referrerpolicy="no-referrer" onerror="{ONERR}">' if cv else ""
+    return f"""<figure class="disc-wrap{' has-cover' if cv else ''}" aria-hidden="true">{img}
   <div class="disc">
     <div class="disc-label">
       <span class="disc-n">{r:02d}</span>
@@ -206,7 +217,9 @@ def fname(e):
 
 def index_page(site, items):
     def row(e):
-        return (f'<li><a href="a/{fname(e)}"><span class="r">{e["rank"]}</span>'
+        cv = cover(site, e)
+        th = (f'<img class="th" src="{cv}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.visibility=\'hidden\'">' if cv else '<span class="th"></span>')
+        return (f'<li><a href="a/{fname(e)}">{th}<span class="r">{e["rank"]}</span>'
                 f'<span class="ar">{html.escape(e["artist"])}</span>'
                 f'<span class="al">{inline(e["album"])}</span>'
                 f'<span class="y">{e.get("year") or ""}</span></a></li>')
