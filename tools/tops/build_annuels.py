@@ -9,6 +9,7 @@ ARCHIVE = "https://lref.fr/"
 FONTS = "/tmp/fz"
 
 YEARS = {
+    "2012":    dict(label="2012", color="#9FB4C7", kind="albums", short="2012"),
     "2013":    dict(label="2013", color="#FF5A36", kind="albums", short="2013"),
     "2014":    dict(label="2014", color="#FFD23F", kind="albums", short="2014"),
     "2014-ep": dict(label="2014", color="#9BE564", kind="EPs & mixtapes", short="EPs 2014"),
@@ -21,6 +22,7 @@ YEARS = {
     "2022":    dict(label="2022", color="#FFA024", kind="projets", short="2022"),
 }
 NOTES = {
+    "2012": "Classement reconstitué en novembre 2026 : aucun bilan 2012 n'a été publié à l'époque. Le choix et l'ordre s'appuient sur les chroniques parues sur le site en 2012, et les textes ont été écrits à la manière des bilans de la rédaction.",
     "2013": "Le bilan 2013 n'était pas classé : dix albums, présentés dans l'ordre de l'article d'origine.",
     "2015": "En 2015, la rédaction avait décidé de ne plus classer de 1 à 10 : dix projets, présentés dans l'ordre de l'article d'origine.",
     "2022": "L'article d'origine annonçait 15 projets mais passe directement du n° 15 au n° 13 : il n'y a jamais eu de n° 14.",
@@ -70,7 +72,7 @@ def page(title, desc, body, color, cls=""):
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <meta name="theme-color" content="{color}">
-<link rel="stylesheet" href="/style.css?v=4">
+<link rel="stylesheet" href="/style.css?v=5">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23141414'/%3E%3Ccircle cx='32' cy='32' r='9' fill='{urllib.parse.quote(color)}'/%3E%3C/svg%3E">
 </head><body class="{cls}" style="--c:{color}">
 {body}
@@ -142,6 +144,10 @@ def year_page(m):
                 f'<b>{esc(ow["artist"])}</b><em>{lead} : {esc(ow["album"])} · {oy["label"]}</em></a>')
 
     intro = "".join(para(p) for p in m["intro"])
+    if m.get("reconstitution"):
+        by = f'<p class="by"><span class="tag">Reconstitution</span> {esc(m["title"])} · d\'après les chroniques LREF de 2012</p>'
+    else:
+        by = f'<p class="by">{esc(m["title"])} · par {esc(m["author"])}, le {esc(m["date"])} · <a href="{ARCHIVE}a/{m["slug"]}/">article d\'origine</a></p>'
     note = f'<p class="note">{esc(NOTES[k])}</p>' if k in NOTES else ""
     covers = "".join(f'<img src="{esc(x["img"])}" alt="" loading="lazy" onerror="this.remove()">' for x in items)
     head = "La sélection" if items[0]["rank"] is None else f"Le top {len(items) + (1 if k == '2022' else 0)}"
@@ -154,7 +160,7 @@ def year_page(m):
     <div class="stack" aria-hidden="true">{covers}</div>
   </div>
   <div class="lede">
-    <p class="by">{esc(m['title'])} · par {esc(m['author'])}, le {esc(m['date'])} · <a href="{ARCHIVE}a/{m['slug']}/">article d'origine</a></p>
+    {by}
     {intro}
     {note}
   </div>
@@ -181,13 +187,13 @@ def index_page():
         spines.append(f"""<li style="--c:{y['color']}"><a href="/{k}/">
   <span class="yr">{"EPs 14" if k=="2014-ep" else y['label']}</span>
   <span class="cv"><span class="ph">{esc(w['album'])}</span><img src="{esc(w['img'])}" alt="" loading="lazy" onerror="this.remove()"></span>
-  <span class="meta"><small>{esc(y['kind'])} · {len(m['items'])} titres</small><b>{esc(w['artist'])}</b><em>{lead} : {esc(w['album'])}</em></span>
+  <span class="meta"><small>{esc(y['kind'])} · {len(m['items'])} titres{' · reconstitué' if m.get('reconstitution') else ''}</small><b>{esc(w['artist'])}</b><em>{lead} : {esc(w['album'])}</em></span>
 </a></li>""")
     body = f"""{top_bar()}
 <main>
 <section class="hub">
   <h1>Les albums<br>de l'année</h1>
-  <p>Chaque hiver, la rédaction de <a href="https://lref.fr/">Le Rap en France</a> se disputait pendant des semaines pour garder dix disques. Voici ce qu'il reste de ces bilans, de 2013 à 2022 : {sum(len(m['items']) for m in DATA)} projets, leurs pochettes et les textes d'époque.</p>
+  <p>Chaque hiver, la rédaction de <a href="https://lref.fr/">Le Rap en France</a> se disputait pendant des semaines pour garder dix disques. Voici ce qu'il reste de ces bilans, de 2013 à 2022 : {sum(len(m['items']) for m in DATA if not m.get('reconstitution'))} projets, leurs pochettes et les textes d'époque, plus un top 2012 reconstitué d'après nos chroniques.</p>
 </section>
 <ol class="spines">
 {''.join(spines)}
