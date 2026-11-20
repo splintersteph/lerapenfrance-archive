@@ -264,7 +264,7 @@ NAV = [(s[0], s[1]) for s in SECTIONS]
 
 def page(title, body, depth=0, desc="", active="", og_image=""):
     pre = "../" * depth
-    links = "".join(f'<a href="{pre}rubrique/{k}.html"{" aria-current=page" if k == active else ""}>{esc(t)}</a>' for k, t in NAV)
+    links = "".join(f'<a class="k-{k}" href="{pre}rubrique/{k}.html"{" aria-current=page" if k == active else ""}>{esc(t)}</a>' for k, t in NAV)
     return f"""<!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -273,9 +273,9 @@ def page(title, body, depth=0, desc="", active="", og_image=""):
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
 {f'<meta property="og:image" content="{esc(og_image)}">' if og_image else ''}
-<link rel="preload" href="{pre}fonts/Schibsted.woff2" as="font" type="font/woff2" crossorigin>
-<meta name="theme-color" content="#050505">
-<link rel="stylesheet" href="{pre}style.css?v=3">
+<link rel="preload" href="{pre}fonts/BigShouldersDisplay.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#141414">
+<link rel="stylesheet" href="{pre}style.css?v=4">
 <script>document.addEventListener("error",e=>{{const t=e.target;if(t.tagName!=="IMG")return;const f=t.closest(".ph-host");if(f){{f.classList.add("noimg");t.remove()}}else t.remove()}},true);</script>
 </head><body>
 <a class="skip" href="#contenu">Aller au contenu</a>
@@ -322,7 +322,7 @@ def byline(a, link=True, depth=0):
 def thumb(a, depth=0, cls=""):
     pre = "../" * depth
     im = f'<img src="{esc(img_url(a["image"]))}" alt="" loading="lazy">' if a.get("image") else ""
-    return f'<span class="ph-host duo {cls}{"" if im else " noimg"}" data-k="{esc(SEC_LABEL[a["sec"]][:1])}">{im}</span>'
+    return f'<span class="ph-host duo k-{a["sec"]} {cls}{"" if im else " noimg"}" data-k="{esc(SEC_LABEL[a["sec"]][:1])}">{im}</span>'
 
 
 def card(a, depth=0, size="m", dek=True):
@@ -545,7 +545,9 @@ def sec_block(key, L, layout):
 <div class="hsec-grid">{"".join(card(a, 0, "m") for a in L)}</div></section>"""
 
 
-body = f"""<section class="opening"><h1 class="opening-title">Le Rap<br>en France</h1><p class="opening-sub"><span>{num(len(arts))} articles</span><span>{len(authors)} plumes</span><span>2011–2023</span></p><p class="opening-txt">Douze ans de chroniques, d'interviews et de dossiers sur le rap français, sauvés de l'oubli.</p></section>
+spines = "".join(f'<li class="k-{k}"><a href="rubrique/{k}.html"><span class="sp-n">{num(len(by_sec[k]))}</span><span class="sp-t">{esc(l.replace("Billets d'humeur", "Billets"))}</span></a></li>' for k, l, _, _ in SECTIONS)
+body = f"""<section class="opening"><h1 class="opening-title">Le Rap<br>en France</h1><div class="opening-side"><p class="opening-sub"><span>{num(len(arts))} articles</span><span>{len(authors)} plumes</span><span>2011–2023</span></p><p class="opening-txt">Douze ans de chroniques, d'interviews et de dossiers sur le rap français, sauvés de l'oubli.</p></div></section>
+<nav class="spines" aria-label="Rubriques"><ul>{spines}</ul></nav>
 <section class="front">
  <article class="lead">
   <a class="lead-link" href="a/{lead['slug']}/">{thumb(lead, 0, "lead-img")}
