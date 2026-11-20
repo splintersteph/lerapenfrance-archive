@@ -177,10 +177,10 @@ def album_page(site, items, i):
     note = ('<p class="note">Seule la recommandation d\'origine a survécu pour ce numéro : '
             'la notice a été réécrite en 2026 et reste à relire.</p>') if rewritten else ""
     nav = '<nav class="pager" aria-label="Albums voisins">'
-    nav += (f'<a class="prev" href="{fname(up_e)}"><small>N° {up_e["rank"]}</small>{html.escape(up_e["artist"])}</a>'
+    nav += (f'<a class="prev" href="{fname(up_e)}"><small>N° {up_e["rank"]}</small>{html.escape(up_e["artist"])}<em>{html.escape(plain(up_e["album"]))}{(" · "+str(up_e["year"])) if up_e.get("year") else ""}</em></a>'
             if up_e else '<span></span>')
     nav += '<a class="all" href="../index.html#classement">Tout le classement</a>'
-    nav += (f'<a class="next" href="{fname(dn_e)}"><small>N° {dn_e["rank"]}</small>{html.escape(dn_e["artist"])}</a>'
+    nav += (f'<a class="next" href="{fname(dn_e)}"><small>N° {dn_e["rank"]}</small>{html.escape(dn_e["artist"])}<em>{html.escape(plain(dn_e["album"]))}{(" · "+str(dn_e["year"])) if dn_e.get("year") else ""}</em></a>'
             if dn_e else '<span></span>')
     nav += "</nav>"
     body = f"""<article class="album">
