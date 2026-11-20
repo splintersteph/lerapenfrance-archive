@@ -92,6 +92,7 @@ def card(m, x, i):
     paras = "".join(para(p) for p in x["paras"])
     return f"""<li class="al{' one' if first else ''}" id="n{rk}">
   <div class="sleeve">
+    <span class="ph" aria-hidden="true">{esc(x['album'])}</span>
     <img src="{esc(x['img'])}" alt="Pochette de {esc(plain(x['album']))}, {esc(plain(x['artist']))}" loading="lazy" onerror="this.remove()">
     <span class="rk" aria-hidden="true">{rk}</span>
   </div>
@@ -163,7 +164,7 @@ def index_page():
         lead = "N° 1" if k != "2013" else "En tête"
         spines.append(f"""<li style="--c:{y['color']}"><a href="/{k}/">
   <span class="yr">{"EPs 14" if k=="2014-ep" else y['label']}</span>
-  <span class="cv"><img src="{esc(w['img'])}" alt="" loading="lazy" onerror="this.remove()"></span>
+  <span class="cv"><span class="ph">{esc(w['album'])}</span><img src="{esc(w['img'])}" alt="" loading="lazy" onerror="this.remove()"></span>
   <span class="meta"><small>{esc(y['kind'])} · {len(m['items'])} titres</small><b>{esc(w['artist'])}</b><em>{lead} : {esc(w['album'])}</em></span>
 </a></li>""")
     body = f"""{top_bar()}
