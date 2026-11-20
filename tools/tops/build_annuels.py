@@ -149,7 +149,7 @@ def year_page(m):
     else:
         by = f'<p class="by">{esc(m["title"])} · par {esc(m["author"])}, le {esc(m["date"])} · <a href="{ARCHIVE}a/{m["slug"]}/">article d\'origine</a></p>'
     note = f'<p class="note">{esc(NOTES[k])}</p>' if k in NOTES else ""
-    covers = "".join(f'<img src="{esc(x["img"])}" alt="" loading="lazy" onerror="this.remove()">' for x in items)
+    covers = "".join(f'<img src="{esc(x["img"])}" alt="" onerror="this.remove()">' for x in items[-3:][::-1] if x["img"])
     head = "La sélection" if items[0]["rank"] is None else f"Le top {len(items) + (1 if k == '2022' else 0)}"
     body = f"""{top_bar()}
 <main>
