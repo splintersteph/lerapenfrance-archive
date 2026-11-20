@@ -899,7 +899,8 @@
   "img": "",
   "chronique": "http://lerapenfrance.fr/interview-sopico-jessaye-dexprimer-quil-y-a-toujours-une-necessite-de-revenir-lidee-que-quand-tu-viens-de-quelque-part-tu-ne-peux-pas-renier-tes-racines/",
   "artist_display": "Sopico",
-  "title_display": "Ciel Bleu"
+  "title_display": "Ciel Bleu",
+  "cover": "https://cdn-images.dzcdn.net/images/cover/8d99ccc0d958db48efde4e456e662657/500x500-000000-80-0-0.jpg"
  },
  {
   "rank": 34,
@@ -1174,7 +1175,8 @@
   "img": "",
   "chronique": "http://lerapenfrance.fr/la-chronique-croisee-lucio-bukowski-oster-lapwass-oderunt-poetas/",
   "artist_display": "Lucio Bukowski",
-  "title_display": "Rubaiyat"
+  "title_display": "Rubaiyat",
+  "cover": "https://cdn-images.dzcdn.net/images/cover/238d1d42bf46d0e0357fd92ee2f11e8b/500x500-000000-80-0-0.jpg"
  },
  {
   "rank": 9,
@@ -1185,7 +1187,8 @@
   "img": "",
   "chronique": "",
   "artist_display": "Caballero & Jean Jass",
-  "title_display": "Repeat"
+  "title_display": "Repeat",
+  "cover": "https://cdn-images.dzcdn.net/images/cover/6707d716ed2d75fb2c92f062cfa20440/500x500-000000-80-0-0.jpg"
  },
  {
   "rank": 8,
@@ -1207,7 +1210,8 @@
   "img": "",
   "chronique": "http://lerapenfrance.fr/chronique-prince-waly-junior-un-anachronisme-a-montreuil/",
   "artist_display": "Prince Waly",
-  "title_display": "Junior"
+  "title_display": "Junior",
+  "cover": "https://cdn-images.dzcdn.net/images/cover/a04c2aebb9d97bd6e5456a3b589a60f0/500x500-000000-80-0-0.jpg"
  },
  {
   "rank": 6,
@@ -1218,7 +1222,8 @@
   "img": "",
   "chronique": "http://lerapenfrance.fr/chronique-jazzy-bazz-p-town/",
   "artist_display": "Jazzy Bazz",
-  "title_display": "Le Roseau"
+  "title_display": "Le Roseau",
+  "cover": "https://cdn-images.dzcdn.net/images/cover/b623d0b3a411d9db9a3520efa205d901/500x500-000000-80-0-0.jpg"
  },
  {
   "rank": 5,
@@ -1229,7 +1234,8 @@
   "img": "",
   "chronique": "",
   "artist_display": "Dooz Kawa",
-  "title_display": "Soirée noire"
+  "title_display": "Soirée noire",
+  "cover": "https://cdn-images.dzcdn.net/images/cover/4833063e67efcad6b7f5a5f04b378aa3/500x500-000000-80-0-0.jpg"
  },
  {
   "rank": 4,
@@ -1240,7 +1246,8 @@
   "img": "",
   "chronique": "",
   "artist_display": "Damso",
-  "title_display": "Amnésie"
+  "title_display": "Amnésie",
+  "cover": "https://cdn-images.dzcdn.net/images/cover/bd1be3997cb1ec7452c5e39c9ea0decf/500x500-000000-80-0-0.jpg"
  },
  {
   "rank": 3,
@@ -1251,7 +1258,8 @@
   "img": "",
   "chronique": "http://lerapenfrance.fr/blog/2015/10/13/une-heure-avec-lomepal-sur-raje/",
   "artist_display": "Lomepal",
-  "title_display": "R2d2"
+  "title_display": "R2d2",
+  "cover": "https://cdn-images.dzcdn.net/images/cover/917ba3c12191caf3412069e8ceea519d/500x500-000000-80-0-0.jpg"
  },
  {
   "rank": 2,
@@ -1262,7 +1270,8 @@
   "img": "",
   "chronique": "",
   "artist_display": "PNL",
-  "title_display": "Da"
+  "title_display": "Da",
+  "cover": "https://cdn-images.dzcdn.net/images/cover/3722b6f876813ecf4bdf75443bf02da1/500x500-000000-80-0-0.jpg"
  },
  {
   "rank": 1,
@@ -1273,6 +1282,7 @@
   "img": "",
   "chronique": "http://lerapenfrance.fr/blog/2016/07/24/hugo-senvole-sur-les-toits-parisiens/",
   "artist_display": "Hugo TSR",
-  "title_display": "La-haut"
+  "title_display": "La-haut",
+  "cover": "https://cdn-images.dzcdn.net/images/cover/f3385bd2d457d1936965313d1828e5a9/500x500-000000-80-0-0.jpg"
  }
 ]

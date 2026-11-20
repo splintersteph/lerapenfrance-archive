@@ -76,17 +76,38 @@ def listen(e):
     return f'<a class="play" href="https://www.youtube.com/results?search_query={quote_plus(a + " " + t)}" rel="noopener">Chercher sur YouTube</a>'
 
 
+def img_url(e):
+    vid = yt_id(e["youtube"])
+    if e["img"]:
+        return "https://web.archive.org/web/2017im_/" + e["img"]
+    if e.get("cover"):
+        return e["cover"]
+    return f"https://i.ytimg.com/vi/{vid}/hqdefault.jpg" if vid else ""
+
+
+def listen_url(e):
+    vid = yt_id(e["youtube"])
+    if vid:
+        return f"https://www.youtube.com/watch?v={vid}", "Écouter"
+    return "https://www.youtube.com/results?search_query=" + quote_plus(nice(e["artist"]) + " " + nice(e["title"])), "Chercher sur YouTube"
+
+
 def item(e, big=False):
     a, t = e["artist"].strip(), e["title"].strip()
     ch = chron_link(e["chronique"])
-    chl = f'<a class="more" href="{esc(ch)}">L\'article sur LREF</a>' if ch else ""
-    return f"""<li class="trk{' big' if big else ''}" id="n{e['rank']}">
-  <span class="rk">{e['rank']}</span>
-  {thumb(e)}
+    u = img_url(e)
+    lu, ll = listen_url(e)
+    chl = f'<a class="more" href="{esc(ch)}">Lire l\'article</a>' if ch else ""
+    bg = f' style="--img:url(\'{esc(u)}\')"' if u else ""
+    art = (f'<img src="{esc(u)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">' if u else "")
+    return f"""<li class="trk{' big' if big else ''}" id="n{e['rank']}" data-rk="{e['rank']}" data-ar="{esc(a)}" data-ti="{esc(t)}" data-u="{esc(lu)}"{bg}>
+  <div class="trk-bg" aria-hidden="true"></div>
+  <span class="rk" aria-hidden="true">{e['rank']}</span>
+  <div class="sleeve">{art}<span class="sleeve-n">N° {e['rank']}</span></div>
   <div class="tx">
-    <h3><span class="ar">{esc(a)}</span> <span class="ti">{esc(t)}</span></h3>
+    <h3><span class="sr">N° {e['rank']} : </span><span class="ar">{esc(a)}</span> <span class="ti">{esc(t)}</span></h3>
     <p>{esc(e['text'])}</p>
-    <p class="act">{listen(e)}{chl}</p>
+    <p class="act"><a class="play" href="{esc(lu)}" rel="noopener">{ll}</a>{chl}</p>
   </div>
 </li>"""
 
@@ -109,56 +130,66 @@ def build():
 
     items = sorted(DATA, key=lambda e: -e["rank"])
     top10 = sorted([e for e in DATA if e["rank"] <= 10], key=lambda e: e["rank"])
-    mosaic_src = [e for e in items if e["img"]][:16]
-    mosaic = "".join(f'<img src="https://web.archive.org/web/2017im_/{esc(e["img"])}" alt="" referrerpolicy="no-referrer" onerror="this.style.visibility=\'hidden\'">' for e in mosaic_src)
+    wall = "".join(f'<img src="{esc(img_url(e))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.visibility=\'hidden\'">' for e in items if e["img"])
     tens = []
-    for start in range(116, 0, -10):
-        end = max(start - 9, 1)
+    for start in range(116, 10, -10):
+        end = max(start - 9, 11)
         grp = [e for e in items if end <= e["rank"] <= start]
-        tens.append(f'<section class="tens" aria-label="Numéros {start} à {end}"><h3 class="tens-h">{start}–{end}</h3><ol>{"".join(item(e) for e in grp)}</ol></section>')
-    body = f"""<header class="top">
+        tens.append(f'<section class="tens" aria-label="Numéros {start} à {end}"><h3 class="tens-h"><span>{start}</span><i></i><span>{end}</span></h3><ol>{"".join(item(e) for e in grp)}</ol></section>')
+    body = f"""<div class="nowbar" id="nowbar" aria-live="polite" hidden>
+  <span class="nb-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  <span class="nb-lbl">En lecture</span>
+  <a class="nb-t" id="nbt" href="#">—</a>
+  <span class="nb-prog" aria-hidden="true"><span id="nbp"></span></span>
+</div>
+<header class="top">
   <a class="brand" href="index.html"><b>LREF</b> Une année 2016</a>
-  <nav><a href="#top10">Le top 10</a><a href="#liste">Les 116</a><a href="{ARCHIVE}">Les archives LREF</a></nav>
+  <nav><a href="#liste">Le compte à rebours</a><a href="#top10">Le top 10</a><a href="{ARCHIVE}">Les archives</a></nav>
 </header>
 <main id="main">
 <section class="hero">
-  <div class="mosaic" aria-hidden="true">{mosaic}</div>
+  <div class="wall" aria-hidden="true">{wall}</div>
   <div class="hero-tx">
-    <p class="kick">Le Rap en France · janvier 2017</p>
-    <h1><span>116 morceaux</span> de rap français en <em>2016</em></h1>
-    <p class="intro">Cette année de rap français a été si riche qu'il aurait été dommage de n'en garder que dix sons.
-    La rédaction en avait choisi 116, pas seulement pour les classer, mais pour se souvenir de cette année dans 5, 10 ou 20 ans.
-    Les voici, restaurés depuis les archives du mini-site <em>uneannee2016.lerapenfrance.fr</em>.</p>
+    <p class="kick">Le Rap en France · sélection de la rédaction</p>
+    <h1><span class="h-n">116</span><span class="h-w">morceaux de rap français</span><span class="h-y">2016</span></h1>
+    <p class="intro">Une année si riche qu'il aurait été dommage de n'en garder que dix sons. En janvier 2017, la rédaction en avait retenu 116, pour se souvenir de 2016 dans cinq, dix ou vingt ans. Les voici, restaurés depuis le mini-site d'origine.</p>
     <p class="cta"><a href="#n116">Lancer le compte à rebours</a><a class="ghost" href="#top10">Aller au top 10</a></p>
   </div>
 </section>
-<section id="top10" class="top10" aria-labelledby="t10h">
-  <h2 id="t10h">Le top 10</h2>
-  <ol>{"".join(item(e, big=True) for e in top10)}</ol>
-</section>
 <section id="liste" class="liste" aria-labelledby="lh">
-  <div class="lhead"><h2 id="lh">Les 116, de 116 à 1</h2>
+  <div class="lhead"><h2 id="lh">Le compte à rebours <small>116 → 11</small></h2>
   <label class="filter"><span>Chercher un artiste ou un titre</span><input id="q" type="search" placeholder="PNL, Damso, Lomepal…" autocomplete="off"></label></div>
   {"".join(tens)}
   <p id="nores" class="nores" hidden>Aucun morceau ne correspond.</p>
 </section>
+<section id="top10" class="top10" aria-labelledby="t10h">
+  <h2 id="t10h"><span>Le top</span> <span class="ten">10</span></h2>
+  <ol>{"".join(item(e, big=True) for e in sorted(top10, key=lambda e: -e["rank"]))}</ol>
+</section>
 <section class="note">
-  <p>Textes de la rédaction de Le Rap en France, publiés en janvier 2017. Les visuels proviennent du mini-site d'origine, conservé par la Wayback Machine ;
-  quand ils manquent, la vignette YouTube prend le relais. Pour le top 10, les vidéos n'ont pas été archivées : les boutons lancent une recherche YouTube.</p>
+  <p>Textes de la rédaction de Le Rap en France, publiés en janvier 2017 sur <em>uneannee2016.lerapenfrance.fr</em> et restaurés depuis la Wayback Machine.
+  Les vidéos du top 10 n'ont pas été archivées : les boutons lancent une recherche YouTube.</p>
 </section>
 </main>
-<footer class="foot"><p>Un classement de <a href="{ARCHIVE}">Le Rap en France</a> · Voir aussi les tops albums des <a href="https://90.lref.fr/">années 90</a> et des <a href="https://2000.lref.fr/">années 2000</a>.</p></footer>
+<footer class="foot"><p>Un classement de <a href="{ARCHIVE}">Le Rap en France</a> · Les tops albums des <a href="https://90.lref.fr/">années 90</a> et des <a href="https://2000.lref.fr/">années 2000</a>.</p></footer>
 <script>
-(function(){{var q=document.getElementById('q'),rows=[].slice.call(document.querySelectorAll('#liste .trk')),secs=[].slice.call(document.querySelectorAll('.tens')),nr=document.getElementById('nores');
+(function(){{
+var q=document.getElementById('q'),rows=[].slice.call(document.querySelectorAll('#liste .trk')),secs=[].slice.call(document.querySelectorAll('.tens')),nr=document.getElementById('nores');
 function n(s){{return s.normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').toLowerCase();}}
-q.addEventListener('input',function(){{var v=n(q.value.trim()),c=0;rows.forEach(function(li){{var ok=!v||n(li.querySelector('h3').textContent).indexOf(v)>-1;li.hidden=!ok;if(ok)c++;}});
-secs.forEach(function(s){{s.hidden=!s.querySelector('.trk:not([hidden])');}});nr.hidden=c>0;}});}})();
+q.addEventListener('input',function(){{var v=n(q.value.trim()),c=0;rows.forEach(function(li){{var ok=!v||n(li.dataset.ar+' '+li.dataset.ti).indexOf(v)>-1;li.hidden=!ok;if(ok)c++;}});
+secs.forEach(function(s){{s.hidden=!s.querySelector('.trk:not([hidden])');}});nr.hidden=c>0;}});
+var bar=document.getElementById('nowbar'),t=document.getElementById('nbt'),p=document.getElementById('nbp');
+var all=[].slice.call(document.querySelectorAll('.trk'));
+if('IntersectionObserver' in window){{var io=new IntersectionObserver(function(es){{es.forEach(function(e){{if(e.isIntersecting){{var li=e.target;all.forEach(function(x){{x.classList.toggle('on',x===li);}});
+bar.hidden=false;t.textContent='N° '+li.dataset.rk+' · '+li.dataset.ar+' — '+li.dataset.ti;t.href=li.dataset.u;p.style.width=((117-li.dataset.rk)/116*100)+'%';}}}});}},{{rootMargin:'-45% 0px -50% 0px'}});
+all.forEach(function(li){{io.observe(li);}});}}
+}})();
 </script>"""
     page = f"""<!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Une année 2016 · 116 morceaux de rap français · LREF</title>
 <meta name="description" content="Les 116 morceaux de rap français préférés de la rédaction de Le Rap en France en 2016, de Columbine à Hugo TSR.">
-<meta name="theme-color" content="#EDEBFF">
+<meta name="theme-color" content="#0C0920">
 <link rel="stylesheet" href="style.css"></head>
 <body><a class="skip" href="#main">Aller au contenu</a>
 {body}
