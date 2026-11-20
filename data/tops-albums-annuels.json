@@ -40,24 +40,6 @@
    },
    {
     "rank": 7,
-    "artist": "Hugo TSR",
-    "album": "Fenêtre sur rue",
-    "img": "",
-    "paras": [
-     "Sur la pochette, un gamin joue à la marelle sur une silhouette tracée à la craie. Le ton est donné : la fenêtre d'<strong>Hugo</strong> ne donne pas sur un jardin fleuri mais sur le 18e, ses dealers, ses patrouilles et son ballet sordide. Épaulé par <strong>I.N.C.H.</strong>, <strong>Al'Tarba</strong> ou <strong>Char</strong> du <strong>Gouffre</strong>, le roi autoproclamé de la punchline sort un disque court, lourd, à avaler cul sec. <strong>Objectif Lune</strong> tourne en boucle sur la toile et ce n'est que justice. Bienvenue en France, terre d'asile psychiatrique."
-    ]
-   },
-   {
-    "rank": 6,
-    "artist": "Lino",
-    "album": "Radio Bitume",
-    "img": "",
-    "paras": [
-     "La sortie la plus rocambolesque de l'année. Pas de promo, un mixage à l'état d'ébauche, des morceaux inachevés, une pochette qui pique les yeux et un artiste qui accuse son label de l'avoir lâché. Et pourtant, le disque est bon. Très bon même. La moitié d'<strong>Ärsenik</strong> n'a rien perdu de sa verve, et des titres comme <strong>Wolfgang</strong>, <strong>Hors-Format</strong> ou <strong>Sentier de gloire</strong> rappellent qu'il reste l'une des plus belles plumes du pays, tous genres confondus. Comme une symphonie inachevée, c'est peut-être ce goût de pas-fini qui en fera un objet culte."
-    ]
-   },
-   {
-    "rank": 5,
     "artist": "Nakk Mendosa",
     "album": "DarkSun",
     "img": "https://cdn-images.dzcdn.net/images/cover/d6845292beae24b903302585e9536059/500x500-000000-80-0-0.jpg",
@@ -66,7 +48,7 @@
     ]
    },
    {
-    "rank": 4,
+    "rank": 6,
     "artist": "B.James",
     "album": "Acte de Barbarie",
     "img": "https://cdn-images.dzcdn.net/images/cover/b4b9f5e3f73b3333695ffad206b4ac5c/500x500-000000-80-0-0.jpg",
@@ -75,7 +57,7 @@
     ]
    },
    {
-    "rank": 3,
+    "rank": 5,
     "artist": "Flynt",
     "album": "Itinéraire bis",
     "img": "",
@@ -84,7 +66,7 @@
     ]
    },
    {
-    "rank": 2,
+    "rank": 4,
     "artist": "Lucio Bukowski",
     "album": "Sans signature",
     "img": "",
@@ -93,12 +75,30 @@
     ]
    },
    {
-    "rank": 1,
+    "rank": 3,
     "artist": "Youssoupha",
     "album": "Noir D****",
     "img": "",
     "paras": [
-     "Forcément. Après deux années passées avec un procès au-dessus de la tête, <strong>Youssoupha</strong> devait être solide sur ses appuis pour repartir. Il l'a été. Avec son ange noir en pochette et un titre qui dérange, <strong>Noir D****</strong> est l'album le plus abouti de l'année, musicalement comme textuellement. Le refrain dubstep de <strong>La vie est belle</strong>, la richesse des <strong>Disques de nos pères</strong>, <strong>L'enfer c'est les autres</strong> : même les titres les plus grand public restent chargés de sens. On avait prédit qu'un jour, on dirait d'un jeune rappeur qu'il fait du Youssoupha. On ne s'était pas trompés."
+     "Après deux années passées avec un procès au-dessus de la tête, <strong>Youssoupha</strong> devait être solide sur ses appuis pour repartir. Il l'a été. Avec son ange noir en pochette et un titre qui dérange, <strong>Noir D****</strong> est l'album le plus abouti de l'année, musicalement comme textuellement. Le refrain dubstep de <strong>La vie est belle</strong>, la richesse des <strong>Disques de nos pères</strong>, <strong>L'enfer c'est les autres</strong> : même les titres les plus grand public restent chargés de sens. On avait prédit qu'un jour, on dirait d'un jeune rappeur qu'il fait du Youssoupha. On ne s'était pas trompés."
+    ]
+   },
+   {
+    "rank": 2,
+    "artist": "Lino",
+    "album": "Radio Bitume",
+    "img": "",
+    "paras": [
+     "La sortie la plus rocambolesque de l'année. Pas de promo, un mixage à l'état d'ébauche, des morceaux inachevés, une pochette qui pique les yeux et un artiste qui accuse son label de l'avoir lâché. Et pourtant, le disque est bon. Très bon même. La moitié d'<strong>Ärsenik</strong> n'a rien perdu de sa verve, et des titres comme <strong>Wolfgang</strong>, <strong>Hors-Format</strong> ou <strong>Sentier de gloire</strong> rappellent qu'il reste l'une des plus belles plumes du pays, tous genres confondus. Comme une symphonie inachevée, c'est peut-être ce goût de pas-fini qui en fera un objet culte."
+    ]
+   },
+   {
+    "rank": 1,
+    "artist": "Hugo TSR",
+    "album": "Fenêtre sur rue",
+    "img": "",
+    "paras": [
+     "Numéro un, et ça ne surprendra personne qui nous lit depuis longtemps. Sur la pochette, un gamin joue à la marelle sur une silhouette tracée à la craie. Le ton est donné : la fenêtre d'<strong>Hugo</strong> ne donne pas sur un jardin fleuri mais sur le 18e, ses dealers, ses patrouilles et son ballet sordide. Épaulé par <strong>I.N.C.H.</strong>, <strong>Al'Tarba</strong> ou <strong>Char</strong> du <strong>Gouffre</strong>, le roi autoproclamé de la punchline sort un disque court, lourd, à avaler cul sec. <strong>Objectif Lune</strong> tourne en boucle sur la toile et ce n'est que justice. Bienvenue en France, terre d'asile psychiatrique."
     ]
    }
   ]
