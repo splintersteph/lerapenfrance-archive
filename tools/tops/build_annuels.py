@@ -39,8 +39,16 @@ def slug(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 
 
+def keep(p):
+    t = plain(p).strip()
+    return t and t not in ("(ICI)", "ICI") and not t.startswith("Sujets")
+
+
 def para(p):
     q = p.startswith("> ")
+    m = re.fullmatch(r"\s*<strong>(.*)</strong>\s*", p, re.S)
+    if m and "<strong>" not in m.group(1):
+        p = m.group(1)
     p = p[2:] if q else p
     # le texte vient déjà de l'archive, avec seulement <strong>/<em>
     p = re.sub(r"<(?!/?(strong|em)>)[^>]*>", "", p)
@@ -54,7 +62,7 @@ def page(title, desc, body, color, cls=""):
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <meta name="theme-color" content="{color}">
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/style.css?v=3">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23141414'/%3E%3Ccircle cx='32' cy='32' r='9' fill='{urllib.parse.quote(color)}'/%3E%3C/svg%3E">
 </head><body class="{cls}" style="--c:{color}">
 {body}
@@ -89,7 +97,7 @@ def card(m, x, i):
     rk = f'{x["rank"]}' if x["rank"] is not None else f'{i + 1:02d}'
     lab = "N°" if x["rank"] is not None else "Sélection"
     first = x["rank"] == 1
-    paras = "".join(para(p) for p in x["paras"])
+    paras = "".join(para(p) for p in x["paras"] if keep(p))
     return f"""<li class="al{' one' if first else ''}" id="n{rk}">
   <div class="sleeve">
     <span class="ph" aria-hidden="true">{esc(x['album'])}</span>

@@ -49,7 +49,7 @@ main{max-width:1180px;margin:0 auto;padding:0 1.25rem}
 .ywrap{position:relative;background:var(--c);border-radius:6px;padding:1.4rem 1.4rem 1.2rem;overflow:hidden;min-height:420px}
 .kind{margin:0 0 .7rem;font:800 1.6rem/1 var(--disp);text-transform:uppercase}
 .ywrap h1{margin:.1rem 0 0;font:900 clamp(7rem,17vw,15rem)/.8 var(--disp);letter-spacing:-.02em;position:relative;z-index:2}
-.stack{position:absolute;right:-30px;bottom:-30px;width:62%;aspect-ratio:1}
+.stack{position:absolute;right:-24px;bottom:-24px;width:52%;aspect-ratio:1;z-index:1}
 .stack img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;box-shadow:0 10px 30px -10px rgba(0,0,0,.5);
   transform:rotate(calc(var(--i,0) * 1deg))}
 .stack img:nth-child(1){transform:rotate(-4deg) translate(-26%,-18%);z-index:10}
@@ -68,7 +68,7 @@ main{max-width:1180px;margin:0 auto;padding:0 1.25rem}
 .sleeve img{position:relative;width:100%;height:100%;object-fit:cover;box-shadow:0 22px 40px -22px rgba(0,0,0,.55)}
 .sleeve .rk{position:absolute;right:-.9rem;bottom:-1.6rem;font:900 clamp(4.5rem,9vw,7.5rem)/.8 var(--disp);color:var(--c);
   -webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:5px 5px 0 var(--ink)}
-.tx{max-width:40em}
+.tx{max-width:40em;min-width:0;overflow-wrap:break-word}
 .pos{margin:0;font:800 1.1rem/1 var(--disp);text-transform:uppercase;letter-spacing:.02em}
 .tx h2{margin:.35rem 0 .9rem;line-height:.95}
 .tx .ar{display:block;font:900 clamp(2.2rem,4.4vw,3.4rem)/.92 var(--disp);text-transform:uppercase}
