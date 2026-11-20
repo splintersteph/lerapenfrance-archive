@@ -89,7 +89,7 @@ def top_bar():
 
 def footer():
     return ('<footer class="foot"><p>Classements de la rédaction de <a href="https://lref.fr/">Le Rap en France</a>, '
-            'restaurés depuis la Wayback Machine. Pochettes : archives LREF, Deezer, Cover Art Archive.</p>'
+            'restaurés depuis la Wayback Machine. Les notices ont été resserrées et relues en 2026 ; le lien « article d’origine » mène au texte intégral. Pochettes : archives LREF, Deezer, Cover Art Archive.</p>'
             '<p>Voir aussi : les tops albums des <a href="https://90.lref.fr/">années 90</a> et des '
             '<a href="https://2000.lref.fr/">années 2000</a>, et <a href="https://2016.lref.fr/">Une année 2016</a> en 116 morceaux.</p></footer>')
 
