@@ -49,6 +49,9 @@ def para(p):
     m = re.fullmatch(r"\s*<strong>(.*)</strong>\s*", p, re.S)
     if m and "<strong>" not in m.group(1):
         p = m.group(1)
+    bold = sum(len(plain(s)) for s in re.findall(r"<strong>(.*?)</strong>", p, re.S))
+    if bold > 0.7 * max(1, len(plain(p))):
+        p = re.sub(r"</?strong>", "", p)
     p = p[2:] if q else p
     # le texte vient déjà de l'archive, avec seulement <strong>/<em>
     p = re.sub(r"<(?!/?(strong|em)>)[^>]*>", "", p)
