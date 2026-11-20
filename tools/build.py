@@ -273,23 +273,24 @@ def page(title, body, depth=0, desc="", active="", og_image=""):
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
 {f'<meta property="og:image" content="{esc(og_image)}">' if og_image else ''}
-<link rel="preload" href="{pre}fonts/BigShouldersDisplay.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{pre}fonts/Schibsted.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#050505">
 <link rel="stylesheet" href="{pre}style.css">
 <script>document.addEventListener("error",e=>{{const t=e.target;if(t.tagName!=="IMG")return;const f=t.closest(".ph-host");if(f){{f.classList.add("noimg");t.remove()}}else t.remove()}},true);</script>
 </head><body>
 <a class="skip" href="#contenu">Aller au contenu</a>
 <header class="mast">
  <div class="mast-in">
-  <a class="brand" href="{pre}index.html"><span class="brand-name">Le Rap en France</span><span class="brand-sub">Archives 2011–2023</span></a>
-  <form class="msearch" action="{pre}articles.html" role="search"><label class="sr" for="mq">Rechercher</label><input id="mq" name="q" type="search" placeholder="Un artiste, un album…"></form>
+  <a class="brand" href="{pre}index.html" aria-label="Le Rap en France, accueil"><span class="brand-mark">LREF</span><span class="brand-name">Le Rap en France</span></a>
+  <nav class="sections" aria-label="Rubriques">{links}<a href="{pre}articles.html"{" aria-current=page" if active == "all" else ""}>Tout</a></nav>
+  <form class="msearch" action="{pre}articles.html" role="search"><label class="sr" for="mq">Rechercher</label><input id="mq" name="q" type="search" placeholder="Rechercher"></form>
  </div>
- <nav class="sections" aria-label="Rubriques"><div class="nav-in">{links}<a href="{pre}articles.html"{" aria-current=page" if active == "all" else ""}>Tout</a></div></nav>
 </header>
 <main id="contenu">{body}</main>
 <footer class="foot"><div class="foot-in">
  <p class="foot-brand">Le Rap en France</p>
- <p>Média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a disparu après un piratage ; ses articles ont été reconstitués à partir des copies de la <a href="https://web.archive.org/">Wayback Machine</a>. Les textes appartiennent à leurs auteurs.</p>
- <p><a href="{pre}a-propos.html">À propos de l'archive</a> · <a href="{pre}top-100-annees-90.html">Top 100 années 90</a> · <a href="{pre}top-100-annees-2000.html">Top 100 années 2000</a> · <a href="{pre}jul-marseille.html">Jul &amp; Marseille</a></p>
+ <p class="foot-txt">Média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a disparu après un piratage ; ses articles ont été reconstitués à partir des copies de la <a href="https://web.archive.org/">Wayback Machine</a>. Les textes appartiennent à leurs auteurs.</p>
+ <ul class="foot-links"><li><a href="{pre}a-propos.html">À propos de l'archive</a></li><li><a href="https://90.lref.fr/">Top 100 années 90</a></li><li><a href="https://2000.lref.fr/">Top 100 années 2000</a></li><li><a href="https://albums.lref.fr/">Les albums de l'année</a></li><li><a href="https://2016.lref.fr/">Une année 2016</a></li><li><a href="{pre}jul-marseille.html">Jul &amp; Marseille</a></li></ul>
 </div></footer>
 </body></html>"""
 
@@ -544,12 +545,12 @@ def sec_block(key, L, layout):
 <div class="hsec-grid">{"".join(card(a, 0, "m") for a in L)}</div></section>"""
 
 
-body = f"""<h1 class="sr">Le Rap en France, archives 2011–2023</h1>
+body = f"""<section class="opening"><h1 class="opening-title">Le Rap<br>en France</h1><p class="opening-sub"><span>{num(len(arts))} articles</span><span>{len(authors)} plumes</span><span>2011–2023</span></p><p class="opening-txt">Douze ans de chroniques, d'interviews et de dossiers sur le rap français, sauvés de l'oubli.</p></section>
 <section class="front">
  <article class="lead">
   <a class="lead-link" href="a/{lead['slug']}/">{thumb(lead, 0, "lead-img")}
-  <span class="kick k-{lead['sec']}">{esc(SEC_LABEL[lead['sec']])}</span>
-  <span class="lead-title">{esc(lead['display'])}</span></a>
+  <span class="lead-over"><span class="kick k-{lead['sec']}">{esc(SEC_LABEL[lead['sec']])}</span>
+  <span class="lead-title">{esc(lead['display'])}</span></span></a>
   <p class="lead-dek">{esc(lead['dek'])}</p>
   <p class="card-by">{byline(lead, False)}</p>
   <p class="lead-also"><a href="top-100-annees-2000.html">Voir les 100 albums du classement</a></p>
