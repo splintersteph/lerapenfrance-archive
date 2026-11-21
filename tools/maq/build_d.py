@@ -26,7 +26,7 @@ def head(title, pre, extra=""):
     nav = "".join(f'<a href="{pre}rubrique/{k}.html"><i class="k-{k}"></i>{esc(l)}</a>' for k, l, _ in SEC)
     return f"""<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)}</title>
-<link rel="stylesheet" href="{pre}maquettes/d.css?v=3">{extra}</head><body>
+<link rel="stylesheet" href="{pre}maquettes/d.css?v=4">{extra}</head><body>
 <header class="bar"><a class="logo" href="{pre}maquette-d.html"><b>LREF</b><span>Fonds Le Rap en France</span></a>
 <nav>{nav}<a href="{pre}articles.html">Tout le fonds</a></nav>
 <form action="{pre}articles.html"><input name="q" type="search" placeholder="Chercher dans le fonds" aria-label="Rechercher"></form></header>"""
@@ -78,17 +78,25 @@ picks = ["les-100-meilleurs-albums-des-annees-2000-le-top-10", "lref-carte-de-ma
          "booba-et-la-religion-oecumenisme-peches-et-paraboles", "dossier-sante-mentale-fin-silence-rap-francais"]
 fp = [by[s] for s in picks if s in by]
 hrefs = {"les-100-meilleurs-albums-des-annees-2000-le-top-10": "top-100-annees-2000.html", "lref-carte-de-marseille-par-jul": "jul-marseille.html"}
-pieces = fiche(fp[0], True, hrefs.get(fp[0]["s"])) + "".join(fiche(a, False, hrefs.get(a["s"])) for a in fp[1:])
+prow = [(hrefs.get(x["s"], "a/" + x["s"] + "/"), x["k"], LAB[x["k"]], x["t"], f'{x["a"] or "La Rédaction"}, {x["f"]}', x["i"]) for x in fp]
+prow[1:1] = [("top-100-annees-90.html", "classements", "Classements", "Les 100 meilleurs albums des années 90", "La Rédaction, cent notices", fp[0]["i"]),
+             ("https://albums.lref.fr/", "classements", "Classements", "Les albums de l'année, de 2012 à 2022", "Dix bilans annuels", "")]
+pieces = "".join(f'<a class="pc k-{k}" href="{h}" data-img="{esc(i)}"><span class="pc-k"><i class="k-{k}"></i>{esc(l)}</span><span class="pc-t">{esc(t)}</span><span class="pc-m">{esc(m)}</span></a>' for h, k, l, t, m, i in prow)
 au = collections.Counter(a["a"] for a in S if a["a"] and a["a"] != "La Rédaction")
 plumes = "".join(f'<li><a href="articles.html?au={esc(n)}"><span>{esc(n)}</span><i></i><b>{c}</b></a></li>' for n, c in sorted(au.most_common(30), key=lambda x: x[0].lower()))
 
+names = sorted(au.most_common(30), key=lambda x: x[0].lower())
+def mqs(L, hid):
+    return "".join(f'<a href="articles.html?au={esc(n)}"{" tabindex=-1 aria-hidden=true" if hid else ""}>{esc(n)}<sup>{c}</sup></a>' for n, c in L)
+mq1, mq1h = mqs(names[::2], False), mqs(names[::2], True)
+mq2, mq2h = mqs(names[1::2], False), mqs(names[1::2], True)
 body = f"""<main>
 <section class="vault">
  <div class="v-in">
   <div class="v-head">
    <p class="v-kick">Le Rap en France · 2011–2023</p>
    <h1>Douze ans<br>de rap français.</h1>
-   <p class="v-txt">Des chroniques d'albums, des interviews d'artistes installés comme de ceux qu'on découvrait, des dossiers de fond et des classements qui faisaient débat, écrits par une trentaine de plumes bénévoles. Chaque case ci-dessous est un article, rangé dans son année : survolez pour lire la fiche, cliquez pour l'ouvrir.</p>
+   <p class="v-txt">Des chroniques d'albums, des interviews d'artistes installés comme de ceux qu'on découvrait, des dossiers de fond et des classements qui faisaient débat, écrits au fil des ans par quatre-vingts plumes bénévoles. Chaque case ci-dessous est un article, rangé dans son année : survolez pour lire la fiche, cliquez pour l'ouvrir.</p>
    <div class="legend">{legend}</div>
   </div>
   <aside class="peek" aria-live="polite"><div class="peek-card" id="peek"><span class="cote">LREF·…·…·0000</span><span class="ft-title">Survolez une case du fonds</span><span class="meta"><span>Rubrique</span><span>Auteur</span><span>Date</span></span></div></aside>
@@ -96,11 +104,14 @@ body = f"""<main>
  <div class="wall" id="wall">{"".join(cells)}</div>
 </section>
 <section class="rubs"><div class="rubs-in"><p class="v-kick">Les rubriques</p>{drawers}<a class="rub all" href="articles.html"><span class="r-name">Tout le fonds</span><span class="r-meta"><b>1 193</b> articles<br>recherche</span></a></div></section>
-<section class="blk"><header class="blk-h"><h2>Pièces remarquables</h2><p>Une sélection pour commencer.</p></header><div class="pieces">{pieces}
-<a class="fiche fold" href="top-100-annees-90.html"><span class="cote">LREF·CLA·DOSSIER SPÉCIAL</span><span class="ft-title">Les 100 meilleurs albums des années 90</span><span class="meta"><span>Classement complet</span><span>100 notices</span></span></a>
-<a class="fiche fold" href="https://albums.lref.fr/"><span class="cote">LREF·CLA·2012–2022</span><span class="ft-title">Les albums de l'année</span><span class="meta"><span>Dix bilans annuels</span></span></a></div></section>
-<section class="blk"><header class="blk-h"><h2>Tiré au hasard</h2><p>Six fiches sorties du fonds, au hasard. <button type="button" id="draw">Tirer six autres fiches</button></p></header><div class="pieces rnd" id="rnd"></div></section>
-<section class="blk"><header class="blk-h"><h2>Index des plumes</h2><p>{len(au) + 1} auteurs ont écrit pour LREF. Les trente plus présents, par ordre alphabétique.</p></header><ol class="plumes">{plumes}</ol></section>
+<section class="must"><div class="must-in"><header class="sh"><p class="v-kick">Pour commencer</p><h2>Les incontournables</h2></header><div class="pcs" id="pcs">{pieces}</div></div><img class="float" id="float" alt=""></section>
+<section class="slot" id="slot"><div class="slot-in">
+ <header class="sh"><p class="v-kick">Tiré au hasard</p><h2>Un article,<br>au pif.</h2><button type="button" id="draw">Tirer un article</button></header>
+ <a class="sl-card" id="sl" href="#"><span class="sl-img" id="sl-img"></span><span class="sl-txt"><span class="sl-k" id="sl-k"></span><span class="sl-t" id="sl-t"></span><span class="sl-m" id="sl-m"></span></span></a>
+</div></section>
+<section class="crew"><header class="sh crew-h"><p class="v-kick">La rédaction</p><h2>{len(au) + 1} plumes</h2></header>
+ <div class="mq"><div class="mq-t">{mq1}{mq1h}</div></div><div class="mq rev"><div class="mq-t">{mq2}{mq2h}</div></div>
+</section>
 </main>
 {FOOT}{switch(False)}
 <script>
@@ -112,9 +123,20 @@ const peek=document.getElementById("peek"),wall=document.getElementById("wall");
 const show=t=>{{const a=t&&t.dataset.n&&M[t.dataset.n];if(!a)return;peek.className="peek-card k-"+a[4];peek.innerHTML=card(a,"div").replace(/^<div[^>]*>|<\\/div>$/g,"")}};
 wall.addEventListener("mouseover",ev=>show(ev.target.closest("a")));wall.addEventListener("focusin",ev=>show(ev.target));
 document.querySelectorAll(".legend button").forEach(b=>b.addEventListener("click",()=>{{const on=b.getAttribute("aria-pressed")!="true";document.querySelectorAll(".legend button").forEach(x=>x.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed",on);wall.dataset.f=on?b.dataset.k:""}}));
-const ks=Object.keys(M),rnd=document.getElementById("rnd");
-const draw=()=>{{const p=[];while(p.length<6){{const k=ks[Math.random()*ks.length|0];if(!p.includes(k))p.push(k)}}rnd.innerHTML=p.map(k=>card(M[k],"a")).join("")}};
+const ks=Object.keys(M),slot=document.getElementById("slot");
+const sl={{c:document.getElementById("sl"),i:document.getElementById("sl-img"),k:document.getElementById("sl-k"),t:document.getElementById("sl-t"),m:document.getElementById("sl-m")}};
+const pickk=()=>M[ks[Math.random()*ks.length|0]];
+const put=a=>{{slot.className="slot k-"+a[4];sl.k.textContent=(LAB[a[4]]||"")+"  ·  "+a[5];sl.t.textContent=a[1];sl.m.textContent=(a[3]||"La Rédaction")+", "+a[2];sl.c.href="a/"+a[0]+"/"}};
+const still=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const draw=()=>{{let n=still?0:14;const fin=pickk();sl.c.classList.add("spin");sl.i.innerHTML="";
+ const step=()=>{{if(n-->0){{put(pickk());setTimeout(step,45+(14-n)*9)}}else{{put(fin);sl.c.classList.remove("spin");if(fin[6])sl.i.innerHTML=`<img src="${{e(fin[6])}}" alt="" onerror="this.remove()">`}}}};step()}};
 document.getElementById("draw").addEventListener("click",draw);draw();
+const fl=document.getElementById("float"),pcs=document.getElementById("pcs");
+if(matchMedia("(hover:hover)").matches){{
+ pcs.addEventListener("mouseover",ev=>{{const r=ev.target.closest(".pc");if(!r)return;const u=r.dataset.img;if(u){{fl.src=u;fl.classList.add("on")}}else fl.classList.remove("on")}});
+ pcs.addEventListener("mouseleave",()=>fl.classList.remove("on"));
+ pcs.addEventListener("mousemove",ev=>{{fl.style.transform=`translate(${{ev.clientX+24}}px,${{ev.clientY-140}}px) rotate(${{(ev.movementX||0)*.4}}deg)`}});
+}}
 </script></body></html>"""
 open(os.path.join(R, "maquette-d.html"), "w").write(head("Le fonds Le Rap en France – maquette D", "") + body)
 
