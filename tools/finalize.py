@@ -181,3 +181,80 @@ for a in S:
   {FOOT0.replace('{pre}', '../../')}</body></html>"""
   open(os.path.join(R, "a", slug, "index.html"), "w", encoding="utf-8").write(head(a["t"] + " – Le Rap en France", "../../", "", a.get("x", ""), a["i"]) + art)
 print("finalize ok", len(S))
+
+# ---------------- page Classements (tranches façon albums.lref.fr) ----------------
+ANN = json.load(open(os.path.join(R, "data", "tops-albums-annuels.json"), encoding="utf-8"))
+def ann_cover(key):
+    for y in ANN:
+        if y["key"] == key:
+            return y["items"][0].get("img", "")
+    return ""
+def img_of(slug):
+    return by[slug]["i"] if slug in by else ""
+BIG = [
+    ("https://90.lref.fr/", "#FFD23F", "Années 90", "Les 100 meilleurs albums des années 90", "100 disques, de Dee Nasty à L'école du micro d'argent", img_of("les-100-meilleurs-albums-des-annees-90-100-a-91")),
+    ("https://2000.lref.fr/", "#FF6A3D", "Années 2000", "Les 100 meilleurs albums des années 2000", "100 disques, un texte pour chacun", img_of("les-100-meilleurs-albums-des-annees-2000-le-top-10")),
+    ("https://albums.lref.fr/", "#7090FF", "2012–2022", "Les albums de l'année", "Dix bilans annuels de la rédaction", ann_cover("2017")),
+    ("https://2016.lref.fr/", "#FF8AC8", "2016", "Une année 2016", "116 morceaux choisis par la rédaction", img_of("nos-morceaux-preferes-2016")),
+]
+MOISL = {m: m.capitalize() for m in MOIS}
+def short(a):
+    t = a["t"].lower()
+    y = re.findall(r"20\d\d", a["t"])
+    yr = y[-1] if y else a["d"][:4]
+    for m in MOIS:
+        if m in t:
+            return f"{m.capitalize()[:4]}{'.' if len(m) > 4 else ''} {yr}"
+    if "semestre" in t:
+        return f"S1 {yr}"
+    m = re.search(r"(premier|second|troisième|1er)\s+trimestre", t)
+    if m:
+        return f"T{ {'premier': 1, '1er': 1, 'second': 2, 'troisième': 3}[m.group(1)] } {yr}"
+    if "vacs" in t:
+        return f"Déc. {yr}"
+    return yr
+YC = {"2014": "#FFD23F", "2015": "#FFA024", "2016": "#FF6A3D", "2017": "#FF8AC8", "2018": "#E07BFF", "2019": "#A98BFF",
+      "2020": "#7090FF", "2021": "#56C8FF", "2022": "#7CF0E0", "2023": "#9BE564"}
+def label(a):
+    t = a["t"].lower(); p = short(a)
+    if "coup" in t: return "Cœur " + p
+    if "eps" in t: return "EPs " + p
+    if "nuit" in t: return "Nuit " + p
+    if "featuring" in t: return "Feat. " + p
+    if "clips" in t: return "Clips " + p
+    if "visuels" in t: return "Visuels " + p
+    if "playlist" in t: return "Mondial " + p
+    return p
+def kind(a):
+    t = a["t"].lower()
+    if "beatmaker" in t: return "beat"
+    if "featuring" in t or "clips" in t or "visuels" in t or "playlist" in t: return "autres"
+    if "morceaux" in t or "sons" in t: return "morceaux"
+    if "100 meilleurs albums" in t or "top 100" in t: return None
+    return "albums"
+GROUPS = [("albums", "Albums et projets", "Les bilans de l'année, des semestres et des trimestres, et les coups de cœur de la rédaction.", "#FFD23F"),
+          ("morceaux", "Morceaux", "Les sons de l'année, puis du mois, en 2016 et 2017.", "#FF8AC8"),
+          ("beat", "Beatmakers", "Les producteurs de l'année, de 2014 à 2018.", "#9BE564"),
+          ("autres", "Featurings, clips et visuels", "Les à-côtés du rap de l'année.", "#7CE0FF")]
+CL = [a for a in S if a["k"] == "classements"]
+def spine(a, c):
+    im = f'<span class="cv"><img src="{esc(a["i"])}" alt="" loading="lazy" onerror="this.remove()"></span>' if a["i"] else '<span class="cv"></span>'
+    return f'<li style="--c:{c}"><a href="../a/{a["s"]}/">{im}<span class="yr">{esc(label(a))}</span><span class="meta"><small>{esc(a["f"])}</small><b>{esc(a["t"].rstrip(" –"))}</b><em>{esc(a["a"] or "La Rédaction")}</em></span></a></li>'
+shelves = ""
+for g, lab, txt, col in GROUPS:
+    L = [a for a in CL if kind(a) == g]
+    L.sort(key=lambda a: a["d"])
+    if not L:
+        continue
+    shelves += f'<section class="shelf"><header class="sh-h"><h2>{esc(lab)}</h2><p>{esc(txt)} <span>{len(L)} classements</span></p></header><ul class="spines">{"".join(spine(a, YC.get(re.findall(r"20\d\d", label(a))[-1], col)) for a in L)}</ul></section>'
+big = "".join(f'<li style="--c:{c}"><a href="{h}">{f"<span class=cv><img src={chr(34)}{esc(i)}{chr(34)} alt={chr(34)}{chr(34)} loading=lazy onerror={chr(34)}this.remove(){chr(34)}></span>" if i else "<span class=cv></span>"}<span class="yr">{esc(y)}</span><span class="meta"><small>Sous-site</small><b>{esc(t)}</b><em>{esc(d)}</em></span></a></li>' for h, c, y, t, d, i in BIG)
+body = f"""<main class="cls">
+<header class="cls-h"><div class="cls-in"><p class="v-kick">Le Rap en France · {len(CL)} classements</p><h1>Classements</h1>
+<p class="cls-t">Douze ans de tops, de bilans et de coups de cœur. Survolez une tranche pour l'ouvrir, cliquez pour lire.</p>
+<ul class="spines big">{big}</ul></div></header>
+<div class="cls-in">{shelves}</div>
+</main>
+{FOOT0.replace('{pre}', '../')}</body></html>"""
+open(os.path.join(R, "rubrique", "classements.html"), "w", encoding="utf-8").write(
+    head("Classements – Le Rap en France", "../", "", "Les classements de Le Rap en France : tops des années 90 et 2000, albums de l'année, morceaux, beatmakers.").replace('<a href="../rubrique/classements.html">', '<a href="../rubrique/classements.html" aria-current="page">') + body)
+print("classements ok", len(CL))
