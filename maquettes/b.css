@@ -1,0 +1,102 @@
+/* PISTE B — « Affiche » : grotesque large, photos passées en bichromie de la couleur de la rubrique,
+   grandes bandes de couleur sur la une. La couleur est là, mais elle met de l'ordre dans les images au lieu d'en rajouter. */
+@font-face{font-family:"Archivo";src:url(../fonts/Archivo.woff2) format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+:root{
+  --paper:#FFFFFF; --paper-2:#F1F1EE; --ink:#16161D; --soft:#5B5D66; --line:#D8D8DE;
+  --disp:"Archivo",system-ui,sans-serif; --ui:"Archivo",system-ui,sans-serif;
+}
+.k-chroniques{--k:#5B7BFF}.k-interviews{--k:#FF6A3D}.k-dossiers{--k:#9BE564}.k-classements{--k:#FFD23F}
+.k-billets{--k:#FF8AC8}.k-selections{--k:#7CE0FF}.k-actus{--k:#FFA024}.k-divers{--k:#B9A2FF}
+body{background:var(--paper)}
+h1,h2,.card-title,.lead-title,.row-title,.ann-t,.brand-name,.opening-title{font-stretch:118%}
+
+/* barre */
+.mast{background:var(--paper);color:var(--ink);border-bottom:2px solid var(--ink)}
+.brand-mark{font:800 20px/1 var(--disp);font-stretch:125%;background:var(--ink);color:#fff;padding:6px 8px;border-radius:0}
+.brand-name{font:800 19px/1 var(--disp);text-transform:none;letter-spacing:-.01em}
+.sections a{font:600 15px/1 var(--ui);color:var(--ink);box-shadow:none;border-radius:99px;padding:8px 12px}
+.sections a:hover,.sections a[aria-current]{background:var(--k,var(--ink));color:var(--ink)}
+.msearch input{background:var(--paper-2);color:var(--ink);border-radius:99px;font-family:var(--ui)}
+.msearch input::placeholder{color:var(--soft)}
+.msearch input:focus{background:#fff;box-shadow:0 0 0 2px var(--ink)}
+
+/* ouverture */
+.opening{padding:52px 0 30px;align-items:end}
+.opening-title{font:800 clamp(64px,10vw,150px)/.86 var(--disp);font-stretch:125%;text-transform:none;letter-spacing:-.045em}
+.opening-sub{font:600 16px/1 var(--ui);text-transform:none;gap:6px 10px}
+.opening-sub span{background:var(--paper-2);padding:7px 11px;border-radius:99px}
+.opening-txt{font:400 19px/1.45 var(--ui)}
+
+.spines ul{height:120px;gap:0}
+.spines li:hover,.spines li:focus-within{flex-grow:1.6}
+.spines a{border-radius:0}
+.sp-t{left:16px;bottom:14px;transform:none;writing-mode:horizontal-tb;font:800 21px/1 var(--disp);font-stretch:110%;text-transform:none}
+.sp-n{font:600 15px/1 var(--ui);top:14px;left:16px}
+
+/* bichromie */
+.duo{border-radius:0;background:var(--k,#D9DBDF);isolation:isolate}
+.duo img{filter:grayscale(1) contrast(1.25) brightness(1.05);mix-blend-mode:multiply;transition:filter .35s,transform .6s cubic-bezier(.2,.7,.2,1)}
+a:hover .duo img{filter:none;mix-blend-mode:normal}
+.duo.noimg::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent 0 14px,rgba(22,22,29,.08) 14px 16px);font-size:0}
+
+/* briques */
+.kick{font:700 13px/1 var(--ui);text-transform:none;letter-spacing:0;border-radius:99px;padding:6px 10px 5px}
+.card-title{font:750 23px/1.08 var(--disp);letter-spacing:-.015em}
+.card-dek{font:400 16px/1.5 var(--ui);color:#3A3C44}
+.card-by{font-family:var(--ui)}
+.row-title{font:750 18px/1.12 var(--disp);letter-spacing:-.01em}
+.duo.sm{width:76px}
+
+/* une */
+.lead .duo{aspect-ratio:16/9}
+.lead-title{font:800 clamp(40px,4.8vw,68px)/.98 var(--disp);text-transform:none;letter-spacing:-.035em}
+.lead-dek{font:400 19px/1.5 var(--ui)}
+.lead-also{font:700 16px var(--ui);text-transform:none}
+.ann{border-radius:0;padding:24px 22px 26px}
+.ann::after{font:800 190px/1 var(--disp);font-stretch:125%}
+.ann-k{font:700 14px var(--ui);text-transform:none}
+.ann-t{font:800 32px/1 var(--disp);text-transform:none;letter-spacing:-.025em}
+
+/* sections en bandes pleine largeur */
+.hsec{position:relative;padding:48px 0 52px;margin-top:8px}
+.hsec-four{box-shadow:0 0 0 100vmax var(--band);clip-path:inset(0 -100vmax);background:var(--band)}
+.hsec-four:nth-of-type(3){--band:#FFD23F}
+.hsec-four:nth-of-type(4){--band:#5B7BFF}
+.hsec-four .kick{background:#fff}
+.hsec-four .card-dek,.hsec-four .card-by{color:var(--ink)}
+.hsec-split{padding-top:0;margin-top:0}
+.hsec-head{border-top:0;padding-top:0}
+.hsec-head h2{font:800 clamp(40px,5vw,72px)/.9 var(--disp);font-stretch:125%;text-transform:none;letter-spacing:-.04em}
+.hsec-all{font:700 15px var(--ui);text-transform:none;background:var(--ink);color:#fff;text-decoration:none;padding:9px 14px;border-radius:99px}
+.quotes a{border-radius:0;padding:18px 18px}
+.q-t{font:700 19px/1.25 var(--ui);font-style:normal}
+.yr-bar{border-radius:0}
+.yr-n,.yr-y{font:700 14px var(--ui)}
+.yr-y{font-size:16px}
+.crew-n{font:700 18px/1.1 var(--ui)}
+.crew-c{font:600 15px var(--ui)}
+
+/* rubriques */
+.sec-head{border-radius:0}
+.sec-head h1{font:800 clamp(60px,10vw,150px)/.86 var(--disp);font-stretch:125%;text-transform:none;letter-spacing:-.045em}
+.yjump a{border-radius:99px;font:700 15px var(--ui)}
+.ytitle{font:800 56px/1 var(--disp);font-stretch:125%;border-top:2px solid var(--ink)}
+
+/* article */
+.story-head h1{font:800 clamp(40px,5.8vw,80px)/.98 var(--disp);font-stretch:118%;letter-spacing:-.035em}
+.story-by{border-top:2px solid var(--ink)}
+.cover{background:var(--k,#5B7BFF)}
+.cover img{border-radius:0}
+.prose h1,.prose h2,.prose h3,.prose h4{font:800 28px/1.08 var(--disp);letter-spacing:-.02em}
+.prose blockquote{border-radius:0;background:#FFF2F9;border-left-color:#FF8AC8}
+.prose img{border-radius:0}
+.story-foot,.more{border-top:2px solid var(--ink)}
+.tags span{font:700 15px var(--ui);text-transform:none}
+.more h2{font:800 44px/1 var(--disp);font-stretch:125%;text-transform:none;letter-spacing:-.04em}
+
+/* pied */
+.foot{background:var(--ink)}
+.foot-brand{font:800 clamp(48px,7vw,100px)/.88 var(--disp);font-stretch:125%;text-transform:none;letter-spacing:-.045em}
+.foot-links a{font:700 15px var(--ui);text-transform:none;border-radius:99px;padding:8px 13px}
+@media (max-width:800px){.spines ul{height:auto;flex-wrap:wrap}.spines li{flex:1 1 40%}.spines a{height:64px}}
+.card-title,.lead-title,.row-title,.ann-t,.story-head h1{font-stretch:112%!important}

@@ -1,0 +1,114 @@
+/* PISTE C — « Catalogue » : une archive qu'on feuillette comme un classeur. Titres en grotesque étroite,
+   listes denses, petites vignettes en couleur d'origine, chaque rubrique repérée par un onglet de couleur. */
+@font-face{font-family:"Archivo";src:url(../fonts/Archivo.woff2) format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+:root{
+  --paper:#F3F4F1; --paper-2:#FFFFFF; --ink:#1B1C20; --soft:#64666D; --line:#D5D7D2;
+  --disp:"Archivo",system-ui,sans-serif; --ui:"Archivo",system-ui,sans-serif;
+}
+.k-chroniques{--k:#5577FF}.k-interviews{--k:#FF5A36}.k-dossiers{--k:#5CC46A}.k-classements{--k:#F2B705}
+.k-billets{--k:#F062B0}.k-selections{--k:#3BB8DB}.k-actus{--k:#FF9014}.k-divers{--k:#9C82F2}
+body{background:var(--paper)}
+h1,h2,.card-title,.lead-title,.row-title,.ann-t,.opening-title,.q-t,.crew-n{font-stretch:78%}
+
+/* barre */
+.mast{background:var(--paper-2);color:var(--ink);border-bottom:1px solid var(--line)}
+.brand-mark{font:800 19px/1 var(--disp);font-stretch:78%;background:none;color:var(--ink);border:2px solid var(--ink);padding:5px 6px 4px}
+.brand-name{font:700 19px/1 var(--disp);font-stretch:78%;text-transform:none}
+.sections a{font:600 15px/1 var(--ui);color:var(--ink);box-shadow:inset 0 3px 0 var(--k,var(--ink));border-radius:0;padding:14px 10px 12px}
+.sections a:hover,.sections a[aria-current]{background:var(--k,var(--ink));color:var(--ink)}
+.msearch input{background:var(--paper);color:var(--ink);border-radius:4px;font-family:var(--ui)}
+.msearch input::placeholder{color:var(--soft)}
+.msearch input:focus{background:#fff;box-shadow:0 0 0 2px var(--ink)}
+
+/* ouverture */
+.opening{padding:44px 0 22px;grid-template-columns:minmax(0,1fr) auto}
+.opening-title{font:800 clamp(56px,8vw,112px)/.88 var(--disp);font-stretch:72%;text-transform:none;letter-spacing:-.02em}
+.opening-sub{font:700 34px/1 var(--disp);font-stretch:72%;text-transform:none;justify-content:flex-end;gap:4px 26px}
+.opening-txt{font:400 17px/1.45 var(--ui);text-align:right;margin-left:auto;max-width:24em}
+
+/* onglets de classeur */
+.spines ul{height:auto;gap:4px;align-items:flex-end;border-bottom:4px solid var(--ink);margin-bottom:0}
+.spines li,.spines li:hover,.spines li:focus-within{flex:1 1 0}
+.spines a{height:78px;border-radius:6px 6px 0 0;transition:height .25s}
+.spines li:hover a,.spines li:focus-within a{height:96px}
+.sp-t{left:12px;bottom:10px;transform:none;writing-mode:horizontal-tb;font:700 21px/1 var(--disp);font-stretch:78%;text-transform:none}
+.sp-n{top:10px;left:12px;font:600 14px/1 var(--ui)}
+
+/* briques */
+.duo{border-radius:2px;background:color-mix(in srgb,var(--k) 25%,#fff)}
+.duo.noimg::before{content:attr(data-k);font:800 72px/1 var(--disp);font-stretch:70%;color:var(--k);opacity:1;right:8px;bottom:-6px}
+.kick{font:700 12.5px/1 var(--ui);text-transform:none;letter-spacing:0;background:none;padding:0 0 0 14px;position:relative;border-radius:0;color:var(--ink)}
+.kick::before{content:"";position:absolute;left:0;top:1px;width:9px;height:9px;background:var(--k)}
+
+/* les cartes deviennent des fiches en liste */
+.hsec-four .hsec-grid,.hsec-three .hsec-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 36px}
+.card{border-top:1px solid var(--line);display:grid;grid-template-columns:132px minmax(0,1fr);column-gap:18px;align-content:start;padding:16px 0}
+.card-link{display:contents}
+.card-link .duo{grid-column:1;grid-row:1/span 4;margin:0;aspect-ratio:4/3;align-self:start}
+.card .kick,.card-title,.card .card-dek,.card .card-by{grid-column:2}
+.card-link .kick{margin:2px 0 6px;justify-self:start}
+.card-title{font:700 23px/1.05 var(--disp);letter-spacing:-.005em}
+.card .card-dek{font:400 15.5px/1.45 var(--ui);-webkit-line-clamp:2;margin:8px 0 4px}
+.card .card-by{font:400 13px var(--ui);margin:4px 0 0}
+.row-title{font:700 20px/1.05 var(--disp)}
+.duo.sm{width:64px;aspect-ratio:4/3}
+
+/* une */
+.front{padding:28px 0 40px;gap:36px;background:var(--paper-2);box-shadow:0 0 0 100vmax var(--paper-2);clip-path:inset(0 -100vmax)}
+.lead .duo{aspect-ratio:16/9;border-radius:2px}
+.lead-title{font:800 clamp(40px,4.6vw,64px)/.95 var(--disp);font-stretch:74%;text-transform:none}
+.lead-dek{font:400 18px/1.5 var(--ui)}
+.lead-also{font:700 15px var(--ui);text-transform:none}
+.ann{border-radius:6px 6px 0 0;border-bottom:4px solid var(--ink);padding:20px 20px 22px}
+.ann::after{font:800 170px/1 var(--disp);font-stretch:70%}
+.ann-k{font:700 13px var(--ui);text-transform:none}
+.ann-t{font:800 34px/.95 var(--disp);font-stretch:74%;text-transform:none}
+
+/* sections */
+.hsec{padding:44px 0 4px}
+.hsec-head{border-top:0;padding-top:0;margin-bottom:6px;align-items:flex-end}
+.hsec-head h2{font:800 clamp(38px,4.4vw,58px)/.9 var(--disp);font-stretch:72%;text-transform:none}
+.hsec-head h2 a{box-shadow:inset 0 -.18em 0 var(--k,#fff)}
+.hsec:has(.k-chroniques) h2 a{--k:#5577FF}.hsec:has(.k-interviews) h2 a{--k:#FF5A36}.hsec:has(.k-dossiers) h2 a{--k:#5CC46A}
+.hsec-all{font:600 14px var(--ui);text-transform:none}
+.hsec-split{grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)}
+.hsec-split .hsec-three .hsec-grid{grid-template-columns:1fr}
+.quotes a{background:var(--paper-2);border-radius:0;border-left:6px solid #F062B0;padding:14px 16px}
+.q-t{font:700 20px/1.1 var(--disp);font-style:normal}
+.q-m{font-family:var(--ui)}
+.yrs{height:300px}
+.yr-bar{border-radius:2px 2px 0 0}
+.yr-n{font:600 13px var(--ui)}
+.yr-y{font:800 22px var(--disp);font-stretch:74%}
+.crew-n{font:700 19px/1.05 var(--disp)}
+.crew-c{font:600 14px var(--ui)}
+
+/* rubriques */
+.sec-head{border-radius:6px 6px 0 0;border-bottom:4px solid var(--ink)}
+.sec-head h1{font:800 clamp(60px,10vw,140px)/.85 var(--disp);font-stretch:70%;text-transform:none}
+.yjump a{font:700 15px var(--ui);border-radius:2px}
+.ytitle{font:800 56px/1 var(--disp);font-stretch:72%;border-top:4px solid var(--ink)}
+.row-title{font-stretch:78%}
+
+/* article */
+.story-head h1{font:800 clamp(42px,6vw,84px)/.94 var(--disp);font-stretch:74%}
+.story-by{border-top:4px solid var(--ink)}
+.cover img{border-radius:2px}
+.prose h1,.prose h2,.prose h3,.prose h4{font:800 30px/1 var(--disp);font-stretch:76%}
+.prose blockquote{background:var(--paper-2);border-radius:0;border-left:6px solid #F062B0}
+.tags span{font:700 15px var(--ui);text-transform:none}
+.more h2{font:800 46px/1 var(--disp);font-stretch:72%;text-transform:none}
+
+/* pied */
+.foot{background:var(--paper-2);color:var(--ink);border-top:4px solid var(--ink)}
+.foot-brand{font:800 clamp(48px,7vw,96px)/.86 var(--disp);font-stretch:70%;text-transform:none;color:var(--ink)}
+.foot-txt{color:var(--soft)}
+.foot-txt a{color:var(--ink)}
+.foot-links a,.foot-links li:nth-child(n) a{background:var(--paper)!important;color:var(--ink)!important;font:600 14px var(--ui);text-transform:none;border-radius:2px;box-shadow:inset 3px 0 0 var(--ink)}
+@media (max-width:800px){
+ .opening{grid-template-columns:1fr}.opening-sub{justify-content:flex-start}.opening-txt{text-align:left;margin-left:0}
+ .spines ul{flex-wrap:wrap;border-bottom:0}.spines li{flex:1 1 30%}.spines a,.spines li:hover a{height:58px;border-radius:4px}
+ .hsec-four .hsec-grid,.hsec-three .hsec-grid{grid-template-columns:1fr}
+ .card{grid-template-columns:96px minmax(0,1fr)}.card .card-dek{display:none}
+}
+.card-title,.lead-title,.row-title,.ann-t,.q-t,.crew-n,.story-head h1,.hsec-head h2{font-stretch:78%!important}
