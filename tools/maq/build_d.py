@@ -26,7 +26,7 @@ def head(title, pre, extra=""):
     nav = "".join(f'<a href="{pre}rubrique/{k}.html"><i class="k-{k}"></i>{esc(l)}</a>' for k, l, _ in SEC)
     return f"""<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)}</title>
-<link rel="stylesheet" href="{pre}maquettes/d.css?v=1">{extra}</head><body>
+<link rel="stylesheet" href="{pre}maquettes/d.css?v=2">{extra}</head><body>
 <header class="bar"><a class="logo" href="{pre}maquette-d.html"><b>LREF</b><span>Fonds Le Rap en France</span></a>
 <nav>{nav}<a href="{pre}articles.html">Tout le fonds</a></nav>
 <form action="{pre}articles.html"><input name="q" type="search" placeholder="Chercher dans le fonds" aria-label="Rechercher"></form></header>"""
@@ -84,9 +84,9 @@ body = f"""<main>
 <section class="vault">
  <div class="v-in">
   <div class="v-head">
-   <p class="v-kick">Fonds Le Rap en France · 2011–2023</p>
-   <h1>1 193 articles<br>repêchés.</h1>
-   <p class="v-txt">Le site a disparu après un piratage. Tout ce que la Wayback Machine en avait gardé est ici, rangé par année. Chaque case est un article : survolez pour lire la fiche, cliquez pour l'ouvrir.</p>
+   <p class="v-kick">Le Rap en France · 2011–2023</p>
+   <h1>Douze ans<br>de rap français.</h1>
+   <p class="v-txt">Des chroniques d'albums, des interviews d'artistes installés comme de ceux qu'on découvrait, des dossiers de fond et des classements qui faisaient débat, écrits par une trentaine de plumes bénévoles. Chaque case ci-dessous est un article, rangé dans son année : survolez pour lire la fiche, cliquez pour l'ouvrir.</p>
    <div class="legend">{legend}</div>
   </div>
   <aside class="peek" aria-live="polite"><div class="peek-card" id="peek"><span class="cote">LREF·…·…·0000</span><span class="ft-title">Survolez une case du fonds</span><span class="meta"><span>Rubrique</span><span>Auteur</span><span>Date</span></span></div></aside>
@@ -122,26 +122,40 @@ a = by[slug]
 src = open(os.path.join(R, "a", slug, "index.html")).read()
 prose = src[src.index('<div class="prose">'):src.index('<footer class="story-foot">')]
 mins = re.search(r'class="read">(\d+) min', src).group(1)
-orig = re.sub(r"^https?://web\.archive\.org/web/\d+/", "", a["w"]).replace("http://", "")
+orig = re.sub(r"^https?://web\.archive\.org/web/\d+/", "", a["w"]).replace("http://", "").rstrip("/")
+Y = years[a["d"][:4]]
+pos = Y.index(a) + 1
+mw = "".join(f'<a class="k-{b["k"]}{" here" if b is a else ""}" href="../../a/{b["s"]}/" title="{esc(b["t"])}"{" aria-current=page" if b is a else ""}></a>' for b in Y)
+prev, nxt = (S[a["n"] - 2] if a["n"] > 1 else None), (S[a["n"]] if a["n"] < len(S) else None)
+def nav(b, lab, cls):
+    return f'<a class="cn {cls} k-{b["k"]}" href="../../a/{b["s"]}/"><span class="cn-l">{lab}</span><span class="cote">{b["cote"]}</span><span class="cn-t">{esc(b["t"])}</span><span class="cn-m">{esc(b["a"] or "La Rédaction")}, {esc(b["f"])}</span></a>'
 more = [b for b in S if b["k"] == a["k"] and b["s"] != slug and b["i"]][-40:][::7][:3]
-art = f"""<main class="doc">
-<header class="dh k-{a['k']}">
- <div class="dh-card">
-  <span class="stamp">Restauré<br><small>2026</small></span>
-  <p class="cote">{a['cote']}</p>
+art = f"""<main class="art k-{a['k']}">
+<header class="ah"><div class="ah-in">
+ <div class="ah-main">
+  <p class="ah-k"><i class="k-{a['k']}"></i><a href="../../rubrique/{a['k']}.html">{esc(LAB[a['k']])}</a><span>{a['cote']}</span></p>
   <h1>{esc(a['t'])}</h1>
-  <dl>
-   <div><dt>Série</dt><dd><a href="../../rubrique/{a['k']}.html">{esc(LAB[a['k']])}</a></dd></div>
-   <div><dt>Auteur</dt><dd><a href="../../articles.html?au={esc(a['a'])}">{esc(a['a'])}</a></dd></div>
-   <div><dt>Publié le</dt><dd>{esc(a['f'])}</dd></div>
-   <div><dt>Copie Wayback</dt><dd><a href="{esc(a['w'])}">{esc(a['cap'])}</a></dd></div>
-   <div><dt>Lecture</dt><dd>{mins} min</dd></div>
-   <div class="wide"><dt>Adresse d'origine</dt><dd><s>{esc(orig)}</s> plus en ligne</dd></div>
-  </dl>
+  <p class="ah-by">Par <a href="../../articles.html?au={esc(a['a'])}">{esc(a['a'])}</a> · {esc(a['f'])} · {mins} min de lecture</p>
  </div>
- {f'<figure class="pin"><img src="{esc(a["i"])}" alt="" onerror="this.parentNode.remove()"></figure>' if a['i'] else ''}
-</header>
-<article class="sheet">{prose}</article>
+ <aside class="ah-wall" aria-label="Position dans le fonds">
+  <p class="aw-t"><b>{a['d'][:4]}</b> {pos}<sup>e</sup> article sur {len(Y)}</p>
+  <div class="aw">{mw}</div>
+  <p class="aw-n">N° {a['n']} sur {len(S):} dans le fonds</p>
+ </aside>
+</div></header>
+{f'<figure class="acov"><img src="{esc(a["i"])}" alt="" onerror="this.parentNode.remove()"></figure>' if a['i'] else ''}
+<div class="abody">
+ <aside class="notice"><p class="n-h">Notice</p><dl>
+  <dt>Cote</dt><dd>{a['cote']}</dd>
+  <dt>Série</dt><dd>{esc(LAB[a['k']])}</dd>
+  <dt>Auteur</dt><dd>{esc(a['a'])}</dd>
+  <dt>Publication</dt><dd>{esc(a['f'])}</dd>
+  <dt>Copie Wayback</dt><dd><a href="{esc(a['w'])}">{esc(a['cap'])}</a></dd>
+  <dt>Adresse d'origine</dt><dd><s>{esc(orig)}</s></dd>
+ </dl></aside>
+ {prose}
+</div>
+<nav class="chrono" aria-label="Dans l'ordre du fonds">{nav(prev, "← Article précédent", "p") if prev else ""}{nav(nxt, "Article suivant →", "n") if nxt else ""}</nav>
 <section class="blk near"><header class="blk-h"><h2>Dans la même série</h2></header><div class="pieces">{"".join(fiche(b).replace('href="a/', 'href="../../a/') for b in more)}</div></section>
 </main>
 {FOOT.replace('href="a-propos', 'href="../../a-propos')}{switch(True)}</body></html>"""
