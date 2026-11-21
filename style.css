@@ -487,8 +487,6 @@ body:has(.art){background:#fff}
 .embed{position:relative;aspect-ratio:16/9;margin:32px 0}
 .embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .prose h2,.prose h3,.prose h4{font:800 32px/1 var(--h);font-stretch:76%;margin:1.6em 0 .5em}
-.prose strong:only-child{font:800 27px/1.05 var(--h);font-stretch:78%;display:block;margin-top:1.4em}
-.prose>p:first-child strong:only-child{font:600 23px/1.5 var(--r);margin:0}
 .chrono{max-width:1180px;margin:72px auto 0;padding:0 28px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .cn{display:block;text-decoration:none;background:var(--box);color:#fff;padding:22px 24px 24px;border-top:6px solid var(--k)}
 .cn.n{text-align:right}
@@ -597,3 +595,11 @@ main.cls+.ft{margin-top:96px}
  .spines .meta b{font-size:20px}
 }
 @media (prefers-reduced-motion:reduce){.spines li,.spines .cv,.spines .meta{transition:none}}
+
+/* harmonisation typographique */
+.prose .chapo{font:500 23px/1.5 var(--r);margin-bottom:1.4em}
+.prose>p:first-child:not(.chapo){font-size:inherit;line-height:inherit}
+.prose h3{font:800 30px/1.05 var(--h);font-stretch:76%;margin:1.6em 0 .5em;letter-spacing:0}
+.prose .q{font-weight:700;font-family:var(--h);font-size:18.5px;line-height:1.5;margin-top:1.8em;padding-left:14px;border-left:4px solid var(--k,var(--red))}
+.prose .q+p{margin-top:.6em}
+.prose hr.page-break{border:0;height:0;margin:2em 0}

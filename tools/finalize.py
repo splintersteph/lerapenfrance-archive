@@ -1,6 +1,8 @@
 """Finalisation du site (design « Le fonds ») : à lancer après build.py.
 Réécrit la une (index.html) et toutes les pages articles a/<slug>/index.html."""
-import json, re, html, os, collections
+import json, re, html, os, collections, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import typo
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 S = json.load(open(os.path.join(R, "search.json"), encoding="utf-8"))
 PAGES = {}
@@ -139,6 +141,7 @@ for a in S:
   slug = a["s"]
   src = PAGES[slug]
   prose = src[src.index('<div class="prose">'):src.index('<footer class="story-foot">')]
+  prose = typo.clean(prose, interview=a["k"] == "interviews")
   mins = re.search(r'class="read">(\d+) min', src).group(1)
   orig = re.sub(r"^https?://web\.archive\.org/web/\d+/", "", a["w"]).replace("http://", "").rstrip("/")
   Y = years[a["d"][:4]]
