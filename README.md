@@ -4,4 +4,5 @@ Archive du site **Le Rap en France (LREF)**, reconstituée à partir des copies 
 
 - Site : https://splintersteph.github.io/lerapenfrance-archive/
 - `tools/build.py` régénère le site à partir de `data/lerapenfrance-archive.json` :
-  `python3 tools/build.py data/lerapenfrance-archive.json .`
+  `python3 tools/build.py data/lerapenfrance-archive.json . && python3 tools/finalize.py`
+  (`finalize.py` produit la une et les pages articles au design « Le fonds » ; `tools/d.css` est ajouté à `tools/style.css`)

@@ -1,9 +1,9 @@
 /* MAQUETTE D — « Le fonds ». Bleu de boîte d'archive, fiches bristol à filet rouge, cotes dactylographiées. */
-@font-face{font-family:"Archivo";src:url(../fonts/Archivo.woff2) format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
-@font-face{font-family:"Courier Prime";src:url(../fonts/CourierPrime.woff2) format("woff2");font-weight:400;font-display:swap}
-@font-face{font-family:"Courier Prime";src:url(../fonts/CourierPrime-700.woff2) format("woff2");font-weight:700;font-display:swap}
-@font-face{font-family:"Newsreader";src:url(../fonts/Newsreader.woff2) format("woff2");font-weight:200 800;font-display:swap}
-@font-face{font-family:"Newsreader";src:url(../fonts/Newsreader-Italic.woff2) format("woff2");font-weight:200 800;font-style:italic;font-display:swap}
+@font-face{font-family:"Archivo";src:url(fonts/Archivo.woff2) format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:"Courier Prime";src:url(fonts/CourierPrime.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Courier Prime";src:url(fonts/CourierPrime-700.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Newsreader";src:url(fonts/Newsreader.woff2) format("woff2");font-weight:200 800;font-display:swap}
+@font-face{font-family:"Newsreader";src:url(fonts/Newsreader-Italic.woff2) format("woff2");font-weight:200 800;font-style:italic;font-display:swap}
 :root{
   --box:#1E3350; --box-2:#28426A; --desk:#DDE2E5; --card:#FCFBF7; --ink:#1B222B; --soft:#5D6670;
   --red:#D9423A; --rule:#B8CFE6; --brass:#B48A4E;
@@ -119,7 +119,7 @@ main{display:block}
 .pc-m{font:400 14px/1.4 var(--t);color:var(--soft);text-align:right}
 .pc:hover .pc-t{transform:translateX(18px);color:var(--box-2)}
 .pc:hover{box-shadow:inset 0 -4px 0 var(--k)}
-.float{position:fixed;left:0;top:0;width:300px;height:220px;object-fit:cover;pointer-events:none;z-index:30;opacity:0;scale:.85;transition:opacity .25s,scale .3s;box-shadow:0 24px 50px -16px rgba(10,20,40,.55)}
+/*x*/.float{position:fixed;left:0;top:0;width:300px;height:220px;object-fit:cover;pointer-events:none;z-index:30;opacity:0;scale:.85;transition:opacity .25s,scale .3s;box-shadow:0 24px 50px -16px rgba(10,20,40,.55)}
 .float.on{opacity:1;scale:1}
 
 /* tirage au hasard */
@@ -211,7 +211,7 @@ body:has(.art){background:#fff}
 .cn-m{display:block;font:400 13.5px var(--t);color:#9DB0C9;margin-top:10px}
 .cn:hover .cn-t{text-decoration:underline;text-decoration-thickness:2px}
 .near{padding-top:64px}
-/* sélecteur de maquettes */
+/* sélecteur de maquettes (inutilisé) */
 .sw{position:fixed;z-index:99;left:50%;bottom:16px;transform:translateX(-50%);background:#111;color:#fff;font:600 14px system-ui;padding:6px;border-radius:99px;display:flex;gap:2px;box-shadow:0 6px 24px rgba(0,0,0,.3)}
 .sw a{color:#fff;text-decoration:none;padding:6px 10px;border-radius:99px}
 .sw a[aria-current]{background:#fff;color:#111}
@@ -222,3 +222,48 @@ body:has(.art){background:#fff}
 @media (max-width:640px){.vault{padding:36px 16px}.bar{padding:0 14px}.blk{padding:56px 16px 0}.pieces{grid-template-columns:1fr}.fiche.big{grid-row:auto}
  .ah{padding:36px 16px 120px}.acov,.abody,.chrono{padding:0 14px}.chrono{grid-template-columns:1fr}.prose{font-size:18.5px}.ft-in{grid-template-columns:1fr}.ft-l{grid-column:1}.logo span{display:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* intégration avec les pages héritées */
+main.home,main.art{max-width:none;margin:0;padding:0}
+.txt{min-width:0}
+.story-foot{border-top:2px solid var(--ink);margin-top:48px;padding-top:16px;font:400 14px var(--t)}
+.story-foot .tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 12px}
+.story-foot .tags span{font:700 14px var(--t);margin-right:6px}
+.story-foot .tags a{background:var(--desk);padding:4px 10px;border-radius:99px;text-decoration:none;font:400 13.5px var(--h)}
+.story-foot .src{color:var(--soft);margin:0}
+.ft{margin-top:72px}
+main.home+.ft{margin-top:0}
+
+/* pages héritées (rubriques, recherche, tops, à propos) remises au style du fonds */
+:root{--disp:"Archivo",system-ui,sans-serif;--ui:"Archivo",system-ui,sans-serif}
+.kick,.lead-title,.lead-also,.ann-k,.ann-t,.hsec-head h2,.hsec-all,.sec-head h1,.embed-note,.tags span,.more h2,.feature-head h1,.entry h2 .rk-a,.places-wrap h2{text-transform:none}
+.sec-head h1,.feature-head h1,.ytitle,.more h2,.hsec-head h2,.places-wrap h2,.entry-n,.rk{font-weight:800;font-stretch:66%;letter-spacing:-.01em}
+.card-title,.row-title,.res-title,.rk-a,.entry h2 .rk-a,.lead-title{font-weight:800;font-stretch:76%}
+.kick{background:none;padding:0 0 0 16px;position:relative;font:600 14px/1 var(--h);border-radius:0;color:var(--ink);letter-spacing:0}
+.kick::before{content:"";position:absolute;left:0;top:1px;width:10px;height:10px;background:var(--k,var(--ink))}
+.duo,.cover img,.prose img{border-radius:0}
+.duo.noimg{background:color-mix(in srgb,var(--k) 30%,#fff)}
+.duo.noimg::before{font:800 120px/1 var(--h);font-stretch:66%;color:var(--k);opacity:1}
+/* en-tête de rubrique / recherche : bandeau bleu pleine largeur */
+.sec-head{background:var(--box);color:#fff;border-radius:0;margin:0 0 44px;padding:56px 0 40px;box-shadow:0 0 0 100vmax var(--box);clip-path:inset(0 -100vmax);border-bottom:8px solid var(--k,#FF48B0)}
+.sec-head h1{font-size:clamp(64px,10vw,150px);line-height:.86;margin:0 0 16px}
+.sec-head p{color:#D5DEEA;font:400 18px/1.5 var(--h)}
+.yjump a{background:var(--box-2);color:#fff;font:400 14px var(--t);border-radius:2px;padding:6px 9px}
+.yjump a:hover{background:#fff;color:var(--ink)}
+.ytitle{font-size:56px;border-top:2px solid var(--ink)}
+.ytitle span{font:400 14px var(--t)}
+.card-by,.row-meta,.res-meta,.count{font-family:var(--t);font-size:13px}
+.finder input,.finder select{border:0;border-radius:99px;background:#fff;font-family:var(--h);padding:13px 16px}
+.results a{border-bottom-color:#B7C0C6}
+/* tops */
+.feature-head h1{font-size:clamp(56px,8vw,124px);line-height:.88}
+.feature-head .standfirst{font-family:var(--r)}
+.rank-wrap{background:var(--box);color:#fff;border-radius:0}
+.ranking a{border-bottom-color:#3A557E}
+.rk{color:#FFD23F}
+.rk-t,.rk-y{color:#D5DEEA}
+.entry{border-top:2px solid var(--ink)}
+.entry-n{color:var(--red)}
+/* à propos, 404 */
+.story-head h1{font-weight:800;font-stretch:70%;letter-spacing:-.01em}
+.prose blockquote{background:none}

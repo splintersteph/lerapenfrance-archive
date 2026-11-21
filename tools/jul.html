@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jul &amp; Marseille, la carte – Le Rap en France</title>
+<meta name="description" content="Les 87 lieux de Marseille cités par Jul dans ses morceaux, de 2012 à 2022.">
+<meta property="og:title" content="Jul & Marseille, la carte">
+<meta property="og:description" content="Les 87 lieux de Marseille cités par Jul dans ses morceaux, de 2012 à 2022.">
+<meta name="theme-color" content="#0F1B2D">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<style>
+@font-face{font-family:"Archivo";src:url(fonts/Archivo.woff2) format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:"Courier Prime";src:url(fonts/CourierPrime.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Courier Prime";src:url(fonts/CourierPrime-700.woff2) format("woff2");font-weight:700;font-display:swap}
+:root{--night:#0F1B2D;--box:#1E3350;--box-2:#28426A;--soft:#9DB0C9;--pink:#FF48B0;--h:"Archivo",system-ui,sans-serif;--t:"Courier Prime","Courier New",monospace}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--night);color:#fff;font:400 17px/1.5 var(--h)}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* scène */
+.stage{position:relative;height:100vh;min-height:640px;overflow:hidden}
+#map{position:absolute;inset:0;background:var(--night)}
+.leaflet-tile-pane{filter:invert(1) grayscale(.55) hue-rotate(190deg) brightness(.78) contrast(1.15) saturate(1.4)}
+.leaflet-container{font:inherit}
+.leaflet-control-attribution{background:rgba(15,27,45,.7)!important;color:var(--soft)!important;font:400 11px var(--t)}
+.leaflet-control-attribution a{color:#fff!important}
+.leaflet-bar a{background:var(--box)!important;color:#fff!important;border-color:var(--box-2)!important}
+.stage::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:400;
+  background:linear-gradient(90deg,rgba(15,27,45,.92) 0,rgba(15,27,45,.55) 34%,rgba(15,27,45,0) 60%),linear-gradient(0deg,rgba(15,27,45,.9),rgba(15,27,45,0) 26%)}
+.dot{filter:drop-shadow(0 0 6px var(--c)) drop-shadow(0 0 14px var(--c));transition:opacity .4s}
+.dot.off{opacity:0;pointer-events:none}
+.dot.on-now{animation:pulse 1s ease-out}
+@keyframes pulse{0%{filter:drop-shadow(0 0 2px #fff) drop-shadow(0 0 40px var(--c))}}
+
+.top{position:absolute;z-index:500;left:0;right:0;top:0;display:flex;align-items:center;gap:16px;padding:18px 28px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo b{font:700 15px/1 var(--t);border:1.5px solid #fff;padding:5px 7px 4px;letter-spacing:.08em}
+.logo span{font:700 17px/1 var(--h);font-stretch:80%}
+.top .back{margin-left:auto;margin-right:56px;font:400 14px var(--t);color:var(--soft)}
+
+.intro{position:absolute;z-index:500;left:28px;top:118px;max-width:560px;pointer-events:none}
+.intro>*{pointer-events:auto}
+.kick{font:400 15px var(--t);color:var(--soft);margin:0 0 14px}
+h1{font:800 clamp(72px,10.5vw,168px)/.84 var(--h);font-stretch:66%;letter-spacing:-.01em;margin:0 0 22px;text-shadow:0 4px 40px rgba(0,0,0,.4)}
+h1 em{font-style:normal;color:var(--pink)}
+.lede{font-size:19px;color:#D5DEEA;margin:0 0 26px;max-width:28em}
+.cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{border:0;border-radius:99px;padding:15px 22px;font:700 16px var(--h);background:var(--pink);color:#141414;box-shadow:0 10px 30px -8px var(--pink);transition:transform .15s}
+.btn:hover{transform:scale(1.04) rotate(-1.5deg)}
+.btn.ghost{background:rgba(255,255,255,.08);color:#fff;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35);text-decoration:none}
+.count b{font:inherit}
+.count{font:800 52px/1 var(--h);font-stretch:70%;margin:30px 0 0;display:flex;gap:28px}
+.count span{display:block;font:400 13px var(--t);color:var(--soft);margin-top:6px}
+
+/* frise des années */
+.years{position:absolute;z-index:500;left:28px;right:28px;bottom:22px;display:flex;align-items:flex-end;gap:6px}
+.years button{flex:1;border:0;background:none;padding:0;display:flex;flex-direction:column;align-items:stretch;gap:6px;opacity:.55;transition:opacity .2s}
+.years button[aria-pressed=true],.years button:hover{opacity:1}
+.years .bar{display:block;height:calc(var(--n) * 4px + 4px);background:var(--c);border-radius:2px;box-shadow:0 0 18px -4px var(--c)}
+.years .y{font:800 20px/1 var(--h);font-stretch:74%;text-align:left}
+.years .y small{font:400 12px var(--t);color:var(--soft);margin-left:6px}
+.years .play{flex:0 0 auto;width:54px;height:54px;border-radius:50%;background:#fff;color:#141414;align-items:center;justify-content:center;opacity:1;font-size:18px;margin-right:10px}
+
+/* fiche extrait */
+.card{position:absolute;z-index:600;right:28px;top:96px;width:min(440px,calc(100% - 56px));background:#FCFBF7;color:#141A22;padding:26px 28px 22px;
+  border-top:8px solid var(--c,var(--pink));box-shadow:0 30px 70px -20px rgba(0,0,0,.7);transform:translateX(120%);transition:transform .5s cubic-bezier(.2,.9,.2,1)}
+.card.show{transform:none}
+.c-yr{font:700 14px var(--t);color:#D9423A;margin:0 0 10px;display:flex;justify-content:space-between}
+.c-place{font:800 22px/1 var(--h);font-stretch:80%;margin:0 0 16px;display:flex;align-items:center;gap:8px}
+.c-place::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--c,var(--pink));flex:none}
+.c-q{font:800 clamp(30px,3vw,40px)/1.02 var(--h);font-stretch:72%;margin:0 0 18px;quotes:"« " " »"}
+.c-q::before{content:open-quote}.c-q::after{content:close-quote}
+.c-src{font:400 14px/1.45 var(--t);color:#5D6670;margin:0 0 18px}
+.c-src b{color:#141A22}
+.c-nav{display:flex;gap:8px;align-items:center;border-top:1px solid #D5DBE0;padding-top:14px}
+.c-nav button{border:0;background:#141A22;color:#fff;border-radius:99px;padding:9px 14px;font:600 14px var(--h)}
+.c-nav .x{margin-left:auto;background:none;color:#5D6670;padding:9px 6px}
+.c-nav .tour-state{font:400 13px var(--t);color:#5D6670}
+.progress{position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--c,var(--pink));transform-origin:left;transform:scaleX(0)}
+.card.touring .progress{animation:prog var(--dur) linear forwards}
+@keyframes prog{to{transform:scaleX(1)}}
+
+/* liste */
+.list{background:var(--night);padding:88px 28px 120px}
+.list-in{max-width:1300px;margin:0 auto}
+.list h2{font:800 clamp(56px,8vw,120px)/.9 var(--h);font-stretch:66%;margin:0 0 10px}
+.list .sub{font:400 15px var(--t);color:var(--soft);margin:0 0 28px}
+.list input{width:min(520px,100%);font:400 17px var(--h);padding:14px 18px;border-radius:99px;border:0;background:var(--box);color:#fff;margin-bottom:34px}
+.list input::placeholder{color:var(--soft)}
+.places{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.places button{display:block;width:100%;text-align:left;border:0;background:var(--box);padding:18px 20px 20px;border-top:5px solid var(--c);border-radius:2px;transition:transform .2s,background .2s;height:100%}
+.places button:hover{transform:translateY(-4px);background:var(--box-2)}
+.p-y{display:block;font:700 13px var(--t);color:var(--soft)}
+.p-n{display:block;font:800 26px/1 var(--h);font-stretch:74%;margin:6px 0 10px}
+.p-q{display:block;font:400 15px/1.45 var(--h);color:#D5DEEA}
+.foot{border-top:1px solid #2A3F5E;padding:28px;text-align:center;font:400 14px var(--t);color:var(--soft)}
+.foot a{color:#fff}
+
+@media (max-width:860px){
+ .stage{height:auto;min-height:0;display:flex;flex-direction:column}
+ #map{position:relative;height:62vh;order:2}
+ .stage::after{display:none}
+ .top{position:relative}
+ .intro{position:relative;left:0;top:0;padding:10px 18px 24px;max-width:none}
+ .count{margin-top:22px}
+ .years{position:relative;order:3;left:0;right:0;bottom:0;padding:16px 14px;overflow-x:auto}
+ .years button{min-width:44px}
+ .card{position:fixed;right:12px;left:12px;top:auto;bottom:12px;width:auto;transform:translateY(130%)}
+ .list{padding:60px 16px 90px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<section class="stage" aria-label="Carte de Marseille selon Jul">
+ <header class="top"><a class="logo" href="index.html"><b>LREF</b><span>Le Rap en France</span></a><a class="back" href="a/lref-carte-de-marseille-par-jul/">Lire l'article d'origine</a></header>
+ <div id="map" aria-label="Carte des lieux"></div>
+ <div class="intro">
+  <p class="kick">Le Rap en France · Carte · 2022</p>
+  <h1>Jul <em>&amp;</em><br>Marseille</h1>
+  <p class="lede">La ville telle que Jul la raconte, morceau après morceau : les cités, les plages, les centres commerciaux, les stades. Chaque point est un lieu cité dans un texte.</p>
+  <div class="cta"><button class="btn" id="tour" type="button">▶ Lancer la visite</button><a class="btn ghost" href="#lieux">Voir les 87 lieux</a></div>
+  <div class="count"><div><b id="c-n">87</b><span>lieux affichés</span></div><div>11<span>années de morceaux</span></div><div>2012–22<span>de Lacrizeomicmek à 2022</span></div></div>
+ </div>
+ <aside class="card" id="card" aria-live="polite">
+  <p class="c-yr"><span id="k-y"></span><span id="k-i"></span></p>
+  <p class="c-place" id="k-p"></p>
+  <p class="c-q" id="k-q"></p>
+  <p class="c-src" id="k-s"></p>
+  <div class="c-nav"><button type="button" id="prev" aria-label="Lieu précédent">←</button><button type="button" id="next" aria-label="Lieu suivant">→</button><span class="tour-state" id="ts"></span><button type="button" class="x" id="close">Fermer</button></div>
+  <span class="progress" id="prog"></span>
+ </aside>
+ <nav class="years" id="years" aria-label="Filtrer par année"></nav>
+</section>
+<section class="list" id="lieux"><div class="list-in">
+ <h2>Les 87 lieux</h2>
+ <p class="sub">Classés par année de sortie du morceau. Choisissez un lieu pour le voir sur la carte.</p>
+ <label class="sr" for="q">Filtrer les lieux</label><input id="q" type="search" placeholder="Un quartier, un morceau, un album…">
+ <ol class="places" id="places"></ol>
+</div></section>
+<footer class="foot">Carte tirée du dossier « Jul &amp; Marseille » de <a href="index.html">Le Rap en France</a>, 2022. Fond de carte © contributeurs <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>.</footer>
+<script src="vendor/leaflet/leaflet.js"></script>
+<script>
+const RAMP={2012:"#FFD23F",2013:"#FFC23A",2014:"#FFA024",2015:"#FF7A3D",2016:"#FF5A5F",2017:"#FF48B0",2018:"#E35CFF",2019:"#A77BFF",2020:"#7C9BFF",2021:"#56C8FF",2022:"#7CF0E0"};
+const still=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const e=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+fetch("jul-marseille.json").then(r=>r.json()).then(raw=>{
+ const P=raw.map(([n,la,lo,d])=>{const m=d.match(/^\s*(\d{4})\s*:\s*["“«]\s*([\s\S]+?)\s*["”»]\s*(.*?)(?:,\s*sur\s+(.*))?$/)||[];return{n,la,lo,y:+(m[1]||0),q:m[2]||d,t:(m[3]||"").trim(),al:(m[4]||"").trim()}})
+  .sort((a,b)=>a.y-b.y||a.n.localeCompare(b.n));
+ P.forEach((p,i)=>{p.i=i;p.c=RAMP[p.y]||"#FF48B0"});
+ const map=L.map("map",{scrollWheelZoom:false,zoomControl:true,attributionControl:true}).setView([43.30,5.40],12);
+ map.zoomControl.setPosition("topright");
+ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"© OpenStreetMap"}).addTo(map);
+ const wide=innerWidth>860;
+ const bounds=L.latLngBounds(P.map(p=>[p.la,p.lo]));
+ map.fitBounds(bounds,{paddingTopLeft:[wide?innerWidth*.42:20,60],paddingBottomRight:[40,120]});
+ P.forEach(p=>{p.m=L.circleMarker([p.la,p.lo],{radius:7,color:"#fff",weight:1.5,fillColor:p.c,fillOpacity:1,className:"dot off"}).addTo(map);
+  p.m.on("add",()=>{});p.el=()=>p.m.getElement();p.m.on("click",()=>{stopTour();open(p.i,true)});
+  p.m.bindTooltip(p.n,{direction:"top",offset:[0,-8]})});
+ const setC=(el,c)=>{if(el)el.style.setProperty("--c",c)};
+ P.forEach(p=>setC(p.el(),p.c));
+
+ // frise
+ const ys=[...new Set(P.map(p=>p.y))].sort();const yr=document.getElementById("years");
+ yr.innerHTML=`<button class="play" id="replay" type="button" aria-label="Rejouer l'apparition des lieux">↻</button>`+ys.map(y=>{const n=P.filter(p=>p.y==y).length;return`<button type="button" data-y="${y}" aria-pressed="false" style="--n:${n};--c:${RAMP[y]}"><span class="bar"></span><span class="y">${y}<small>${n}</small></span></button>`}).join("");
+ let filt=0;
+ const showUpTo=(Y,only)=>{let n=0;P.forEach(p=>{const on=only?p.y==Y:p.y<=Y;const el=p.el();if(el){el.classList.toggle("off",!on);if(on)n++}});document.getElementById("c-n").textContent=n};
+ yr.addEventListener("click",ev=>{const b=ev.target.closest("button[data-y]");if(!b)return;const y=+b.dataset.y;filt=filt==y?0:y;
+  yr.querySelectorAll("button[data-y]").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.y==filt));
+  if(filt){showUpTo(filt,true);const L2=P.filter(p=>p.y==filt);map.flyToBounds(L.latLngBounds(L2.map(p=>[p.la,p.lo])),{paddingTopLeft:[wide?innerWidth*.42:20,60],paddingBottomRight:[wide?480:40,120],maxZoom:14,duration:1.2})}else showUpTo(9999)});
+ const reveal=()=>{filt=0;yr.querySelectorAll("button[data-y]").forEach(x=>x.setAttribute("aria-pressed","false"));
+  if(still){showUpTo(9999);return}
+  showUpTo(0);let k=0;const step=()=>{if(k>=ys.length)return;const y=ys[k++];showUpTo(y);yr.querySelectorAll("button[data-y]").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.y==y));
+   P.filter(p=>p.y==y).forEach(p=>{const el=p.el();if(el){el.classList.remove("on-now");void el.getBoundingClientRect();el.classList.add("on-now")}});
+   setTimeout(k<ys.length?step:()=>yr.querySelectorAll("button[data-y]").forEach(x=>x.setAttribute("aria-pressed","false")),k<ys.length?420:900)};setTimeout(step,500)};
+ document.getElementById("replay").addEventListener("click",reveal);reveal();
+
+ // fiche
+ const card=document.getElementById("card"),$=id=>document.getElementById(id);let cur=-1;
+ const open=(i,fly)=>{const p=P[(i+P.length)%P.length];cur=p.i;card.style.setProperty("--c",p.c);
+  $("k-y").textContent=p.y;$("k-i").textContent=`${p.i+1} / ${P.length}`;$("k-p").textContent=p.n;$("k-q").textContent=p.q;
+  $("k-s").innerHTML=p.t?`<b>${e(p.t)}</b>${p.al?`, sur ${e(p.al)}`:""}`:"";card.classList.add("show");
+  const el=p.el();if(el){el.classList.remove("off");el.classList.remove("on-now");void el.getBoundingClientRect();el.classList.add("on-now")}
+  if(fly)map.flyTo([p.la,p.lo],15,{duration:still?0:1.6,paddingTopLeft:[0,0]});};
+ $("prev").onclick=()=>{stopTour();open(cur-1,true)};$("next").onclick=()=>{stopTour();open(cur+1,true)};
+ $("close").onclick=()=>{stopTour();card.classList.remove("show");map.flyToBounds(bounds,{paddingTopLeft:[wide?innerWidth*.42:20,60],paddingBottomRight:[40,120],duration:1.2})};
+
+ // visite guidée
+ let tour=null;const DUR=6500;
+ const stopTour=()=>{if(tour){clearTimeout(tour);tour=null}card.classList.remove("touring");$("ts").textContent="";$("tour").textContent="▶ Lancer la visite"};
+ const tick=i=>{showUpTo(9999);open(i,true);const pr=$("prog");card.classList.remove("touring");void pr.offsetWidth;card.style.setProperty("--dur",DUR+"ms");card.classList.add("touring");$("ts").textContent="Visite en cours";
+  tour=setTimeout(()=>tick(cur+1),DUR)};
+ $("tour").onclick=()=>{if(tour){stopTour();return}$("tour").textContent="❚❚ Arrêter la visite";document.querySelector(".stage").scrollIntoView({behavior:"smooth"});tick(cur<0?0:cur)};
+ addEventListener("keydown",ev=>{if(!card.classList.contains("show"))return;if(ev.key=="ArrowRight")$("next").click();if(ev.key=="ArrowLeft")$("prev").click();if(ev.key=="Escape")$("close").click()});
+
+ // liste
+ const list=$("places");
+ const draw=()=>{const q=norm($("q").value);list.innerHTML=P.filter(p=>!q||norm(p.n+" "+p.q+" "+p.t+" "+p.al).includes(q)).map(p=>`<li><button type="button" data-i="${p.i}" style="--c:${p.c}"><span class="p-y">${p.y}${p.t?" · "+e(p.t):""}</span><span class="p-n">${e(p.n)}</span><span class="p-q">« ${e(p.q)} »</span></button></li>`).join("")};
+ $("q").addEventListener("input",draw);draw();
+ list.addEventListener("click",ev=>{const b=ev.target.closest("button[data-i]");if(!b)return;stopTour();document.querySelector(".stage").scrollIntoView({behavior:"smooth"});showUpTo(9999);setTimeout(()=>open(+b.dataset.i,true),400)});
+});
+</script>
+</body></html>

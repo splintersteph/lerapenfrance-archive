@@ -278,7 +278,7 @@ NAV = [(s[0], s[1]) for s in SECTIONS]
 
 def page(title, body, depth=0, desc="", active="", og_image=""):
     pre = "../" * depth
-    links = "".join(f'<a class="k-{k}" href="{pre}rubrique/{k}.html"{" aria-current=page" if k == active else ""}>{esc(t)}</a>' for k, t in NAV)
+    links = "".join(f'<a href="{pre}rubrique/{k}.html"{" aria-current=page" if k == active else ""}><i class="k-{k}"></i>{esc(t)}</a>' for k, t in NAV)
     return f"""<!DOCTYPE html>
 <html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -287,25 +287,18 @@ def page(title, body, depth=0, desc="", active="", og_image=""):
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
 {f'<meta property="og:image" content="{esc(og_image)}">' if og_image else ''}
-<link rel="preload" href="{pre}fonts/BigShouldersDisplay.woff2" as="font" type="font/woff2" crossorigin>
-<meta name="theme-color" content="#141414">
-<link rel="stylesheet" href="{pre}style.css?v=4">
+<link rel="preload" href="{pre}fonts/Archivo.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#1E3350">
+<link rel="stylesheet" href="{pre}style.css?v=5">
 <script>document.addEventListener("error",e=>{{const t=e.target;if(t.tagName!=="IMG")return;const f=t.closest(".ph-host");if(f){{f.classList.add("noimg");t.remove()}}else t.remove()}},true);</script>
 </head><body>
 <a class="skip" href="#contenu">Aller au contenu</a>
-<header class="mast">
- <div class="mast-in">
-  <a class="brand" href="{pre}index.html" aria-label="Le Rap en France, accueil"><span class="brand-mark">LREF</span><span class="brand-name">Le Rap en France</span></a>
-  <nav class="sections" aria-label="Rubriques">{links}<a href="{pre}articles.html"{" aria-current=page" if active == "all" else ""}>Tout</a></nav>
-  <form class="msearch" action="{pre}articles.html" role="search"><label class="sr" for="mq">Rechercher</label><input id="mq" name="q" type="search" placeholder="Rechercher"></form>
- </div>
-</header>
+<header class="bar"><a class="logo" href="{pre}index.html"><b>LREF</b><span>Fonds Le Rap en France</span></a>
+<nav>{links}<a href="{pre}articles.html"{" aria-current=page" if active == "all" else ""}>Tout le fonds</a></nav>
+<form action="{pre}articles.html" role="search"><input name="q" type="search" placeholder="Chercher dans le fonds" aria-label="Rechercher"></form></header>
 <main id="contenu">{body}</main>
-<footer class="foot"><div class="foot-in">
- <p class="foot-brand">Le Rap en France</p>
- <p class="foot-txt">Média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a disparu après un piratage ; ses articles ont été reconstitués à partir des copies de la <a href="https://web.archive.org/">Wayback Machine</a>. Les textes appartiennent à leurs auteurs.</p>
- <ul class="foot-links"><li><a href="{pre}a-propos.html">À propos de l'archive</a></li><li><a href="https://90.lref.fr/">Top 100 années 90</a></li><li><a href="https://2000.lref.fr/">Top 100 années 2000</a></li><li><a href="https://albums.lref.fr/">Les albums de l'année</a></li><li><a href="https://2016.lref.fr/">Une année 2016</a></li><li><a href="{pre}jul-marseille.html">Jul &amp; Marseille</a></li></ul>
-</div></footer>
+<footer class="ft"><div class="ft-in"><p class="ft-t">Provenance</p><p>Le Rap en France, média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a disparu après un piratage. Ce fonds a été reconstitué en 2026 à partir des copies conservées par la Wayback Machine d'Internet Archive. Les textes appartiennent à leurs auteurs.</p>
+<p class="ft-l"><a href="https://90.lref.fr/">Top 100 années 90</a><a href="https://2000.lref.fr/">Top 100 années 2000</a><a href="https://albums.lref.fr/">Les albums de l'année</a><a href="https://2016.lref.fr/">Une année 2016</a><a href="{pre}a-propos.html">À propos du fonds</a><a href="{pre}jul-marseille.html">Jul &amp; Marseille, la carte</a></p></div></footer>
 </body></html>"""
 
 
@@ -321,8 +314,9 @@ for f in os.listdir(OUT):
         continue
     fp = os.path.join(OUT, f)
     shutil.rmtree(fp) if os.path.isdir(fp) else os.remove(fp)
-shutil.copy(os.path.join(HERE, "style.css"), os.path.join(OUT, "style.css"))
+open(os.path.join(OUT, "style.css"), "w", encoding="utf-8").write(open(os.path.join(HERE, "style.css"), encoding="utf-8").read() + "\n" + open(os.path.join(HERE, "d.css"), encoding="utf-8").read())
 shutil.copytree(os.path.join(HERE, "fonts"), os.path.join(OUT, "fonts"))
+shutil.copytree(os.path.join(HERE, "vendor"), os.path.join(OUT, "vendor"))
 open(os.path.join(OUT, ".nojekyll"), "w").close()
 
 
@@ -507,26 +501,7 @@ write("top-100-annees-2000.html", page("Les 100 meilleurs albums des années 200
 _jf = os.path.join(DATA, "jul-marseille.json")
 if os.path.exists(_jf):
     write("jul-marseille.json", open(_jf, encoding="utf-8").read())
-    body = f"""<header class="feature-head"><p class="kick k-dossiers">Carte</p><h1>Jul &amp; Marseille</h1>
-<p class="standfirst">Les lieux de Marseille cités par Jul dans ses morceaux, de 2012 à 2022. Choisissez un point pour lire l'extrait. <a href="a/lref-carte-de-marseille-par-jul/">Lire l'article d'origine</a>.</p></header>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<div class="map-wrap"><div id="map" class="bigmap" aria-label="Carte des lieux"></div></div>
-<section class="places-wrap"><h2>Les 87 lieux</h2><div class="finder"><label class="sr" for="q">Filtrer</label><input id="q" type="search" placeholder="Un quartier, un morceau, un album…"></div><ol id="places" class="places"></ol></section>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-fetch("jul-marseille.json").then(r=>r.json()).then(P=>{{
- const map=L.map("map",{{scrollWheelZoom:false}}).setView([43.30,5.40],12);
- L.tileLayer("https://{{s}}.basemaps.cartocdn.com/rastertiles/voyager/{{z}}/{{x}}/{{y}}{{r}}.png",{{maxZoom:19,subdomains:"abcd",attribution:"© OpenStreetMap, © CARTO"}}).addTo(map);
- const e=s=>s.replace(/[&<>"]/g,c=>({{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}}[c]));
- const mk=P.map(([n,la,lo,d])=>L.circleMarker([la,lo],{{radius:7,color:"#1A1D33",weight:2,fillColor:"#FF48B0",fillOpacity:.95}}).addTo(map).bindPopup("<b>"+e(n)+"</b><br>"+e(d)));
- map.fitBounds(L.featureGroup(mk).getBounds(),{{padding:[20,20]}});
- const norm=s=>s.normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toLowerCase();
- const draw=()=>{{const q=norm(document.getElementById("q").value);document.getElementById("places").innerHTML=P.map((p,i)=>[p,i]).filter(([p])=>!q||norm(p[0]+" "+p[3]).includes(q)).sort((a,b)=>a[0][3].localeCompare(b[0][3])).map(([p,i])=>`<li><button type="button" data-i="${{i}}">${{e(p[0])}}</button><span>${{e(p[3])}}</span></li>`).join("");}};
- document.getElementById("q").addEventListener("input",draw);draw();
- document.getElementById("places").addEventListener("click",ev=>{{const b=ev.target.closest("button[data-i]");if(!b)return;const m=mk[+b.dataset.i];document.getElementById("map").scrollIntoView({{behavior:"smooth"}});map.setView(m.getLatLng(),15);m.openPopup();}});
-}});
-</script>"""
-    write("jul-marseille.html", page("Jul & Marseille, la carte – Le Rap en France", body, 0, "Les lieux de Marseille cités par Jul", "dossiers"))
+    write("jul-marseille.html", open(os.path.join(HERE, "jul.html"), encoding="utf-8").read())
 
 # --- la une ----------------------------------------------------------------
 def pick(slug):

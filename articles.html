@@ -6,19 +6,15 @@
 <meta property="og:title" content="Toutes les archives – Le Rap en France">
 <meta property="og:description" content="">
 
-<link rel="preload" href="fonts/BigShouldersDisplay.woff2" as="font" type="font/woff2" crossorigin>
-<meta name="theme-color" content="#141414">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="preload" href="fonts/Archivo.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#1E3350">
+<link rel="stylesheet" href="style.css?v=5">
 <script>document.addEventListener("error",e=>{const t=e.target;if(t.tagName!=="IMG")return;const f=t.closest(".ph-host");if(f){f.classList.add("noimg");t.remove()}else t.remove()},true);</script>
 </head><body>
 <a class="skip" href="#contenu">Aller au contenu</a>
-<header class="mast">
- <div class="mast-in">
-  <a class="brand" href="index.html" aria-label="Le Rap en France, accueil"><span class="brand-mark">LREF</span><span class="brand-name">Le Rap en France</span></a>
-  <nav class="sections" aria-label="Rubriques"><a class="k-classements" href="rubrique/classements.html">Classements</a><a class="k-dossiers" href="rubrique/dossiers.html">Dossiers</a><a class="k-interviews" href="rubrique/interviews.html">Interviews</a><a class="k-chroniques" href="rubrique/chroniques.html">Chroniques</a><a class="k-billets" href="rubrique/billets.html">Billets d&#x27;humeur</a><a class="k-selections" href="rubrique/selections.html">Sélections</a><a class="k-actus" href="rubrique/actus.html">Actus</a><a href="articles.html" aria-current=page>Tout</a></nav>
-  <form class="msearch" action="articles.html" role="search"><label class="sr" for="mq">Rechercher</label><input id="mq" name="q" type="search" placeholder="Rechercher"></form>
- </div>
-</header>
+<header class="bar"><a class="logo" href="index.html"><b>LREF</b><span>Fonds Le Rap en France</span></a>
+<nav><a href="rubrique/classements.html"><i class="k-classements"></i>Classements</a><a href="rubrique/dossiers.html"><i class="k-dossiers"></i>Dossiers</a><a href="rubrique/interviews.html"><i class="k-interviews"></i>Interviews</a><a href="rubrique/chroniques.html"><i class="k-chroniques"></i>Chroniques</a><a href="rubrique/billets.html"><i class="k-billets"></i>Billets d&#x27;humeur</a><a href="rubrique/selections.html"><i class="k-selections"></i>Sélections</a><a href="rubrique/actus.html"><i class="k-actus"></i>Actus</a><a href="articles.html" aria-current=page>Tout le fonds</a></nav>
+<form action="articles.html" role="search"><input name="q" type="search" placeholder="Chercher dans le fonds" aria-label="Rechercher"></form></header>
 <main id="contenu"><header class="sec-head"><h1>Toutes les archives</h1><p>1 193 articles publiés entre 2011 et 2023. Cherchez un artiste, un album, un auteur.</p></header>
 <div class="finder">
 <label class="sr" for="q">Rechercher</label><input id="q" type="search" placeholder="Rechercher…">
@@ -40,9 +36,6 @@ $("list").innerHTML=R.slice(0,300).map(a=>`<li><a href="a/${a.s}/"><span class="
 fetch("search.json").then(r=>r.json()).then(j=>{D=j;draw()});
 ["q","r","y","au"].forEach(k=>$(k).addEventListener("input",draw));
 </script></main>
-<footer class="foot"><div class="foot-in">
- <p class="foot-brand">Le Rap en France</p>
- <p class="foot-txt">Média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a disparu après un piratage ; ses articles ont été reconstitués à partir des copies de la <a href="https://web.archive.org/">Wayback Machine</a>. Les textes appartiennent à leurs auteurs.</p>
- <ul class="foot-links"><li><a href="a-propos.html">À propos de l'archive</a></li><li><a href="https://90.lref.fr/">Top 100 années 90</a></li><li><a href="https://2000.lref.fr/">Top 100 années 2000</a></li><li><a href="https://albums.lref.fr/">Les albums de l'année</a></li><li><a href="https://2016.lref.fr/">Une année 2016</a></li><li><a href="jul-marseille.html">Jul &amp; Marseille</a></li></ul>
-</div></footer>
+<footer class="ft"><div class="ft-in"><p class="ft-t">Provenance</p><p>Le Rap en France, média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a disparu après un piratage. Ce fonds a été reconstitué en 2026 à partir des copies conservées par la Wayback Machine d'Internet Archive. Les textes appartiennent à leurs auteurs.</p>
+<p class="ft-l"><a href="https://90.lref.fr/">Top 100 années 90</a><a href="https://2000.lref.fr/">Top 100 années 2000</a><a href="https://albums.lref.fr/">Les albums de l'année</a><a href="https://2016.lref.fr/">Une année 2016</a><a href="a-propos.html">À propos du fonds</a><a href="jul-marseille.html">Jul &amp; Marseille, la carte</a></p></div></footer>
 </body></html>
