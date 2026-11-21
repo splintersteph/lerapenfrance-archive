@@ -26,7 +26,7 @@ def head(title, pre, extra=""):
     nav = "".join(f'<a href="{pre}rubrique/{k}.html"><i class="k-{k}"></i>{esc(l)}</a>' for k, l, _ in SEC)
     return f"""<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)}</title>
-<link rel="stylesheet" href="{pre}maquettes/d.css?v=2">{extra}</head><body>
+<link rel="stylesheet" href="{pre}maquettes/d.css?v=3">{extra}</head><body>
 <header class="bar"><a class="logo" href="{pre}maquette-d.html"><b>LREF</b><span>Fonds Le Rap en France</span></a>
 <nav>{nav}<a href="{pre}articles.html">Tout le fonds</a></nav>
 <form action="{pre}articles.html"><input name="q" type="search" placeholder="Chercher dans le fonds" aria-label="Rechercher"></form></header>"""
@@ -62,8 +62,10 @@ def rng(k):
 drawers = ""
 for k, l, c in SEC:
     r, n = rng(k)
-    drawers += f'<a class="drawer k-{k}" href="rubrique/{k}.html"><span class="holder"><span class="lbl"><b>{esc(l)}</b><em>{n} fiches · {r}</em><small>Série {c}</small></span></span><span class="pull"></span></a>'
-drawers += '<a class="drawer all" href="articles.html"><span class="holder"><span class="lbl"><b>Tout le fonds</b><em>1 193 fiches · 2011–2023</em><small>Recherche</small></span></span><span class="pull"></span></a>'
+    ims = [a["i"] for a in S if a["k"] == k and a["i"]][::-1][:10]
+    tr = "".join(f'<img src="{esc(u)}" alt="" loading="lazy" onerror="this.remove()">' for u in ims)
+    drawers += f'<a class="rub k-{k}" href="rubrique/{k}.html"><span class="r-strip" aria-hidden="true"><span class="r-track">{tr}{tr}</span></span><span class="r-name">{esc(l)}</span><span class="r-meta"><b>{n}</b> articles<br>{r}</span></a>'
+
 
 
 def fiche(a, big=False, extra_href=None):
@@ -93,7 +95,7 @@ body = f"""<main>
  </div>
  <div class="wall" id="wall">{"".join(cells)}</div>
 </section>
-<section class="blk"><header class="blk-h"><h2>Le meuble à tiroirs</h2><p>Sept séries, classées comme au premier jour.</p></header><div class="cabinet">{drawers}</div></section>
+<section class="rubs"><div class="rubs-in"><p class="v-kick">Les rubriques</p>{drawers}<a class="rub all" href="articles.html"><span class="r-name">Tout le fonds</span><span class="r-meta"><b>1 193</b> articles<br>recherche</span></a></div></section>
 <section class="blk"><header class="blk-h"><h2>Pièces remarquables</h2><p>Une sélection pour commencer.</p></header><div class="pieces">{pieces}
 <a class="fiche fold" href="top-100-annees-90.html"><span class="cote">LREF·CLA·DOSSIER SPÉCIAL</span><span class="ft-title">Les 100 meilleurs albums des années 90</span><span class="meta"><span>Classement complet</span><span>100 notices</span></span></a>
 <a class="fiche fold" href="https://albums.lref.fr/"><span class="cote">LREF·CLA·2012–2022</span><span class="ft-title">Les albums de l'année</span><span class="meta"><span>Dix bilans annuels</span></span></a></div></section>
