@@ -183,6 +183,11 @@ for a in arts:
     else:
         _keep.append(a)
 arts = _keep
+# compte à rebours des tops 100 (« de 40 à 31 »…) : retirés, les classements complets vivent sur 90.lref.fr et 2000.lref.fr
+COUNTDOWN = [a for a in arts if re.search(r"100 meilleurs albums", a["title"]) and re.search(r"\d+\s*à\s*\d+", a["title"])]
+REDIRECT = {a["slug"]: ("top-100-annees-2000.html" if "2000" in a["title"] else "top-100-annees-90.html") for a in COUNTDOWN}
+arts = [a for a in arts if a["slug"] not in REDIRECT]
+TOPPAGES = json.load(open(os.path.join(os.path.dirname(SRC), "tops-pages.json"), encoding="utf-8"))
 by_slug = {a["slug"]: a for a in arts}
 for a in arts:
     a["text"] = plain(a["html"])
@@ -260,6 +265,8 @@ def rewrite(h, depth):
                 a["href"] = pre + "index.html"
             elif s in by_slug:
                 a["href"] = f"{pre}a/{s}/"
+            elif s in REDIRECT:
+                a["href"] = pre + REDIRECT[s]
             else:
                 a["href"] = "https://web.archive.org/web/2020/" + href
         elif href.startswith("/"):
@@ -473,7 +480,7 @@ body = f"""<header class="feature-head"><p class="kick k-classements">Classement
 write("top-100-annees-90.html", page("Les 100 meilleurs albums des années 90 – Le Rap en France", body, 0, intro[:160], "classements"))
 
 # --- top 2000 --------------------------------------------------------------
-tranches = [a for a in arts if re.search(r"100-meilleurs-albums.*annees-2000", a["slug"])]
+tranches = [a for a in arts + COUNTDOWN if re.search(r"100-meilleurs-albums.*annees-2000", a["slug"])]
 rank00 = []
 for a in tranches:
     for el in BeautifulSoup(a["html"], "html.parser").find_all(["h1", "h2", "h3", "h4", "strong", "b"]):
@@ -488,14 +495,18 @@ def split_t(t):
     return (p[0], p[1]) if len(p) == 2 else (t, "")
 
 
-rows00 = "".join(f'<li><a href="a/{s}/"><span class="rk">{n}</span><span class="rk-a">{esc(split_t(t)[0])}</span><span class="rk-t">{esc(split_t(t)[1])} <span class="rk-y">{y}</span></span></a></li>' for n, t, y, s in rank00)
+rows00 = "".join(f'<li><a href="https://2000.lref.fr/a/{TOPPAGES["2000"].get(str(n), "")}"><span class="rk">{n}</span><span class="rk-a">{esc(split_t(t)[0])}</span><span class="rk-t">{esc(split_t(t)[1])} <span class="rk-y">{y}</span></span></a></li>' for n, t, y, s in rank00)
 order = lambda a: 0 if "top-10" in a["slug"] else -int(re.search(r"de-(\d+)-a", a["slug"]).group(1))
-trs = "".join(card(a, 0, "s", False) for a in sorted(tranches, key=order, reverse=True))
+trs = "".join(card(a, 0, "s", False) for a in sorted(tranches, key=order, reverse=True) if a["slug"] in by_slug)
 body = f"""<header class="feature-head"><p class="kick k-classements">Classement</p><h1>Les 100 meilleurs albums des années 2000</h1>
 <p class="standfirst">Un classement établi avec 43 votants : les rédactions de L'Abcdr du Son, Reaphit, Le Bon Son, Revrse et SURL, ainsi que Genono, Spleenter et Olivier Cachin. Chacun classait cinquante albums, de cinquante points pour le premier à un point pour le dernier.</p></header>
 <div class="rank-wrap"><ol class="ranking">{rows00}</ol></div>
-<section class="more"><h2>Le classement, en dix épisodes</h2><div class="grid5">{trs}</div></section>"""
+<section class="more"><h2>Le top 10, l'article</h2><div class="grid5">{trs}</div><p class="src">Chaque album du classement a sa notice complète sur <a href="https://2000.lref.fr/">2000.lref.fr</a>.</p></section>"""
 write("top-100-annees-2000.html", page("Les 100 meilleurs albums des années 2000 – Le Rap en France", body, 0, "", "classements"))
+
+# anciennes adresses du compte à rebours : redirection vers le classement complet
+for _s, _t in REDIRECT.items():
+    write(f"a/{_s}/index.html", f'<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0; url=../../{_t}"><link rel="canonical" href="../../{_t}"><title>Redirection</title></head><body><p><a href="../../{_t}">Voir le classement complet</a></p></body></html>')
 
 # --- Jul & Marseille -------------------------------------------------------
 _jf = os.path.join(DATA, "jul-marseille.json")
