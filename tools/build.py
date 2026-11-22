@@ -184,7 +184,7 @@ for a in arts:
         _keep.append(a)
 arts = _keep
 # compte à rebours des tops 100 (« de 40 à 31 »…) : retirés, les classements complets vivent sur 90.lref.fr et 2000.lref.fr
-COUNTDOWN = [a for a in arts if re.search(r"100 meilleurs albums", a["title"]) and re.search(r"\d+\s*à\s*\d+", a["title"])]
+COUNTDOWN = [a for a in arts if re.search(r"100 meilleurs albums", a["title"]) and re.search(r"\d+\s*à\s*\d+|TOP\s*10", a["title"])]
 REDIRECT = {a["slug"]: ("top-100-annees-2000.html" if "2000" in a["title"] else "top-100-annees-90.html") for a in COUNTDOWN}
 arts = [a for a in arts if a["slug"] not in REDIRECT]
 TOPPAGES = json.load(open(os.path.join(os.path.dirname(SRC), "tops-pages.json"), encoding="utf-8"))
@@ -280,7 +280,7 @@ def rewrite(h, depth):
 
 
 # --- gabarit --------------------------------------------------------------
-NAV = [(s[0], s[1]) for s in SECTIONS]
+NAV = [(s[0], s[1].replace("Billets d'humeur", "Billets")) for s in SECTIONS]
 
 
 def page(title, body, depth=0, desc="", active="", og_image=""):
@@ -301,7 +301,7 @@ def page(title, body, depth=0, desc="", active="", og_image=""):
 </head><body>
 <a class="skip" href="#contenu">Aller au contenu</a>
 <header class="bar"><a class="logo" href="{pre}index.html"><b>LREF</b><span>Fonds Le Rap en France</span></a>
-<nav>{links}<a href="{pre}articles.html"{" aria-current=page" if active == "all" else ""}>Tout le fonds</a></nav>
+<nav>{links}<a href="{pre}artistes.html">Artistes</a><a href="{pre}articles.html"{" aria-current=page" if active == "all" else ""}>Tout le fonds</a></nav>
 <form action="{pre}articles.html" role="search"><input name="q" type="search" placeholder="Chercher dans le fonds" aria-label="Rechercher"></form></header>
 <main id="contenu">{body}</main>
 <footer class="ft"><div class="ft-in"><p class="ft-t">Provenance</p><p>Le Rap en France, média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a disparu après un piratage. Ce fonds a été reconstitué en 2026 à partir des copies conservées par la Wayback Machine d'Internet Archive. Les textes appartiennent à leurs auteurs.</p>
@@ -501,7 +501,7 @@ trs = "".join(card(a, 0, "s", False) for a in sorted(tranches, key=order, revers
 body = f"""<header class="feature-head"><p class="kick k-classements">Classement</p><h1>Les 100 meilleurs albums des années 2000</h1>
 <p class="standfirst">Un classement établi avec 43 votants : les rédactions de L'Abcdr du Son, Reaphit, Le Bon Son, Revrse et SURL, ainsi que Genono, Spleenter et Olivier Cachin. Chacun classait cinquante albums, de cinquante points pour le premier à un point pour le dernier.</p></header>
 <div class="rank-wrap"><ol class="ranking">{rows00}</ol></div>
-<section class="more"><h2>Le top 10, l'article</h2><div class="grid5">{trs}</div><p class="src">Chaque album du classement a sa notice complète sur <a href="https://2000.lref.fr/">2000.lref.fr</a>.</p></section>"""
+<p class="src">Chaque album du classement a sa notice complète sur <a href="https://2000.lref.fr/">2000.lref.fr</a>.</p>"""
 write("top-100-annees-2000.html", page("Les 100 meilleurs albums des années 2000 – Le Rap en France", body, 0, "", "classements"))
 
 # anciennes adresses du compte à rebours : redirection vers le classement complet

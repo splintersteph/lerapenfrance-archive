@@ -30,14 +30,61 @@ years = collections.defaultdict(list)
 for a in S:
     years[a["d"][:4]].append(a)
 
+# ---------------- artistes ----------------
+import unicodedata
+def norm(x):
+    x = unicodedata.normalize("NFKD", html.unescape(x)).encode("ascii", "ignore").decode().lower()
+    return re.sub(r"[^a-z0-9]+", " ", x).strip()
+def aslug(x):
+    return norm(x).replace(" ", "-") or "x"
+CLEAN = {}
+for a in S:
+    src = PAGES[a["s"]]
+    pr = src[src.index('<div class="prose">'):src.index('<footer class="story-foot">')]
+    CLEAN[a["s"]] = typo.clean(pr, interview=a["k"] == "interviews")
+ARTISTS = json.load(open(os.path.join(R, "data", "artistes.json"), encoding="utf-8"))
+AL = {}
+for ar in ARTISTS:
+    ar["slug"] = aslug(ar["nom"])
+    for x in ar["alias"]:
+        AL[x] = ar["slug"]
+AR = {ar["slug"]: ar for ar in ARTISTS}
+for ar in ARTISTS:
+    ar["main"], ar["cite"] = [], []
+for a in S:
+    bold = collections.Counter()
+    for m in re.findall(r"<strong>([^<]{2,40})</strong>", CLEAN[a["s"]]):
+        k = norm(m.strip(" ,.:;!?’'\u00a0"))
+        if k in AL:
+            bold[AL[k]] += 1
+    tn = " " + norm(a["t"]) + " "
+    tags = {norm(t) for t in a.get("c", [])}
+    main = {sl for x, sl in AL.items() if f" {x} " in tn or x in tags}
+    a["art"] = sorted(main, key=lambda sl: -bold[sl]) + [sl for sl, _ in bold.most_common() if sl not in main]
+    a["artmain"] = main
+    for sl in main:
+        AR[sl]["main"].append(a)
+    for sl in bold:
+        if sl not in main:
+            AR[sl]["cite"].append(a)
+for ar in ARTISTS:
+    ar["n"] = len(ar["main"]) + len(ar["cite"])
+ARTISTS = [ar for ar in ARTISTS if ar["n"] >= 6]
+AR = {ar["slug"]: ar for ar in ARTISTS}
+def bubbles(sls, pre, cls="bubs"):
+    sls = [sl for sl in sls if sl in AR]
+    if not sls:
+        return ""
+    return f'<ul class="{cls}">' + "".join(f'<li><a href="{pre}artiste/{sl}.html">{esc(AR[sl]["nom"])}</a></li>' for sl in sls) + "</ul>"
+
 
 def head(title, pre, extra="", desc="", img=""):
-    nav = "".join(f'<a href="{pre}rubrique/{k}.html"><i class="k-{k}"></i>{esc(l)}</a>' for k, l, _ in SEC)
+    nav = "".join(f'<a href="{pre}rubrique/{k}.html"><i class="k-{k}"></i>{esc(l.replace("Billets d'humeur", "Billets"))}</a>' for k, l, _ in SEC)
     return f"""<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)}</title><meta name="description" content="{esc(desc)}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">{f'<meta property="og:image" content="{esc(img)}">' if img else ""}<meta name="theme-color" content="#1E3350">
 <link rel="stylesheet" href="{pre}style.css?v=5">{extra}</head><body>
 <header class="bar"><a class="logo" href="{pre}index.html"><b>LREF</b><span>Fonds Le Rap en France</span></a>
-<nav>{nav}<a href="{pre}articles.html">Tout le fonds</a></nav>
+<nav>{nav}<a href="{pre}artistes.html">Artistes</a><a href="{pre}articles.html">Tout le fonds</a></nav>
 <form action="{pre}articles.html"><input name="q" type="search" placeholder="Chercher dans le fonds" aria-label="Rechercher"></form></header>"""
 
 
@@ -80,7 +127,9 @@ picks = ["les-100-meilleurs-albums-des-annees-2000-le-top-10", "lref-carte-de-ma
          "booba-et-la-religion-oecumenisme-peches-et-paraboles", "dossier-sante-mentale-fin-silence-rap-francais"]
 fp = [by[s] for s in picks if s in by]
 hrefs = {"les-100-meilleurs-albums-des-annees-2000-le-top-10": "top-100-annees-2000.html", "lref-carte-de-marseille-par-jul": "jul-marseille.html"}
+img_of_lead = "https://web.archive.org/web/2020im_/http://lerapenfrance.fr/wp-content/uploads/2022/07/Capture-de%CC%81cran-2022-07-17-a%CC%80-18.47.28.png"
 prow = [(hrefs.get(x["s"], "a/" + x["s"] + "/"), x["k"], LAB[x["k"]], x["t"], f'{x["a"] or "La Rédaction"}, {x["f"]}', x["i"]) for x in fp]
+prow[0:0] = [("top-100-annees-2000.html", "classements", "Classements", "Les 100 meilleurs albums des années 2000", "La Rédaction et 43 votants", img_of_lead)] if "les-100-meilleurs-albums-des-annees-2000-le-top-10" not in by else []
 prow[1:1] = [("top-100-annees-90.html", "classements", "Classements", "Les 100 meilleurs albums des années 90", "La Rédaction, cent notices", fp[0]["i"]),
              ("https://albums.lref.fr/", "classements", "Classements", "Les albums de l'année, de 2012 à 2022", "Dix bilans annuels", "")]
 pieces = "".join(f'<a class="pc k-{k}" href="{h}" data-img="{esc(i)}"><span class="pc-k"><i class="k-{k}"></i>{esc(l)}</span><span class="pc-t">{esc(t)}</span><span class="pc-m">{esc(m)}</span></a>' for h, k, l, t, m, i in prow)
@@ -140,8 +189,7 @@ open(os.path.join(R, "index.html"), "w", encoding="utf-8").write(head("Le Rap en
 for a in S:
   slug = a["s"]
   src = PAGES[slug]
-  prose = src[src.index('<div class="prose">'):src.index('<footer class="story-foot">')]
-  prose = typo.clean(prose, interview=a["k"] == "interviews")
+  prose = CLEAN[slug]
   mins = re.search(r'class="read">(\d+) min', src).group(1)
   orig = re.sub(r"^https?://web\.archive\.org/web/\d+/", "", a["w"]).replace("http://", "").rstrip("/")
   Y = years[a["d"][:4]]
@@ -175,7 +223,7 @@ for a in S:
     <dt>Publication</dt><dd>{esc(a['f'])}</dd>
     <dt>Copie Wayback</dt><dd><a href="{esc(a['w'])}">{esc(a['cap'])}</a></dd>
     <dt>Adresse d'origine</dt><dd><s>{esc(orig)}</s></dd>
-   </dl></aside>
+   </dl>{('<p class="n-h n-a">Artistes</p>' + bubbles(a["art"][:14], "../../")) if any(sl in AR for sl in a["art"]) else ""}</aside>
    <div class="txt">{prose}<footer class="story-foot">{tg.group(0) if tg else ""}<p class="src">Article publié sur lerapenfrance.fr. <a href="{esc(a['w'])}">Voir la copie d'archive</a></p></footer></div>
   </div>
   <nav class="chrono" aria-label="Dans l'ordre du fonds">{nav(prev, "← Article précédent", "p") if prev else ""}{nav(nxt, "Article suivant →", "n") if nxt else ""}</nav>
@@ -261,3 +309,72 @@ body = f"""<main class="cls">
 open(os.path.join(R, "rubrique", "classements.html"), "w", encoding="utf-8").write(
     head("Classements – Le Rap en France", "../", "", "Les classements de Le Rap en France : tops des années 90 et 2000, albums de l'année, morceaux, beatmakers.").replace('<a href="../rubrique/classements.html">', '<a href="../rubrique/classements.html" aria-current="page">') + body)
 print("classements ok", len(CL))
+
+# ---------------- pages artistes ----------------
+os.makedirs(os.path.join(R, "artiste"), exist_ok=True)
+for f in os.listdir(os.path.join(R, "artiste")):
+    os.remove(os.path.join(R, "artiste", f))
+YRS = [str(y) for y in range(2011, 2024)]
+for ar in ARTISTS:
+    allp = sorted(ar["main"] + ar["cite"], key=lambda a: a["d"])
+    cy = collections.Counter(a["d"][:4] for a in allp)
+    mx = max(cy.values())
+    bars = "".join(f'<li title="{y} : {cy[y]} article{"s" if cy[y] > 1 else ""}"><span style="--h:{cy[y] / mx:.3f}"></span><b>{y[2:]}</b></li>' for y in YRS)
+    co = collections.Counter()
+    for a in allp:
+        for sl in a["art"]:
+            if sl != ar["slug"] and sl in AR:
+                co[sl] += 1
+    pics = [a["i"] for a in sorted(ar["main"], key=lambda a: a["d"], reverse=True) if a["i"]][:3] or [a["i"] for a in reversed(allp) if a["i"]][:3]
+    stack = "".join(f'<img src="{esc(u)}" alt="" onerror="this.remove()" style="--r:{r}deg">' for u, r in zip(pics, (-5, 3, -1)))
+    main = sorted(ar["main"], key=lambda a: a["d"], reverse=True)
+    mains = "".join(fiche(a).replace('href="a/', 'href="../a/') for a in main)
+    groups = collections.defaultdict(list)
+    for a in sorted(ar["cite"], key=lambda a: a["d"], reverse=True):
+        groups[a["d"][:4]].append(a)
+    cites = "".join(f'<section class="ay"><h3>{y}</h3><ul>' + "".join(
+        f'<li class="k-{a["k"]}"><a href="../a/{a["s"]}/"><i class="k-{a["k"]}"></i><span class="t">{esc(a["t"])}</span><span class="m">{esc(LAB.get(a["k"], ""))} · {esc(a["a"] or "La Rédaction")} · {esc(a["f"])}</span></a></li>' for a in L) + "</ul></section>"
+        for y, L in sorted(groups.items(), reverse=True))
+    span = f'{allp[0]["d"][:4]}–{allp[-1]["d"][:4]}' if allp[0]["d"][:4] != allp[-1]["d"][:4] else allp[0]["d"][:4]
+    nm, nc = len(ar["main"]), len(ar["cite"])
+    body = f"""<main class="artp">
+<header class="arh"><div class="arh-in">
+ <div class="arh-t"><p class="v-kick"><a href="../artistes.html">Artistes</a> · {ar['n']} articles · {span}</p>
+ <h1>{esc(ar['nom'])}</h1>
+ <p class="arh-s">{f"{nm} article{'s' if nm > 1 else ''} consacré{'s' if nm > 1 else ''}" if nm else "Aucun article consacré"}, cité{'' if nc == 1 else 's'} dans {nc} autre{'' if nc == 1 else 's'}.</p>
+ <ol class="yb" aria-label="Articles par année">{bars}</ol></div>
+ <div class="arh-stack">{stack}</div>
+</div></header>
+{f'<section class="blk"><header class="blk-h"><h2>Les articles consacrés</h2><p>{nm} au total</p></header><div class="pieces">{mains}</div></section>' if nm else ''}
+{f'<section class="blk"><header class="blk-h"><h2>Il en est question</h2><p>{nc} articles où le nom revient</p></header><div class="cites">{cites}</div></section>' if nc else ''}
+{f'<section class="blk"><header class="blk-h"><h2>Souvent cité avec</h2></header>{bubbles([sl for sl, _ in co.most_common(16)], "../", "bubs big")}</section>' if co else ''}
+</main>
+{FOOT0.replace('{pre}', '../')}</body></html>"""
+    open(os.path.join(R, "artiste", ar["slug"] + ".html"), "w", encoding="utf-8").write(
+        head(f"{ar['nom']} – Le Rap en France", "../", "", f"Tous les articles de Le Rap en France sur {ar['nom']} : {ar['n']} articles, {span}.", pics[0] if pics else "") + body)
+
+# index des artistes : nuage de bulles
+mxn = max(ar["n"] for ar in ARTISTS)
+def cloud(L, pre):
+    return '<ul class="cloud">' + "".join(
+        f'<li style="--s:{0.15 + 0.85 * (ar["n"] / mxn) ** .55:.3f}"><a href="{pre}artiste/{ar["slug"]}.html" data-n="{esc(norm(ar["nom"]))}"><span>{esc(ar["nom"])}</span><sup>{ar["n"]}</sup></a></li>' for ar in L) + "</ul>"
+alpha = sorted(ARTISTS, key=lambda ar: norm(ar["nom"]))
+body = f"""<main class="artp">
+<header class="arh"><div class="arh-in one"><div class="arh-t"><p class="v-kick">Le Rap en France · {len(ARTISTS)} artistes</p><h1>Artistes</h1>
+<p class="arh-s">Les rappeurs, groupes et producteurs dont le fonds parle le plus. La taille d'une bulle suit le nombre d'articles.</p>
+<label class="sr" for="af">Chercher un artiste</label><input id="af" type="search" placeholder="Chercher un artiste" class="af"></div></div></header>
+<div class="cls-in">{cloud(alpha, "")}</div>
+</main>
+{FOOT}
+<script>const n=s=>s.normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+document.getElementById("af").addEventListener("input",e=>{{const q=n(e.target.value);document.querySelectorAll(".cloud li").forEach(li=>li.hidden=q&&!li.firstChild.dataset.n.includes(q))}});</script></body></html>"""
+open(os.path.join(R, "artistes.html"), "w", encoding="utf-8").write(head("Artistes – Le Rap en France", "", "", "Les artistes dont parle Le Rap en France, avec tous leurs articles.") + body)
+
+# bloc artistes sur la une
+top = sorted(ARTISTS, key=lambda ar: -ar["n"])[:48]
+top.sort(key=lambda ar: norm(ar["nom"]))
+ih = open(os.path.join(R, "index.html"), encoding="utf-8").read()
+blk = f'<section class="arts"><div class="cls-in"><header class="sh"><p class="v-kick">Les artistes</p><h2>Ceux dont on a le plus parlé</h2></header>{cloud(top, "")}<p class="arts-all"><a href="artistes.html">Voir les {len(ARTISTS)} artistes</a></p></div></section>\n'
+ih = ih.replace('<section class="slot"', blk + '<section class="slot"', 1)
+open(os.path.join(R, "index.html"), "w", encoding="utf-8").write(ih)
+print("artistes ok", len(ARTISTS))
