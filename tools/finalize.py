@@ -154,7 +154,7 @@ body = f"""<main>
  </div>
  <div class="wall" id="wall">{"".join(cells)}</div>
 </section>
-<section class="rubs"><div class="rubs-in"><p class="v-kick">Les rubriques</p>{drawers}<a class="rub all" href="articles.html"><span class="r-name">Tout le fonds</span><span class="r-meta"><b>1 193</b> articles<br>recherche</span></a></div></section>
+<section class="rubs"><div class="rubs-in"><p class="v-kick">Les rubriques</p>{drawers}<a class="rub all" href="articles.html"><span class="r-name">Tout le fonds</span><span class="r-meta"><b>{f"{len(S):,}".replace(",", " ")}</b> articles<br>recherche</span></a></div></section>
 <section class="must"><div class="must-in"><header class="sh"><p class="v-kick">Pour commencer</p><h2>Les incontournables</h2></header><div class="pcs" id="pcs">{pieces}</div></div></section>
 <section class="slot" id="slot"><div class="slot-in">
  <header class="sh"><p class="v-kick">Tiré au hasard</p><h2>Un article,<br>au pif.</h2><button type="button" id="draw">Tirer un article</button></header>
@@ -183,7 +183,7 @@ const draw=()=>{{let n=still?0:14;const fin=pickk();sl.c.classList.add("spin");s
  const step=()=>{{if(n-->0){{put(pickk());setTimeout(step,45+(14-n)*9)}}else{{put(fin);sl.c.classList.remove("spin");if(fin[6])sl.i.innerHTML=`<img src="${{e(fin[6])}}" alt="" onerror="this.remove()">`}}}};step()}};
 document.getElementById("draw").addEventListener("click",draw);draw();
 </script></body></html>"""
-open(os.path.join(R, "index.html"), "w", encoding="utf-8").write(head("Le Rap en France – douze ans de rap français, 2011–2023", "", "", "Archives du média Le Rap en France (LREF) : 1 193 chroniques, interviews, dossiers et classements sur le rap français, 2011–2023.") + body.replace('<main>', '<main class="home">', 1))
+open(os.path.join(R, "index.html"), "w", encoding="utf-8").write(head("Le Rap en France – douze ans de rap français, 2011–2023", "", "", "Archives du média Le Rap en France (LREF) : " + f"{len(S):,}".replace(",", " ") + " chroniques, interviews, dossiers et classements sur le rap français, 2011–2023.") + body.replace('<main>', '<main class="home">', 1))
 
 # ---------------- article ----------------
 for a in S:

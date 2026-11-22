@@ -367,3 +367,20 @@ main.artp{max-width:none;margin:0;padding:0}
 @media (max-width:1000px){.pieces{grid-template-columns:1fr 1fr}}
 @media (max-width:640px){.pieces{grid-template-columns:1fr}}
 .bar nav a{padding:9px 8px}
+
+/* mobile : mur et rubriques */
+@media (max-width:640px){
+ .wall{overflow:visible;gap:3px;margin-top:28px}
+ .col{flex:1 1 0}
+ .cells{width:100%;gap:1px}
+ .cells a{width:calc((100% - 2px)/3);height:auto;aspect-ratio:1}
+ .cells a:hover,.cells a:focus-visible{transform:none}
+ .yl b{font-size:13px}
+ .yl span{font-size:10px}
+ .rubs{padding:16px 16px 56px}
+ .rub{gap:10px;padding:2px 0}
+ .r-name{font-size:clamp(36px,11vw,56px);white-space:normal}
+ .r-meta{font-size:0;line-height:1}
+ .r-meta b{font-size:24px}
+ .vault h1{font-size:clamp(44px,13vw,72px)}
+}

@@ -72,7 +72,7 @@ def page(title, desc, body, color, cls=""):
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(desc)}">
 <meta name="theme-color" content="{color}">
-<link rel="stylesheet" href="/style.css?v=5">
+<link rel="stylesheet" href="/style.css?v=6">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23141414'/%3E%3Ccircle cx='32' cy='32' r='9' fill='{urllib.parse.quote(color)}'/%3E%3C/svg%3E">
 </head><body class="{cls}" style="--c:{color}">
 {body}

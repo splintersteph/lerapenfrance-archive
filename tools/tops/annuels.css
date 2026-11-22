@@ -103,7 +103,9 @@ main{max-width:1180px;margin:0 auto;padding:0 1.25rem}
   .spines li{flex:none}
   .spines a{height:auto;min-height:118px;display:grid;grid-template-columns:96px 1fr;gap:1rem;align-items:center;padding:.8rem}
   .spines .yr,.spines li:hover .yr{position:static;transform:none;writing-mode:horizontal-tb;font-size:3.2rem;grid-column:2;grid-row:1}
-  .spines .cv{position:static;opacity:1;transform:none;width:96px;grid-row:1/3;grid-column:1}
+  .spines .cv{position:relative;top:auto;left:auto;opacity:1;transform:none;width:96px;grid-row:1/3;grid-column:1}
+  .spines .cv .ph{font-size:.8rem;padding:.4rem}
+  .spines .yr{color:var(--ink)}
   .spines .meta{position:static;opacity:1;grid-column:2}
   .yhero{grid-template-columns:1fr}
   .ywrap{min-height:330px}
