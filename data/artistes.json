@@ -62,6 +62,7 @@
 {
 "nom": "Alkpote",
 "alias": [
+"alk",
 "alkpote"
 ]
 },
@@ -74,6 +75,7 @@
 {
 "nom": "Lucio Bukowski",
 "alias": [
+"bukowski",
 "lucio",
 "lucio bukowski"
 ]
@@ -112,6 +114,7 @@
 {
 "nom": "Demi Portion",
 "alias": [
+"demi p",
 "demi portion"
 ]
 },
@@ -139,6 +142,7 @@
 {
 "nom": "Mani Deiz",
 "alias": [
+"mani",
 "mani deiz"
 ]
 },
@@ -159,7 +163,8 @@
 "nom": "Oxmo Puccino",
 "alias": [
 "oxmo",
-"oxmo puccino"
+"oxmo puccino",
+"puccino"
 ]
 },
 {
@@ -183,6 +188,7 @@
 {
 "nom": "Jazzy Bazz",
 "alias": [
+"jazzy",
 "jazzy bazz"
 ]
 },
@@ -195,13 +201,15 @@
 {
 "nom": "Caballero",
 "alias": [
+"caba",
 "caballero"
 ]
 },
 {
 "nom": "Myth Syzer",
 "alias": [
-"myth syzer"
+"myth syzer",
+"syzer"
 ]
 },
 {
@@ -220,12 +228,14 @@
 {
 "nom": "NTM",
 "alias": [
-"ntm"
+"ntm",
+"supreme ntm"
 ]
 },
 {
 "nom": "Keny Arkana",
 "alias": [
+"keny",
 "keny arkana"
 ]
 },
@@ -244,6 +254,7 @@
 {
 "nom": "L’Entourage",
 "alias": [
+"entourage",
 "lentourage"
 ]
 },
@@ -300,6 +311,7 @@
 {
 "nom": "L’Animalerie",
 "alias": [
+"animalerie",
 "lanimalerie"
 ]
 },
@@ -324,7 +336,8 @@
 {
 "nom": "MC Solaar",
 "alias": [
-"mc solaar"
+"mc solaar",
+"solaar"
 ]
 },
 {
@@ -342,13 +355,16 @@
 {
 "nom": "Oster Lapwass",
 "alias": [
+"lapwass",
+"oster",
 "oster lapwass"
 ]
 },
 {
 "nom": "Prince Waly",
 "alias": [
-"prince waly"
+"prince waly",
+"waly"
 ]
 },
 {
@@ -379,7 +395,8 @@
 {
 "nom": "Joe Lucazz",
 "alias": [
-"joe lucazz"
+"joe lucazz",
+"joe luccaz"
 ]
 },
 {
@@ -481,6 +498,7 @@
 {
 "nom": "Freeze Corleone",
 "alias": [
+"freeze",
 "freeze corleone"
 ]
 },
@@ -511,7 +529,8 @@
 {
 "nom": "13 Block",
 "alias": [
-"13 block"
+"13 block",
+"13block"
 ]
 },
 {
@@ -577,7 +596,8 @@
 {
 "nom": "Gouffre",
 "alias": [
-"gouffre"
+"gouffre",
+"le gouffre"
 ]
 },
 {
@@ -650,12 +670,14 @@
 {
 "nom": "Koba la D",
 "alias": [
-"koba la d"
+"koba la d",
+"koba lad"
 ]
 },
 {
 "nom": "Hippocampe Fou",
 "alias": [
+"hippocampe",
 "hippocampe fou"
 ]
 },
@@ -710,7 +732,8 @@
 {
 "nom": "La Fouine",
 "alias": [
-"la fouine"
+"la fouine",
+"lafouine"
 ]
 },
 {
@@ -734,6 +757,7 @@
 {
 "nom": "Maître Gims",
 "alias": [
+"gims",
 "maitre gims"
 ]
 },
@@ -819,12 +843,14 @@
 {
 "nom": "Nakk",
 "alias": [
-"nakk"
+"nakk",
+"nakk mendosa"
 ]
 },
 {
 "nom": "Kacem Wapalek",
 "alias": [
+"kacem",
 "kacem wapalek"
 ]
 },
@@ -951,7 +977,8 @@
 {
 "nom": "Le Rat Luciano",
 "alias": [
-"le rat luciano"
+"le rat luciano",
+"rat luciano"
 ]
 },
 {
@@ -1054,6 +1081,7 @@
 {
 "nom": "Sexion d’Assaut",
 "alias": [
+"sexion",
 "sexion dassaut"
 ]
 },
@@ -1126,7 +1154,1417 @@
 {
 "nom": "Big Budha Cheez",
 "alias": [
+"big buddha cheez",
 "big budha cheez"
+]
+},
+{
+"nom": "Hayce Lemsi",
+"alias": [
+"hayce lemsi"
+]
+},
+{
+"nom": "Senamo",
+"alias": [
+"senamo"
+]
+},
+{
+"nom": "Busta Flex",
+"alias": [
+"busta flex"
+]
+},
+{
+"nom": "75e Session",
+"alias": [
+"75e session",
+"75eme session"
+]
+},
+{
+"nom": "Ikaz Boi",
+"alias": [
+"ikaz boi"
+]
+},
+{
+"nom": "Stick",
+"alias": [
+"stick"
+]
+},
+{
+"nom": "Calbo",
+"alias": [
+"calbo"
+]
+},
+{
+"nom": "Moïse The Dude",
+"alias": [
+"moise",
+"moise the dude"
+]
+},
+{
+"nom": "Joey Starr",
+"alias": [
+"joey starr",
+"joeystarr"
+]
+},
+{
+"nom": "TTC",
+"alias": [
+"ttc"
+]
+},
+{
+"nom": "Lasco",
+"alias": [
+"lasco"
+]
+},
+{
+"nom": "Taipan",
+"alias": [
+"taipan"
+]
+},
+{
+"nom": "Espiiem",
+"alias": [
+"espiiem"
+]
+},
+{
+"nom": "Passi",
+"alias": [
+"passi"
+]
+},
+{
+"nom": "Assassin",
+"alias": [
+"assassin"
+]
+},
+{
+"nom": "Ol Zico",
+"alias": [
+"ol zico"
+]
+},
+{
+"nom": "Pejmaxx",
+"alias": [
+"pejmaxx"
+]
+},
+{
+"nom": "Néfaste",
+"alias": [
+"nefaste"
+]
+},
+{
+"nom": "Robse",
+"alias": [
+"robse"
+]
+},
+{
+"nom": "Secteur Ä",
+"alias": [
+"secteur a"
+]
+},
+{
+"nom": "Sofiane Pamart",
+"alias": [
+"sofiane pamart"
+]
+},
+{
+"nom": "Aketo",
+"alias": [
+"aketo"
+]
+},
+{
+"nom": "Hatik",
+"alias": [
+"hatik"
+]
+},
+{
+"nom": "Django",
+"alias": [
+"django"
+]
+},
+{
+"nom": "Kohndo",
+"alias": [
+"kohndo"
+]
+},
+{
+"nom": "Lautrec",
+"alias": [
+"lautrec"
+]
+},
+{
+"nom": "L’Hexaler",
+"alias": [
+"lhexaler"
+]
+},
+{
+"nom": "Sam’s",
+"alias": [
+"sams"
+]
+},
+{
+"nom": "LPEE",
+"alias": [
+"lpee"
+]
+},
+{
+"nom": "Katrina Squad",
+"alias": [
+"katrina squad"
+]
+},
+{
+"nom": "Tiers Monde",
+"alias": [
+"tiers monde"
+]
+},
+{
+"nom": "Stavo",
+"alias": [
+"stavo"
+]
+},
+{
+"nom": "Nizi",
+"alias": [
+"nizi"
+]
+},
+{
+"nom": "La Caution",
+"alias": [
+"la caution"
+]
+},
+{
+"nom": "Krisy",
+"alias": [
+"krisy"
+]
+},
+{
+"nom": "Zekwé Ramos",
+"alias": [
+"zekwe",
+"zekwe ramos"
+]
+},
+{
+"nom": "Abd Al Malik",
+"alias": [
+"abd al malik"
+]
+},
+{
+"nom": "I.N.C.H",
+"alias": [
+"i n c h"
+]
+},
+{
+"nom": "Ormaz",
+"alias": [
+"ormaz"
+]
+},
+{
+"nom": "Missak",
+"alias": [
+"missak"
+]
+},
+{
+"nom": "La Cliqua",
+"alias": [
+"la cliqua"
+]
+},
+{
+"nom": "Ladea",
+"alias": [
+"ladea"
+]
+},
+{
+"nom": "Casseurs Flowters",
+"alias": [
+"casseurs flowters"
+]
+},
+{
+"nom": "ATK",
+"alias": [
+"atk"
+]
+},
+{
+"nom": "Wit",
+"alias": [
+"wit"
+]
+},
+{
+"nom": "EDGE",
+"alias": [
+"edge"
+]
+},
+{
+"nom": "Esso Luxueux",
+"alias": [
+"esso luxueux"
+]
+},
+{
+"nom": "Mokless",
+"alias": [
+"mokless"
+]
+},
+{
+"nom": "Rockin Squat",
+"alias": [
+"rockin squat"
+]
+},
+{
+"nom": "Yoshi Di Original",
+"alias": [
+"yoshi",
+"yoshi di original"
+]
+},
+{
+"nom": "Beeby",
+"alias": [
+"beeby"
+]
+},
+{
+"nom": "Mafia K’1 Fry",
+"alias": [
+"mafia k1 fry"
+]
+},
+{
+"nom": "DJ Mehdi",
+"alias": [
+"dj mehdi"
+]
+},
+{
+"nom": "Phases Cachées",
+"alias": [
+"phases cachees"
+]
+},
+{
+"nom": "Dehmo",
+"alias": [
+"dehmo"
+]
+},
+{
+"nom": "Gros Mo",
+"alias": [
+"gros mo"
+]
+},
+{
+"nom": "20Syl",
+"alias": [
+"20syl"
+]
+},
+{
+"nom": "Vidji",
+"alias": [
+"vidji"
+]
+},
+{
+"nom": "Saïan Supa Crew",
+"alias": [
+"saian supa crew"
+]
+},
+{
+"nom": "Al’Tarba",
+"alias": [
+"al tarba",
+"altarba"
+]
+},
+{
+"nom": "Oboy",
+"alias": [
+"oboy"
+]
+},
+{
+"nom": "Saké",
+"alias": [
+"sake"
+]
+},
+{
+"nom": "Pit Baccardi",
+"alias": [
+"pit baccardi"
+]
+},
+{
+"nom": "Issaba",
+"alias": [
+"issaba"
+]
+},
+{
+"nom": "Tunisiano",
+"alias": [
+"tunisiano"
+]
+},
+{
+"nom": "Richie Beats",
+"alias": [
+"richie beats"
+]
+},
+{
+"nom": "Maes",
+"alias": [
+"maes"
+]
+},
+{
+"nom": "Chilla",
+"alias": [
+"chilla"
+]
+},
+{
+"nom": "Tandem",
+"alias": [
+"tandem"
+]
+},
+{
+"nom": "Aladin 135",
+"alias": [
+"aladin 135"
+]
+},
+{
+"nom": "Aelpéacha",
+"alias": [
+"aelpeacha"
+]
+},
+{
+"nom": "Leto",
+"alias": [
+"leto"
+]
+},
+{
+"nom": "Alpha 5.20",
+"alias": [
+"alpha 5 20"
+]
+},
+{
+"nom": "Limsa d’Aulnay",
+"alias": [
+"limsa",
+"limsa daulnay"
+]
+},
+{
+"nom": "Da Uzi",
+"alias": [
+"da uzi"
+]
+},
+{
+"nom": "Eff Gee",
+"alias": [
+"eff gee"
+]
+},
+{
+"nom": "Sefyu",
+"alias": [
+"sefyu"
+]
+},
+{
+"nom": "Nessbeal",
+"alias": [
+"nessbeal"
+]
+},
+{
+"nom": "Le Motel",
+"alias": [
+"le motel"
+]
+},
+{
+"nom": "Seezy",
+"alias": [
+"seezy"
+]
+},
+{
+"nom": "Sameer Ahmad",
+"alias": [
+"sameer ahmad"
+]
+},
+{
+"nom": "Vin’s",
+"alias": [
+"vins"
+]
+},
+{
+"nom": "Swing",
+"alias": [
+"swing"
+]
+},
+{
+"nom": "La Prune",
+"alias": [
+"la prune"
+]
+},
+{
+"nom": "High Five Crew",
+"alias": [
+"high five crew"
+]
+},
+{
+"nom": "DJ Pone",
+"alias": [
+"dj pone",
+"pone"
+]
+},
+{
+"nom": "Luidji",
+"alias": [
+"luidji"
+]
+},
+{
+"nom": "Spider ZED",
+"alias": [
+"spider zed"
+]
+},
+{
+"nom": "Nikkfurie",
+"alias": [
+"nikkfurie"
+]
+},
+{
+"nom": "Vaati",
+"alias": [
+"vaati"
+]
+},
+{
+"nom": "B2O",
+"alias": [
+"b2o"
+]
+},
+{
+"nom": "Cenza",
+"alias": [
+"cenza"
+]
+},
+{
+"nom": "Omerta Muzik",
+"alias": [
+"omerta muzik"
+]
+},
+{
+"nom": "KLM",
+"alias": [
+"klm"
+]
+},
+{
+"nom": "Ministère ÄMER",
+"alias": [
+"ministere amer"
+]
+},
+{
+"nom": "Bonnie Banane",
+"alias": [
+"bonnie banane"
+]
+},
+{
+"nom": "Diabi",
+"alias": [
+"diabi"
+]
+},
+{
+"nom": "Marc Nammour",
+"alias": [
+"marc nammour"
+]
+},
+{
+"nom": "Gaïden",
+"alias": [
+"gaiden"
+]
+},
+{
+"nom": "Gouap",
+"alias": [
+"gouap"
+]
+},
+{
+"nom": "Zola",
+"alias": [
+"zola"
+]
+},
+{
+"nom": "Stomy Bugsy",
+"alias": [
+"stomy bugsy"
+]
+},
+{
+"nom": "Cheeko",
+"alias": [
+"cheeko"
+]
+},
+{
+"nom": "La Fève",
+"alias": [
+"la feve"
+]
+},
+{
+"nom": "Heuss L’enfoiré",
+"alias": [
+"heuss",
+"heuss lenfoire"
+]
+},
+{
+"nom": "Nubi",
+"alias": [
+"nubi"
+]
+},
+{
+"nom": "So Clock",
+"alias": [
+"so clock"
+]
+},
+{
+"nom": "YL",
+"alias": [
+"yl"
+]
+},
+{
+"nom": "Nodey",
+"alias": [
+"nodey"
+]
+},
+{
+"nom": "REDK",
+"alias": [
+"redk"
+]
+},
+{
+"nom": "Bavoog Avers",
+"alias": [
+"bavoog avers"
+]
+},
+{
+"nom": "Ol Kainry",
+"alias": [
+"ol kainry",
+"olkainry"
+]
+},
+{
+"nom": "Set&Match",
+"alias": [
+"set match"
+]
+},
+{
+"nom": "5 Majeur",
+"alias": [
+"5 majeur"
+]
+},
+{
+"nom": "Heskis",
+"alias": [
+"heskis"
+]
+},
+{
+"nom": "Pand’Or",
+"alias": [
+"pandor"
+]
+},
+{
+"nom": "Seyté",
+"alias": [
+"seyte"
+]
+},
+{
+"nom": "Vicelow",
+"alias": [
+"vicelow"
+]
+},
+{
+"nom": "Teki Latex",
+"alias": [
+"teki latex"
+]
+},
+{
+"nom": "Jeune LC",
+"alias": [
+"jeune lc"
+]
+},
+{
+"nom": "Nasme",
+"alias": [
+"nasme"
+]
+},
+{
+"nom": "Klub des Loosers",
+"alias": [
+"klub des loosers"
+]
+},
+{
+"nom": "Anfalsh",
+"alias": [
+"anfalsh"
+]
+},
+{
+"nom": "Luni Sacks",
+"alias": [
+"luni sacks"
+]
+},
+{
+"nom": "Atl4s",
+"alias": [
+"atl4s"
+]
+},
+{
+"nom": "Meyso",
+"alias": [
+"meyso"
+]
+},
+{
+"nom": "Rochdi",
+"alias": [
+"rochdi"
+]
+},
+{
+"nom": "Chanje",
+"alias": [
+"chanje"
+]
+},
+{
+"nom": "Sidi Sid",
+"alias": [
+"sidi sid"
+]
+},
+{
+"nom": "Jäde",
+"alias": [
+"jade"
+]
+},
+{
+"nom": "Areno Jaz",
+"alias": [
+"areno jaz"
+]
+},
+{
+"nom": "Pumpkin",
+"alias": [
+"pumpkin"
+]
+},
+{
+"nom": "Fouki",
+"alias": [
+"fouki"
+]
+},
+{
+"nom": "Eden Dillinger",
+"alias": [
+"eden dillinger"
+]
+},
+{
+"nom": "P-Dro",
+"alias": [
+"p dro"
+]
+},
+{
+"nom": "Flem",
+"alias": [
+"flem"
+]
+},
+{
+"nom": "Gazo",
+"alias": [
+"gazo"
+]
+},
+{
+"nom": "Expression Direkt",
+"alias": [
+"expression direkt"
+]
+},
+{
+"nom": "Nelick",
+"alias": [
+"nelick"
+]
+},
+{
+"nom": "Bigflo & Oli",
+"alias": [
+"big flo et oli",
+"big flo oli",
+"bigflo et oli",
+"bigflo oli"
+]
+},
+{
+"nom": "Tragik",
+"alias": [
+"tragik"
+]
+},
+{
+"nom": "Yung Cœur",
+"alias": [
+"yung cur"
+]
+},
+{
+"nom": "L’Or du Commun",
+"alias": [
+"lor du commun"
+]
+},
+{
+"nom": "Hache-P",
+"alias": [
+"hache p"
+]
+},
+{
+"nom": "Le Bavar",
+"alias": [
+"le bavar"
+]
+},
+{
+"nom": "C.Sen",
+"alias": [
+"c sen"
+]
+},
+{
+"nom": "T.Killa",
+"alias": [
+"t killa"
+]
+},
+{
+"nom": "Rocca",
+"alias": [
+"rocca"
+]
+},
+{
+"nom": "Rezinsky",
+"alias": [
+"rezinsky"
+]
+},
+{
+"nom": "Ideal J",
+"alias": [
+"ideal j"
+]
+},
+{
+"nom": "Eazy Dew",
+"alias": [
+"eazy dew"
+]
+},
+{
+"nom": "Naza",
+"alias": [
+"naza"
+]
+},
+{
+"nom": "Naps",
+"alias": [
+"naps"
+]
+},
+{
+"nom": "DJ Kore",
+"alias": [
+"dj kore"
+]
+},
+{
+"nom": "Zinée",
+"alias": [
+"zinee"
+]
+},
+{
+"nom": "Skread",
+"alias": [
+"skread"
+]
+},
+{
+"nom": "Sully Sefil",
+"alias": [
+"sully sefil"
+]
+},
+{
+"nom": "Mister You",
+"alias": [
+"mister you"
+]
+},
+{
+"nom": "Kids of Crackling",
+"alias": [
+"kids of crackling"
+]
+},
+{
+"nom": "Hash24",
+"alias": [
+"hash 24",
+"hash24"
+]
+},
+{
+"nom": "Varnish La Piscine",
+"alias": [
+"varnish la piscine"
+]
+},
+{
+"nom": "Timal",
+"alias": [
+"timal"
+]
+},
+{
+"nom": "Soso Maness",
+"alias": [
+"soso maness"
+]
+},
+{
+"nom": "Seine Zoo",
+"alias": [
+"seine zoo"
+]
+},
+{
+"nom": "Rounhaa",
+"alias": [
+"rounhaa"
+]
+},
+{
+"nom": "Khali",
+"alias": [
+"khali"
+]
+},
+{
+"nom": "Imhotep",
+"alias": [
+"imhotep"
+]
+},
+{
+"nom": "Tortoz",
+"alias": [
+"tortoz"
+]
+},
+{
+"nom": "D.Ace",
+"alias": [
+"d ace"
+]
+},
+{
+"nom": "B-Biface",
+"alias": [
+"b biface"
+]
+},
+{
+"nom": "Cheu-B",
+"alias": [
+"cheu b"
+]
+},
+{
+"nom": "Hornet la Frappe",
+"alias": [
+"hornet la frappe"
+]
+},
+{
+"nom": "Or Noir",
+"alias": [
+"or noir"
+]
+},
+{
+"nom": "LK de l’Hôtel Moscou",
+"alias": [
+"lk de lhotel moscou"
+]
+},
+{
+"nom": "Twinsmatic",
+"alias": [
+"twinsmatic"
+]
+},
+{
+"nom": "Faf Larage",
+"alias": [
+"faf larage"
+]
+},
+{
+"nom": "Lezarman",
+"alias": [
+"lezarman"
+]
+},
+{
+"nom": "Elyo",
+"alias": [
+"elyo"
+]
+},
+{
+"nom": "Menzo",
+"alias": [
+"menzo"
+]
+},
+{
+"nom": "Cut Killer",
+"alias": [
+"cut killer"
+]
+},
+{
+"nom": "Stupeflip",
+"alias": [
+"stupeflip"
+]
+},
+{
+"nom": "Ethor Skull",
+"alias": [
+"ethor skull"
+]
+},
+{
+"nom": "Eloquence",
+"alias": [
+"eloquence"
+]
+},
+{
+"nom": "Dany Synthé",
+"alias": [
+"dany synthe"
+]
+},
+{
+"nom": "Fanny Polly",
+"alias": [
+"fanny polly"
+]
+},
+{
+"nom": "Hartigan",
+"alias": [
+"hartigan"
+]
+},
+{
+"nom": "2fingz",
+"alias": [
+"2fingz"
+]
+},
+{
+"nom": "Zuukou Mayzie",
+"alias": [
+"zuukou mayzie"
+]
+},
+{
+"nom": "Ben PLG",
+"alias": [
+"ben plg"
+]
+},
+{
+"nom": "VM the Don",
+"alias": [
+"vm the don"
+]
+},
+{
+"nom": "Sear Lui-même",
+"alias": [
+"sear lui meme"
+]
+},
+{
+"nom": "Dony S",
+"alias": [
+"dony s"
+]
+},
+{
+"nom": "Lamanif",
+"alias": [
+"lamanif"
+]
+},
+{
+"nom": "Céo",
+"alias": [
+"ceo"
+]
+},
+{
+"nom": "Darryl Zeuja",
+"alias": [
+"darryl zeuja"
+]
+},
+{
+"nom": "Nestor Kéa",
+"alias": [
+"nestor kea"
+]
+},
+{
+"nom": "47Ter",
+"alias": [
+"47ter"
+]
+},
+{
+"nom": "Rrobin",
+"alias": [
+"rrobin"
+]
+},
+{
+"nom": "2Zer",
+"alias": [
+"2zer"
+]
+},
+{
+"nom": "Veust",
+"alias": [
+"veust"
+]
+},
+{
+"nom": "Phazz",
+"alias": [
+"phazz"
+]
+},
+{
+"nom": "DJ Khéops",
+"alias": [
+"dj kheops",
+"kheops"
+]
+},
+{
+"nom": "SWK",
+"alias": [
+"swk"
+]
+},
+{
+"nom": "Dead Obies",
+"alias": [
+"dead obies"
+]
+},
+{
+"nom": "Zippo",
+"alias": [
+"zippo"
+]
+},
+{
+"nom": "Metek",
+"alias": [
+"metek"
+]
+},
+{
+"nom": "Riski",
+"alias": [
+"riski"
+]
+},
+{
+"nom": "Petitcopek",
+"alias": [
+"petitcopek"
+]
+},
+{
+"nom": "Géabé",
+"alias": [
+"geabe"
+]
+},
+{
+"nom": "Fababy",
+"alias": [
+"fababy"
+]
+},
+{
+"nom": "Endé",
+"alias": [
+"ende"
+]
+},
+{
+"nom": "Kyo Itachi",
+"alias": [
+"kyo itachi"
+]
+},
+{
+"nom": "Daddy Lord C",
+"alias": [
+"daddy lord c"
+]
+},
+{
+"nom": "Diamond Deuklo",
+"alias": [
+"diamond deuklo"
+]
+},
+{
+"nom": "Ponko",
+"alias": [
+"ponko"
+]
+},
+{
+"nom": "Unité 2 Feu",
+"alias": [
+"unite 2 feu"
+]
+},
+{
+"nom": "Mysa",
+"alias": [
+"mysa"
+]
+},
+{
+"nom": "Lu’cid",
+"alias": [
+"lucid"
+]
+},
+{
+"nom": "Veence Hanao",
+"alias": [
+"veence hanao"
+]
+},
+{
+"nom": "Tekilla",
+"alias": [
+"tekilla"
+]
+},
+{
+"nom": "404Billy",
+"alias": [
+"404billy"
+]
+},
+{
+"nom": "Bu$hi",
+"alias": [
+"bu hi",
+"bushi"
+]
+},
+{
+"nom": "Ashe 22",
+"alias": [
+"ashe 22"
+]
+},
+{
+"nom": "MC Jean Gab’1",
+"alias": [
+"mc jean gab1"
+]
+},
+{
+"nom": "Simorgh",
+"alias": [
+"simorgh"
+]
+},
+{
+"nom": "Dee Nasty",
+"alias": [
+"dee nasty"
+]
+},
+{
+"nom": "Taïro",
+"alias": [
+"tairo"
+]
+},
+{
+"nom": "Alivor",
+"alias": [
+"alivor"
+]
+},
+{
+"nom": "Fizzi Pizzi",
+"alias": [
+"fizzi pizzi"
+]
+},
+{
+"nom": "Fiasko Proximo",
+"alias": [
+"fiasko proximo"
+]
+},
+{
+"nom": "Retro X",
+"alias": [
+"retro x"
+]
+},
+{
+"nom": "DJ Djel",
+"alias": [
+"dj djel",
+"djel"
 ]
 }
 ]

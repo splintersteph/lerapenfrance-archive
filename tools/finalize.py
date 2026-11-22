@@ -86,7 +86,7 @@ for a in S:
             AR[sl]["cite"].append(a)
 for ar in ARTISTS:
     ar["n"] = len(ar["main"]) + len(ar["cite"])
-ARTISTS = [ar for ar in ARTISTS if ar["n"] >= 6]
+ARTISTS = [ar for ar in ARTISTS if ar["n"] >= 4]
 AR = {ar["slug"]: ar for ar in ARTISTS}
 def bubbles(sls, pre, cls="bubs"):
     sls = [sl for sl in sls if sl in AR]
