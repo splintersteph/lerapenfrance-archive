@@ -12,6 +12,8 @@ for a in S:
     m = re.search(r'<figure class="(?:cover|acov)"><img src="([^"]+)"', h); a["i"] = m.group(1) if m else ""
     m = re.search(r'class="src">.*?href="([^"]+)"', h) or re.search(r'<dt>Copie Wayback</dt><dd><a href="([^"]+)"', h); a["w"] = m.group(1) if m else ""
 esc = html.escape
+import hashlib
+CSSV = hashlib.md5(open(os.path.join(R, "style.css"), "rb").read()).hexdigest()[:8]
 MOIS = "janvier février mars avril mai juin juillet août septembre octobre novembre décembre".split()
 SEC = [("classements", "Classements", "CLA"), ("dossiers", "Dossiers", "DOS"), ("interviews", "Interviews", "ITW"),
        ("chroniques", "Chroniques", "CHR"), ("billets", "Billets d'humeur", "BIL"), ("selections", "Sélections", "SEL"),
@@ -97,7 +99,7 @@ def head(title, pre, extra="", desc="", img=""):
     nav = "".join(f'<a href="{pre}rubrique/{k}.html"><i class="k-{k}"></i>{esc(l.replace("Billets d'humeur", "Billets"))}</a>' for k, l, _ in SEC)
     return f"""<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)}</title><meta name="description" content="{esc(desc)}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">{f'<meta property="og:image" content="{esc(img)}">' if img else ""}<meta name="theme-color" content="#1E3350">
-<link rel="stylesheet" href="{pre}style.css?v=5">{extra}</head><body>
+<link rel="stylesheet" href="{pre}style.css?v={CSSV}">{extra}</head><body>
 <header class="bar"><a class="logo" href="{pre}index.html"><b>LREF</b><span>Fonds Le Rap en France</span></a>
 <nav>{nav}<a href="{pre}artistes.html">Artistes</a><a href="{pre}plumes.html">Plumes</a><a href="{pre}articles.html">Tout</a></nav>
 <form action="{pre}articles.html"><input name="q" type="search" placeholder="Chercher dans le fonds" aria-label="Rechercher"></form></header>"""

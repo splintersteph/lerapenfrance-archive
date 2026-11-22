@@ -313,7 +313,7 @@ def page(title, body, depth=0, desc="", active="", og_image=""):
 {f'<meta property="og:image" content="{esc(og_image)}">' if og_image else ''}
 <link rel="preload" href="{pre}fonts/Archivo.woff2" as="font" type="font/woff2" crossorigin>
 <meta name="theme-color" content="#1E3350">
-<link rel="stylesheet" href="{pre}style.css?v=5">
+<link rel="stylesheet" href="{pre}style.css?v={CSSV}">
 <script>document.addEventListener("error",e=>{{const t=e.target;if(t.tagName!=="IMG")return;const f=t.closest(".ph-host");if(f){{f.classList.add("noimg");t.remove()}}else t.remove()}},true);</script>
 </head><body>
 <a class="skip" href="#contenu">Aller au contenu</a>
@@ -338,7 +338,10 @@ for f in os.listdir(OUT):
         continue
     fp = os.path.join(OUT, f)
     shutil.rmtree(fp) if os.path.isdir(fp) else os.remove(fp)
-open(os.path.join(OUT, "style.css"), "w", encoding="utf-8").write(open(os.path.join(HERE, "style.css"), encoding="utf-8").read() + "\n" + open(os.path.join(HERE, "d.css"), encoding="utf-8").read())
+_css = open(os.path.join(HERE, "style.css"), encoding="utf-8").read() + "\n" + open(os.path.join(HERE, "d.css"), encoding="utf-8").read()
+open(os.path.join(OUT, "style.css"), "w", encoding="utf-8").write(_css)
+import hashlib
+CSSV = hashlib.md5(_css.encode()).hexdigest()[:8]
 shutil.copytree(os.path.join(HERE, "fonts"), os.path.join(OUT, "fonts"))
 shutil.copytree(os.path.join(HERE, "vendor"), os.path.join(OUT, "vendor"))
 open(os.path.join(OUT, ".nojekyll"), "w").close()
