@@ -63,11 +63,11 @@ for a in S:
     bold = collections.Counter()
     for m in re.findall(r"<strong>([^<]{2,40})</strong>", CLEAN[a["s"]]):
         k = norm(m.strip(" ,.:;!?’'\u00a0"))
-        if k in AL:
+        if k in AL and a["s"] not in AR[AL[k]].get("exclure", []):
             bold[AL[k]] += 1
     ta = deacc(html.unescape(a["t"]))
     tags = {norm(t) for t in a.get("c", [])}
-    main = {ar["slug"] for ar in ARTISTS if TRX[ar["slug"]].search(ta)}
+    main = {ar["slug"] for ar in ARTISTS if TRX[ar["slug"]].search(ta) and a["s"] not in ar.get("exclure", [])}
     for x, sl in AL.items():
         if x in tags:
             bold[sl] += 1

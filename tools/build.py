@@ -186,7 +186,24 @@ arts = _keep
 # compte à rebours des tops 100 (« de 40 à 31 »…) : retirés, les classements complets vivent sur 90.lref.fr et 2000.lref.fr
 COUNTDOWN = [a for a in arts if re.search(r"100 meilleurs albums", a["title"]) and re.search(r"\d+\s*à\s*\d+|TOP\s*10", a["title"])]
 REDIRECT = {a["slug"]: ("top-100-annees-2000.html" if "2000" in a["title"] else "top-100-annees-90.html") for a in COUNTDOWN}
+# doublons : la même page archivée deux fois, ou des épisodes repris dans un entretien complet
+DUPES = {"p-24689": "a/interview-croisee-lacraps-et-sameer-ahmad-la-france-nest-pas-un-pays-de-culture-musicale/",
+         "p-361": "a/lindis-jai-toujours-dit-quun-texte-qui-parle-au-coeur-devient-intemporel/",
+         "interview-julie-cholewa-la-place": "a/interview-julien-cholewa-la-place/",
+         "entretien-avec-lomepal-12": "a/entretien-complet-avec-lomepal-il-y-a-le-sens-la-technique-et-le-style/",
+         "entretien-avec-phases-cachees-12": "a/lentretien-complet-avec-phases-cachees-le-crew-boogie-woogie/",
+         "entretien-avec-phases-cachees-23": "a/lentretien-complet-avec-phases-cachees-le-crew-boogie-woogie/",
+         "les-100-meilleurs-albums-des-annees-90-100-a-91": "top-100-annees-90.html",
+         "top-100-annees-90-linterface": "top-100-annees-90.html"}
+REDIRECT.update({k: v for k, v in DUPES.items() if any(a["slug"] == k for a in arts)})
 arts = [a for a in arts if a["slug"] not in REDIRECT]
+# titres des séries « Mes 5 … » réduits au nom de l'invité dans l'archive
+for a in arts:
+    m = re.match(r"mes-5-(films|livres|classiques)", a["slug"])
+    if m:
+        core = re.sub(r"^\s*\[[^\]]*\]\s*[:–-]?\s*", "", a["title"]).strip().rstrip(".")
+        core = re.sub(r"^mes 5 \w+\s*[:–-]\s*", "", core, flags=re.I)
+        a["title"] = f"Mes 5 {m.group(1)} – {core}"
 TOPPAGES = json.load(open(os.path.join(os.path.dirname(SRC), "tops-pages.json"), encoding="utf-8"))
 by_slug = {a["slug"]: a for a in arts}
 for a in arts:
