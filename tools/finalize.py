@@ -49,17 +49,28 @@ for ar in ARTISTS:
     for x in ar["alias"]:
         AL[x] = ar["slug"]
 AR = {ar["slug"]: ar for ar in ARTISTS}
+def deacc(x):
+    return unicodedata.normalize("NFKD", x).encode("ascii", "ignore").decode().replace("’", "'")
+TRX = {ar["slug"]: re.compile(r"(?<![\w'])" + re.escape(deacc(ar["nom"]).replace("’", "'")) + r"(?![\w])") for ar in ARTISTS}
 for ar in ARTISTS:
     ar["main"], ar["cite"] = [], []
+def hebdo(a):
+    return bool(re.search(r"semaine de rap", a["t"], re.I)) or any(re.search(r"semaine de rap", t, re.I) for t in a.get("c", []))
 for a in S:
+    a["art"], a["artmain"] = [], set()
+    if hebdo(a):
+        continue
     bold = collections.Counter()
     for m in re.findall(r"<strong>([^<]{2,40})</strong>", CLEAN[a["s"]]):
         k = norm(m.strip(" ,.:;!?’'\u00a0"))
         if k in AL:
             bold[AL[k]] += 1
-    tn = " " + norm(a["t"]) + " "
+    ta = deacc(html.unescape(a["t"]))
     tags = {norm(t) for t in a.get("c", [])}
-    main = {sl for x, sl in AL.items() if f" {x} " in tn or x in tags}
+    main = {ar["slug"] for ar in ARTISTS if TRX[ar["slug"]].search(ta)}
+    for x, sl in AL.items():
+        if x in tags:
+            bold[sl] += 1
     a["art"] = sorted(main, key=lambda sl: -bold[sl]) + [sl for sl, _ in bold.most_common() if sl not in main]
     a["artmain"] = main
     for sl in main:
