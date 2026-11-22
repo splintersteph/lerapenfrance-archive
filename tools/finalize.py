@@ -35,6 +35,9 @@ import unicodedata
 def norm(x):
     x = unicodedata.normalize("NFKD", html.unescape(x)).encode("ascii", "ignore").decode().lower()
     return re.sub(r"[^a-z0-9]+", " ", x).strip()
+def pslug(x):
+    x = unicodedata.normalize("NFKD", x).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-zA-Z0-9]+", "-", x).strip("-").lower() or "page"
 def aslug(x):
     return norm(x).replace(" ", "-") or "x"
 CLEAN = {}
@@ -42,6 +45,7 @@ for a in S:
     src = PAGES[a["s"]]
     pr = src[src.index('<div class="prose">'):src.index('<footer class="story-foot">')]
     CLEAN[a["s"]] = typo.clean(pr, interview=a["k"] == "interviews")
+    mm = re.search(r'class="read">(\d+) min', src); a["min"] = int(mm.group(1)) if mm else 1
 ARTISTS = json.load(open(os.path.join(R, "data", "artistes.json"), encoding="utf-8"))
 AL = {}
 for ar in ARTISTS:
@@ -95,7 +99,7 @@ def head(title, pre, extra="", desc="", img=""):
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)}</title><meta name="description" content="{esc(desc)}"><meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">{f'<meta property="og:image" content="{esc(img)}">' if img else ""}<meta name="theme-color" content="#1E3350">
 <link rel="stylesheet" href="{pre}style.css?v=5">{extra}</head><body>
 <header class="bar"><a class="logo" href="{pre}index.html"><b>LREF</b><span>Fonds Le Rap en France</span></a>
-<nav>{nav}<a href="{pre}artistes.html">Artistes</a><a href="{pre}articles.html">Tout le fonds</a></nav>
+<nav>{nav}<a href="{pre}artistes.html">Artistes</a><a href="{pre}plumes.html">Plumes</a><a href="{pre}articles.html">Tout</a></nav>
 <form action="{pre}articles.html"><input name="q" type="search" placeholder="Chercher dans le fonds" aria-label="Rechercher"></form></header>"""
 
 
@@ -145,11 +149,11 @@ prow[1:1] = [("top-100-annees-90.html", "classements", "Classements", "Les 100 m
              ("https://albums.lref.fr/", "classements", "Classements", "Les albums de l'année, de 2012 à 2022", "Dix bilans annuels", "")]
 pieces = "".join(f'<a class="pc k-{k}" href="{h}" data-img="{esc(i)}"><span class="pc-k"><i class="k-{k}"></i>{esc(l)}</span><span class="pc-t">{esc(t)}</span><span class="pc-m">{esc(m)}</span></a>' for h, k, l, t, m, i in prow)
 au = collections.Counter(a["a"] for a in S if a["a"] and a["a"] != "La Rédaction")
-plumes = "".join(f'<li><a href="articles.html?au={esc(n)}"><span>{esc(n)}</span><i></i><b>{c}</b></a></li>' for n, c in sorted(au.most_common(30), key=lambda x: x[0].lower()))
+plumes = "".join(f'<li><a href="plume/{pslug(n)}.html"><span>{esc(n)}</span><i></i><b>{c}</b></a></li>' for n, c in sorted(au.most_common(30), key=lambda x: x[0].lower()))
 
 names = sorted(au.most_common(30), key=lambda x: x[0].lower())
 def mqs(L, hid):
-    return "".join(f'<a href="articles.html?au={esc(n)}"{" tabindex=-1 aria-hidden=true" if hid else ""}>{esc(n)}<sup>{c}</sup></a>' for n, c in L)
+    return "".join(f'<a href="plume/{pslug(n)}.html"{" tabindex=-1 aria-hidden=true" if hid else ""}>{esc(n)}<sup>{c}</sup></a>' for n, c in L)
 mq1, mq1h = mqs(names[::2], False), mqs(names[::2], True)
 mq2, mq2h = mqs(names[1::2], False), mqs(names[1::2], True)
 body = f"""<main>
@@ -217,7 +221,7 @@ for a in S:
    <div class="ah-main">
     <p class="ah-k"><i class="k-{a['k']}"></i><a href="../../rubrique/{a['k'] if a['k'] != 'divers' else 'actus'}.html">{esc(LAB[a['k']])}</a><span>{a['cote']}</span></p>
     <h1>{esc(a['t'])}</h1>
-    <p class="ah-by">Par <a href="../../articles.html?au={esc(who)}">{esc(who)}</a> · {esc(a['f'])} · {mins} min de lecture</p>
+    <p class="ah-by">Par <a href="../../plume/{pslug(who)}.html">{esc(who)}</a> · {esc(a['f'])} · {mins} min de lecture</p>
    </div>
    <aside class="ah-wall" aria-label="Position dans le fonds">
     <p class="aw-t"><b>{a['d'][:4]}</b> {pos}<sup>e</sup> article sur {len(Y)}</p>
@@ -230,7 +234,7 @@ for a in S:
    <aside class="notice"><p class="n-h">Notice</p><dl>
     <dt>Cote</dt><dd>{a['cote']}</dd>
     <dt>Série</dt><dd>{esc(LAB[a['k']])}</dd>
-    <dt>Auteur</dt><dd>{esc(who)}</dd>
+    <dt>Auteur</dt><dd><a href="../../plume/{pslug(who)}.html">{esc(who)}</a></dd>
     <dt>Publication</dt><dd>{esc(a['f'])}</dd>
     <dt>Copie Wayback</dt><dd><a href="{esc(a['w'])}">{esc(a['cap'])}</a></dd>
     <dt>Adresse d'origine</dt><dd><s>{esc(orig)}</s></dd>
@@ -389,3 +393,62 @@ blk = f'<section class="arts"><div class="cls-in"><header class="sh"><p class="v
 ih = ih.replace('<section class="slot"', blk + '<section class="slot"', 1)
 open(os.path.join(R, "index.html"), "w", encoding="utf-8").write(ih)
 print("artistes ok", len(ARTISTS))
+
+
+# ---------------- pages plumes (auteurs) ----------------
+os.makedirs(os.path.join(R, "plume"), exist_ok=True)
+for f in os.listdir(os.path.join(R, "plume")):
+    os.remove(os.path.join(R, "plume", f))
+AUT = collections.defaultdict(list)
+for a in S:
+    AUT[a["a"] or "La Rédaction"].append(a)
+KC = {"chroniques": "#7090FF", "interviews": "#FF6A3D", "dossiers": "#9BE564", "classements": "#FFD23F", "billets": "#FF8AC8", "selections": "#7CE0FF", "actus": "#FFA024", "divers": "#B9A2FF"}
+def rubbar(L):
+    c = collections.Counter(a["k"] for a in L)
+    return '<div class="rb">' + "".join(f'<span style="--w:{n / len(L):.4f};--c:{KC.get(k, "#ccc")}" title="{esc(LAB.get(k, k))} : {n}"></span>' for k, n in c.most_common()) + "</div>"
+def rublegend(L):
+    c = collections.Counter(a["k"] for a in L)
+    return '<ul class="rl">' + "".join(f'<li><i style="background:{KC.get(k, "#ccc")}"></i>{esc(LAB.get(k, k))} <b>{n}</b></li>' for k, n in c.most_common()) + "</ul>"
+def plural(n, w):
+    return f"{n} {w}{'s' if n > 1 else ''}"
+for nom, L in AUT.items():
+    L = sorted(L, key=lambda a: a["d"])
+    span = L[0]["d"][:4] if L[0]["d"][:4] == L[-1]["d"][:4] else f'{L[0]["d"][:4]}–{L[-1]["d"][:4]}'
+    words = sum(a["min"] for a in L) * 230
+    top_k = collections.Counter(a["k"] for a in L).most_common(1)[0][0]
+    co = collections.Counter(sl for a in L for sl in a.get("art", []) if sl in AR)
+    feat = sorted([a for a in L if a["i"]], key=lambda a: -a["min"])[:1] or L[-1:]
+    fa = feat[0]
+    rest = sorted([a for a in L if a is not fa], key=lambda a: a["d"], reverse=True)
+    byy = collections.defaultdict(list)
+    for a in rest:
+        byy[a["d"][:4]].append(a)
+    yrs = "".join(f'<section class="py"><h3>{y}<span>{plural(len(G), "article")}</span></h3><div class="pieces">' + "".join(fiche(a).replace('href="a/', 'href="../a/') for a in G) + "</div></section>" for y, G in sorted(byy.items(), reverse=True))
+    img = f'<img src="{esc(fa["i"])}" alt="" onerror="this.remove()">' if fa["i"] else ""
+    body = f"""<main class="artp plp">
+<header class="arh"><div class="arh-in">
+ <div class="arh-t"><p class="v-kick"><a href="../plumes.html">La rédaction</a> · {span}</p>
+ <h1>{esc(nom)}</h1>
+ <p class="arh-s">{plural(len(L), "article")} pour Le Rap en France, environ {f"{words:,}".replace(",", " ")} mots, surtout en {esc(LAB.get(top_k, top_k).lower())}.</p>
+ {rubbar(L)}{rublegend(L)}</div>
+ <div class="plp-num"><b>{len(L)}</b><span>{plural(len(L), "texte")}</span></div>
+</div></header>
+<section class="blk"><header class="blk-h"><h2>Le texte le plus long</h2><p>{fa['min']} min de lecture</p></header>
+<a class="lead-a k-{fa['k']}" href="../a/{fa['s']}/"><span class="lead-img">{img}</span><span class="lead-t"><span class="cote">{fa['cote']}</span><b>{esc(fa['t'])}</b><em>{esc(fa.get('x', ''))}</em><small>{esc(LAB.get(fa['k'], ''))} · {esc(fa['f'])}</small></span></a></section>
+{f'<section class="blk"><header class="blk-h"><h2>Les artistes les plus suivis</h2></header>{bubbles([sl for sl, _ in co.most_common(18)], "../", "bubs big")}</section>' if co else ''}
+{f'<section class="blk"><header class="blk-h"><h2>Tous les articles</h2><p>du plus récent au plus ancien</p></header>{yrs}</section>' if rest else ''}
+</main>
+{FOOT0.replace('{pre}', '../')}</body></html>"""
+    open(os.path.join(R, "plume", pslug(nom) + ".html"), "w", encoding="utf-8").write(
+        head(f"{nom} – Le Rap en France", "../", "", f"Les {len(L)} articles de {nom} pour Le Rap en France, {span}.", fa["i"]) + body)
+# index des plumes
+cards = "".join(f'<li><a href="plume/{pslug(n)}.html"><span class="pc-n">{esc(n)}</span><span class="pc-c">{len(L)}</span><span class="pc-y">{min(a["d"][:4] for a in L)}{("–" + max(a["d"][:4] for a in L)) if max(a["d"][:4] for a in L) != min(a["d"][:4] for a in L) else ""}</span>{rubbar(L)}</a></li>'
+                for n, L in sorted(AUT.items(), key=lambda x: (-len(x[1]), x[0])))
+body = f"""<main class="artp">
+<header class="arh"><div class="arh-in one"><div class="arh-t"><p class="v-kick">Le Rap en France · 2011–2023</p><h1>La rédaction</h1>
+<p class="arh-s">{len(AUT)} plumes ont écrit pour LREF, bénévolement. Chaque barre montre ce que chacun a écrit : chroniques, interviews, dossiers…</p>{rublegend(S)}</div></div></header>
+<div class="cls-in"><ul class="pcards">{cards}</ul></div>
+</main>
+{FOOT}</body></html>"""
+open(os.path.join(R, "plumes.html"), "w", encoding="utf-8").write(head("La rédaction – Le Rap en France", "", "", f"Les {len(AUT)} plumes de Le Rap en France et leurs articles.") + body)
+print("plumes ok", len(AUT))

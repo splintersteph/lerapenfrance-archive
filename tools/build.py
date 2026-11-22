@@ -318,7 +318,7 @@ def page(title, body, depth=0, desc="", active="", og_image=""):
 </head><body>
 <a class="skip" href="#contenu">Aller au contenu</a>
 <header class="bar"><a class="logo" href="{pre}index.html"><b>LREF</b><span>Fonds Le Rap en France</span></a>
-<nav>{links}<a href="{pre}artistes.html">Artistes</a><a href="{pre}articles.html"{" aria-current=page" if active == "all" else ""}>Tout le fonds</a></nav>
+<nav>{links}<a href="{pre}artistes.html">Artistes</a><a href="{pre}plumes.html">Plumes</a><a href="{pre}articles.html"{" aria-current=page" if active == "all" else ""}>Tout</a></nav>
 <form action="{pre}articles.html" role="search"><input name="q" type="search" placeholder="Chercher dans le fonds" aria-label="Rechercher"></form></header>
 <main id="contenu">{body}</main>
 <footer class="ft"><div class="ft-in"><p class="ft-t">Provenance</p><p>Le Rap en France, média web consacré au rap français, fondé en 2011 par Stéphane Fortems. Le site a disparu après un piratage. Ce fonds a été reconstitué en 2026 à partir des copies conservées par la Wayback Machine d'Internet Archive. Les textes appartiennent à leurs auteurs.</p>
@@ -347,7 +347,7 @@ open(os.path.join(OUT, ".nojekyll"), "w").close()
 def byline(a, link=True, depth=0):
     pre = "../" * depth
     au = a.get("author")
-    who = (f'<a href="{pre}articles.html?au={quote(au)}">{esc(au)}</a>' if link else esc(au)) if au else ""
+    who = (f'<a href="{pre}plume/{slugify(au)}.html">{esc(au)}</a>' if link else esc(au)) if au else ""
     return f'{"Par " + who + ", le " if who else "Le "}<time datetime="{a["date"][:10]}">{esc(a["fdate"])}</time>'
 
 
@@ -552,7 +552,7 @@ def pick_sec(key, n):
 ch, iv, ds, bi = pick_sec("chroniques", 4), pick_sec("interviews", 4), pick_sec("dossiers", 3), [a for a in by_sec["billets"] if a["slug"] not in used][:5]
 ymax = max(years.values())
 yrs = "".join(f'<a class="yr" href="articles.html?y={y}" style="--h:{years[y] / ymax:.3f}"><span class="yr-bar"></span><span class="yr-n">{years[y]}</span><span class="yr-y">{y}</span></a>' for y in sorted(years))
-crew = "".join(f'<li><a href="articles.html?au={quote(n)}"><span class="crew-n">{esc(n)}</span><span class="crew-c">{c}</span></a></li>' for n, c in authors.most_common(24) if n != "La Rédaction")
+crew = "".join(f'<li><a href="plume/{slugify(n)}.html"><span class="crew-n">{esc(n)}</span><span class="crew-c">{c}</span></a></li>' for n, c in authors.most_common(24) if n != "La Rédaction")
 ann = f'<a class="ann" href="top-100-annees-90.html"><span class="ann-k">Classement</span><span class="ann-t">Les 100 meilleurs albums des années 90</span><span class="ann-d">De Dee Nasty à L’école du micro d’argent, avec un texte pour chaque disque.</span></a>'
 
 
